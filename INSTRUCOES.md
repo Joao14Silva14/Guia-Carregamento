@@ -3,9 +3,11 @@
 Repositório: github.com/Joao14Silva14/Guia-Carregamento (ramo `main`)
 Site: https://guia-carregamento.vercel.app/
 
-## O que mudou nesta versão — «Nova UX/UI + 5 idiomas»
+## O que mudou nesta versão — «UX/UI: alinhar mockups e modernizar seletores»
 
 Inclui também os últimos ajustes:
+- Corrigidos os ecrãs Volvo e BMW: a imagem do Volvo fica centrada numa zona reservada; a imagem do BMW deixa de se sobrepor ao texto.
+- Atualizados os botões de marca para cartões compactos modernos com logótipos mantidos; nomes dos modelos alinhados ao centro.
 - Saiu o bloco «Não tem agendamento na app ou prefere automatizar pela wallbox?». O contacto de apoio (800 501 070) continua no cartão do tarifário.
 - Saíram as marcas NIO, TOGG e VinFast, e o firefly (que usa a app da NIO), porque não são vendidas em Portugal. O guia passa a ter 86 marcas e 333 modelos. Os links antigos destas marcas abrem a página inicial.
 
@@ -31,7 +33,7 @@ Em `public/img/` ficam apenas `electric-love-casa.webp` e `logo-goldenergy.webp`
    - os ficheiros `index.html`, `tailwind.config.js`, `vite.config.js` e `package.json` (podem ir sempre, mesmo sem alterações)
    - o ficheiro `INSTRUCOES.md` (opcional)
    Arrastem as pastas inteiras, não o conteúdo solto, para manter os caminhos `src/…` e `public/…`.
-4. Em baixo, escrevam a mensagem, por exemplo «Nova UX/UI + 5 idiomas», escolham **Commit directly to the main branch** e carreguem em **Commit changes**.
+4. Em baixo, escrevam a mensagem, por exemplo «UX/UI: alinhar mockups e modernizar seletores», escolham **Commit directly to the main branch** e carreguem em **Commit changes**.
 5. Se existirem no repositório, apaguem em `public/img/` os ficheiros antigos `casinha-solar.webp`, `casinhas-tarifario.webp`, `casinha-carregar-noite.webp` e `logo-goldenergy-branco.webp`: abram cada ficheiro, depois **…** › **Delete file** › **Commit changes**. Não apaguem `electric-love-casa.webp` nem `logo-goldenergy.webp`.
 6. Confirmem que na raiz do repositório estão `package.json`, `index.html`, `src/` e `public/` (e não uma pasta `guia-carregamento-programado/` lá dentro).
 
@@ -60,3 +62,6 @@ Façam o teste em **2 aparelhos reais**: um computador (janela larga, ~1440 px) 
 | 10 | Rodar o telemóvel e voltar | Nada fica sobreposto nem sai do ecrã; sem deslizar para o lado | — | |
 | 11 | Descer até ao fim | Já não existe o bloco da wallbox; aparecem os cartões do tarifário e dos painéis solares | | |
 | 12 | Tocar em **Aderir ao tarifário** | Abre goldenergy.pt/mobilidade-eletrica/carregar-em-casa/ | | |
+| 13 | Selecionar Volvo e avançar pelos ecrãs | Carro centrado; não tapa os indicadores nem o estado de carregamento | | |
+| 14 | Selecionar BMW iX2 e avançar pelos ecrãs | «TUDO OK» e restante texto continuam legíveis, sem sobreposição da imagem | | |
+| 15 | Escolher uma marca e vários modelos | Logótipos mantidos; rótulos dos modelos visualmente centrados | | |

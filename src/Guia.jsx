@@ -172,7 +172,7 @@ function BrandLogo({ b, size = "md" }) {
   const dim = { xs: "h-7 w-7 text-[10px] rounded-lg p-1", sm: "h-9 w-9 text-xs rounded-xl p-1", md: "h-12 w-12 text-sm rounded-xl p-1.5", lg: "h-14 w-14 text-base rounded-2xl p-1.5" }[size];
   const isOther = !b || b.other;
   return (
-    <span className={cx("flex flex-none items-center justify-center overflow-hidden border border-[color:var(--ge-line-soft)] bg-white", dim)} aria-hidden="true">
+    <span className={cx("brand-logo flex flex-none items-center justify-center overflow-hidden border border-[color:var(--ge-line-soft)] bg-white", dim)} aria-hidden="true">
       {isOther ? <Icon n="car" className="h-3/4 w-3/4 text-[color:var(--ge-muted)]" />
         : (fail || !REMOTE) ? <b className="flex h-full w-full items-center justify-center rounded-md font-black tracking-tight" style={{ background: "hsl(" + BRAND_HUE(b.name) + " 45% 93%)", color: "hsl(" + BRAND_HUE(b.name) + " 55% 28%)" }}>{initials(b.name)}</b>
         : <img src={logoUrl(b.name)} alt="" loading="lazy" decoding="async" width="48" height="48" className="h-full w-full object-contain" onError={() => setFail(true)} />}
@@ -506,7 +506,7 @@ function BrandPicker({ b, f, onBrand, onModel, onOther }) {
   const [all, setAll] = useState(false);
   const top = TOP.map(n => BRANDS.find(x => x.name === n)).filter(Boolean).slice(0, 10);
   const chip = (x, on, onClick, label, key) => (
-    <button key={key || x.name} type="button" aria-pressed={on} onClick={onClick} className="ge-chip ge-focus">
+    <button key={key || x.name} type="button" aria-pressed={on} onClick={onClick} className="ge-brand-chip ge-focus">
       <BrandLogo b={x} size="xs" /><span className="truncate">{label || x.name}</span>
     </button>
   );
@@ -524,10 +524,10 @@ function BrandPicker({ b, f, onBrand, onModel, onOther }) {
           <ul className="grid max-h-[320px] grid-cols-2 gap-1 overflow-y-auto overscroll-contain sm:grid-cols-3 lg:grid-cols-4" aria-label={L.t("pick.allBrandsLabel")}>
             {BRANDS.map(x => (
               <li key={x.name}><button type="button" onClick={() => { onBrand(x.name); setAll(false); }} aria-pressed={!!b && b.name === x.name}
-                className={cx("ge-focus flex min-h-[44px] w-full items-center gap-2 rounded-xl px-2 text-left text-[0.98rem] font-semibold hover:bg-[color:var(--ge-soft)]", b && b.name === x.name && "bg-[color:var(--ge-mint)]")}>
+                className={cx("ge-brand-list-item ge-focus", b && b.name === x.name && "is-selected")}>
                 <BrandLogo b={x} size="xs" /><span className="truncate">{x.name}</span></button></li>
             ))}
-            <li><button type="button" onClick={() => { onOther(); setAll(false); }} className="ge-focus flex min-h-[44px] w-full items-center gap-2 rounded-xl px-2 text-left text-[0.98rem] font-semibold hover:bg-[color:var(--ge-soft)]"><BrandLogo b={OTHER} size="xs" /><span className="truncate">{L.t("other.short")}</span></button></li>
+            <li><button type="button" onClick={() => { onOther(); setAll(false); }} className="ge-brand-list-item ge-focus"><BrandLogo b={OTHER} size="xs" /><span className="truncate">{L.t("other.short")}</span></button></li>
           </ul>
         </div>
       )}
@@ -536,8 +536,8 @@ function BrandPicker({ b, f, onBrand, onModel, onOther }) {
           <p id="famLbl" className="mb-2.5 flex items-center gap-2 font-bold text-[color:var(--ge-ink)]"><BrandLogo b={b} size="xs" />{L.t("pick.model", { brand: b.name })}</p>
           <div role="group" aria-labelledby="famLbl" className="flex flex-wrap gap-2">
             {b.families.map((x, i) => (
-              <button key={x.name} type="button" aria-pressed={f === x} onClick={() => onModel(i)} className="ge-chip ge-focus px-3.5">
-                <span>{famName(L, b, x)}</span>{x.old && <span className="text-xs font-semibold text-[color:var(--ge-muted)]">· {L.t("pick.old")}</span>}
+              <button key={x.name} type="button" aria-pressed={f === x} onClick={() => onModel(i)} className="ge-model-chip ge-focus">
+                <span className="model-chip-label">{famName(L, b, x)}</span>{x.old && <span className="model-chip-note">· {L.t("pick.old")}</span>}
               </button>
             ))}
           </div>
@@ -955,6 +955,21 @@ transition:border-color var(--dur-2) var(--ease),background-color var(--dur-2) v
 .ge-chip:hover{border-color:var(--ge-ink);box-shadow:var(--sh-2);transform:translateY(-1px)}
 .ge-chip:active{transform:none;box-shadow:none}
 .ge-chip[aria-pressed=true]{border-color:var(--ge-success);background:var(--ge-mint);box-shadow:inset 0 0 0 1px var(--ge-success)}
+.ge-brand-list-item{display:flex;min-height:48px;width:100%;align-items:center;gap:.6rem;border:1px solid transparent;border-radius:12px;padding:.35rem .55rem;text-align:left;font-size:.95rem;font-weight:650;color:var(--ge-ink);transition:background-color var(--dur-2) var(--ease),border-color var(--dur-2) var(--ease)}
+.ge-brand-list-item:hover{background:var(--ge-soft);border-color:var(--ge-line-soft)}
+.ge-brand-list-item.is-selected{background:var(--ge-mint);border-color:var(--ge-success)}
+.ge-brand-chip{display:inline-flex;align-items:center;gap:.65rem;min-height:50px;max-width:100%;padding:.35rem .95rem .35rem .4rem;border-radius:14px;border:1px solid var(--ge-line-soft);background:#fff;color:var(--ge-ink);font-weight:700;font-size:.98rem;box-shadow:var(--sh-1);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform var(--dur-1) var(--ease),border-color var(--dur-2) var(--ease),background-color var(--dur-2) var(--ease),box-shadow var(--dur-2) var(--ease)}
+.ge-brand-chip .brand-logo{height:34px;width:34px;border:0;border-radius:10px;background:var(--ge-soft);padding:5px}
+.ge-brand-chip .brand-logo img{mix-blend-mode:multiply}
+.ge-brand-chip:hover{transform:translateY(-2px);border-color:#B9B2C8;box-shadow:var(--sh-2)}
+.ge-brand-chip:active{transform:translateY(0);box-shadow:var(--sh-1)}
+.ge-brand-chip[aria-pressed=true]{border-color:var(--ge-success);background:var(--ge-mint);box-shadow:inset 0 0 0 1px var(--ge-success),var(--sh-1)}
+.ge-model-chip{display:inline-flex;align-items:center;justify-content:center;gap:.35rem;min-width:76px;min-height:48px;max-width:100%;padding:.55rem .95rem;border-radius:14px;border:1px solid var(--ge-line);background:#fff;color:var(--ge-ink);font-weight:650;font-size:.98rem;line-height:1.2;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform var(--dur-1) var(--ease),border-color var(--dur-2) var(--ease),background-color var(--dur-2) var(--ease),box-shadow var(--dur-2) var(--ease)}
+.ge-model-chip .model-chip-label{min-width:0;text-align:center}
+.ge-model-chip .model-chip-note{font-size:.72rem;font-weight:600;color:var(--ge-muted)}
+.ge-model-chip:hover{transform:translateY(-1px);border-color:#B9B2C8;box-shadow:var(--sh-1)}
+.ge-model-chip[aria-pressed=true]{border-color:var(--ge-success);background:var(--ge-mint);box-shadow:inset 0 0 0 1px var(--ge-success)}
+
 .ge-step{transition:background-color var(--dur-2) var(--ease),border-color var(--dur-2) var(--ease),box-shadow var(--dur-2) var(--ease)}
 .ge-kbd{display:inline-flex;min-width:1.6rem;height:1.6rem;align-items:center;justify-content:center;border-radius:.4rem;border:1px solid var(--ge-line);border-bottom-width:2px;background:#fff;font:600 .8rem/1 system-ui,sans-serif;color:var(--ge-ink)}
 .ge-in{animation:geIn var(--dur-2) var(--ease-out) both}

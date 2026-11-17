@@ -3008,8 +3008,9 @@ const DEVICE_CSS = `.gm svg,.gm img{display:inline-block;vertical-align:middle;m
 .gm .xw-hd{display:flex;align-items:center;justify-content:space-between;height:26px}
 .gm .xw-hd b{font-size:10.5px;font-weight:600}
 .gm .xw-hd svg{width:15px;height:15px}
-.gm .xw-ok{position:relative;z-index:1;display:block;font-size:34px;font-weight:800;line-height:.95;letter-spacing:-.01em;margin-top:8px}
-.gm .xw-img{height:92px;margin-top:-22px;color:#fff;position:relative;z-index:2}
+.gm .xw-ok{position:relative;z-index:1;display:block;font-size:30px;font-weight:800;line-height:.98;letter-spacing:-.01em;margin-top:8px}
+.gm .xw-img{height:86px;margin-top:6px;color:#fff;position:relative;z-index:0}
+.gm .xw-img img{object-fit:contain;padding:0 6px}
 .gm .xw-g{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:none}
 .gm .xw-c{position:relative;background:#F2F3F5;border-radius:6px;padding:8px 9px;min-width:0}
 .gm .xw-c b{display:block;font-size:11px;font-weight:600}
@@ -3631,9 +3632,10 @@ const DEVICE_CSS = `.gm svg,.gm img{display:inline-block;vertical-align:middle;m
 .gm .xvo-pl svg{width:8px;height:8px;transform:rotate(90deg)}
 .gm .xvo-hd i{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center}
 .gm .xvo-hd i svg{width:12px;height:12px}
-.gm .xvo-k{position:relative;z-index:1;display:block;margin-top:14px;font-size:32px;font-weight:300;line-height:1.08;letter-spacing:-.02em}
-.gm .xvo-img{position:absolute;right:-26px;bottom:44px;width:214px;height:112px;color:#fff}
-.gm .xvo-st{position:absolute;z-index:1;left:10px;right:10px;bottom:8px;display:flex;justify-content:space-between;align-items:center;padding:6px;border-radius:6px}
+.gm .xvo-k{position:relative;z-index:1;display:block;flex:none;margin-top:8px;font-size:28px;font-weight:300;line-height:1.04;letter-spacing:-.02em}
+.gm .xvo-img{position:relative;right:auto;bottom:auto;align-self:center;width:min(100%,230px);height:96px;min-height:72px;margin:5px auto 4px;color:#fff;flex:1 1 auto}
+.gm .xvo-img img{object-fit:contain;padding:0 4px}
+.gm .xvo-st{position:relative;z-index:1;left:auto;right:auto;bottom:auto;display:flex;flex:none;justify-content:space-between;align-items:center;gap:6px;padding:6px;border-radius:6px}
 .gm .xvo-st span{display:flex;align-items:center;gap:5px;font-size:12px;white-space:nowrap}
 .gm .xvo-st svg{width:14px;height:14px;color:#5BE37D}
 .gm .xvo-st small{font-size:8.5px;color:#B9BFBB;white-space:nowrap}
