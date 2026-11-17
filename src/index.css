@@ -1,3 +1,47 @@
+/* Brandon Grotesque (fonte oficial Goldenergy, alojada no próprio site) */
+@font-face {
+  font-family: "Brandon Grotesque";
+  src: url("/fonts/brandon-grotesque-light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Brandon Grotesque";
+  src: url("/fonts/brandon-grotesque-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Brandon Grotesque";
+  src: url("/fonts/brandon-grotesque-regular-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Brandon Grotesque";
+  src: url("/fonts/brandon-grotesque-medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Brandon Grotesque";
+  src: url("/fonts/brandon-grotesque-bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Brandon Grotesque";
+  src: url("/fonts/brandon-grotesque-black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

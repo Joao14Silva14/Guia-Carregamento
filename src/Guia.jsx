@@ -1247,7 +1247,7 @@ const RAW = `
 #City
 -City (2008–2012)
 `;
-const LOGO = "data:image/webp;base64,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";
+const LOGO = "data:image/webp;base64,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";
 
 const OK="ok", IND="ind";
 /* Capturas reais (opcional). Coloquem os ficheiros num servidor Goldenergy e indiquem a pasta em base.
@@ -2087,6 +2087,38 @@ function shotFor(gk,b,i){
 }
 
 /* ===================== 3. Interface ===================== */
+/* ===================== Oferta comercial (editar aqui) =====================
+   Valores copiados de goldenergy.pt/mobilidade-eletrica/carregar-em-casa (17-11-2026).
+   VALIDAR com Marketing/Jurídico antes de cada publicação. */
+const OFFER = {
+  preco: "0,0889 €/kWh",
+  precoNum: 0.0889,   /* €/kWh no vazio, sem IVA (igual a «preco») */
+  consumo100: 15,     /* kWh aos 100 km, consumo médio assumido */
+  iva: 0.23,
+  precoNota: "no vazio, em tarifa bi-horária",
+  descontoClientes: "+35%",
+  telefone: "800 501 070",
+  telefoneHref: "tel:+351800501070",
+  horario: "Dias úteis, das 9h às 21h",
+  adesao: "https://adesao.goldenergy.pt/",
+  pagina: "https://goldenergy.pt/mobilidade-eletrica/carregar-em-casa/",
+  precosPdf: "https://goldenergy.pt/resources/data/website/documentos/precos_lp_carregar_em_casa.pdf",
+  solar: "https://goldenergy.pt/paineis-solares/",
+  notaPreco: "Ao preço da energia acresce o encargo com o financiamento da tarifa social de eletricidade, fixado pela ERSE (Entidade Reguladora dos Serviços Energéticos) na Diretiva n.º 12-A/2025, no valor de 0,0020666 €/kWh para 2026.",
+  notaDesconto: "Face ao tarifário de referência «Tarifário GOLD», opção bi-horária, potência contratada de 6,90 kVA.",
+};
+/* Ilustração oficial Goldenergy (campanha «Electric Love»). Usar sem cortes nem alterações. */
+const IMG = { hero: "/img/electric-love-casa.webp" };
+/* Custo indicativo de 100 km no vazio: consumo × preço do vazio × (1 + IVA) */
+const eur = x => x.toFixed(2).replace(".", ",") + " €";
+const CUSTO100 = eur(OFFER.consumo100 * OFFER.precoNum * (1 + OFFER.iva));
+const CUSTO100_CALC = OFFER.consumo100 + " kWh/100 km × " + OFFER.preco + " (vazio) + IVA " + Math.round(OFFER.iva * 100) + "% = " + CUSTO100;
+const CUSTO100_NOTA = "Valor indicativo, para um consumo médio de " + OFFER.consumo100 + " kWh aos 100 km, carregando só no vazio. Não inclui a potência contratada, o encargo da tarifa social nem outras taxas.";
+/* Ligações com UTM para medir conversões vindas do guia */
+const utm = (url, content) => url + (url.includes("?") ? "&" : "?") + "utm_source=guia-carregamento&utm_medium=referral&utm_campaign=carregar-em-casa&utm_content=" + content;
+/* Evento para o Google Tag Manager (se existir na página) */
+const track = id => { try { (window.dataLayer = window.dataLayer || []).push({ event: "cta_click", cta_id: id }); } catch (e) { } };
+
 /* Imagens externas (logótipos jsdelivr, fotos Wikimedia/EV Database).
    "auto": ativas quando a página abre diretamente no navegador; desativadas dentro de pré-visualizações
    em iframe com política de segurança restritiva (aí usamos iniciais e silhueta, sem pedidos bloqueados).
@@ -2117,8 +2149,8 @@ function Rich({ text, b, p }) {
     if (!part) return;
     if (part === "{app}") out.push(b.app ? <b key={i}>{b.app}</b> : (b.other ? "da marca" : "oficial da " + b.name));
     else if (part === "{inicio}" || part === "{fim}") out.push(<Time key={i}>{part === "{inicio}" ? p.s : p.e}</Time>);
-    else if (part.startsWith("<b>")) out.push(<b key={i} className="font-bold text-[#171424]">{part.slice(3, -4)}</b>);
-    else out.push(part);
+    else if (part.startsWith("<b>")) out.push(<b key={i} className="font-bold text-[#171424]">{vzText(part.slice(3, -4), i)}</b>);
+    else out.push(...vzText(part, i));
   });
   return <>{out}</>;
 }
@@ -2140,19 +2172,39 @@ const I = {
   refresh: <><path d="M20 11a8 8 0 0 0-14.9-3.5L4 9" /><path d="M4 4v5h5" /><path d="M4 13a8 8 0 0 0 14.9 3.5L20 15" /><path d="M20 20v-5h-5" /></>,
   info: <><circle cx="12" cy="12" r="9" /><path d="M12 11v6M12 7.5v.5" /></>,
   ext: <><path d="M14 4h6v6" /><path d="M20 4 10 14" /><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5" /></>,
+  sun: <><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></>,
+  phone: <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" />,
+  arrow: <><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></>,
   car: <><path d="M5 16V11l2-5h10l2 5v5" /><path d="M3 16h18v3H3z" /><circle cx="7.5" cy="13" r=".8" /><circle cx="16.5" cy="13" r=".8" /></>,
 };
 const Icon = ({ n, className = "h-5 w-5" }) => (
   <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">{I[n]}</svg>
 );
 const Ext = () => <span className="sr-only"> (abre numa nova janela)</span>;
+/* Lua = vazio · Sol = fora de vazio */
+const Moon = ({ className = "mr-[0.2em] inline-block h-[1.05em] w-[1.05em] align-[-0.16em]" }) => (
+  <svg viewBox="0 0 24 24" className={cx("flex-none", className)} aria-hidden="true" focusable="false"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="#382F83" stroke="#382F83" strokeWidth="1.5" strokeLinejoin="round" /></svg>
+);
+const Sun = ({ className = "mr-[0.2em] inline-block h-[1.1em] w-[1.1em] align-[-0.18em]" }) => (
+  <svg viewBox="0 0 24 24" className={cx("flex-none", className)} aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.5" fill="#FFC845" stroke="#7A4B00" strokeWidth="1.6" /><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M5.3 18.7l1.5-1.5M17.2 6.8l1.5-1.5" stroke="#7A4B00" strokeWidth="1.8" strokeLinecap="round" /></svg>
+);
+const Vz = ({ children = "vazio" }) => <span className="whitespace-nowrap"><Moon />{children}</span>;
+const Fv = ({ children = "fora de vazio" }) => <span className="whitespace-nowrap"><Sun />{children}</span>;
+/* Acrescenta a lua antes de «vazio» e o sol antes de «fora de/do vazio» em texto corrido */
+const vzText = (str, k) => String(str).split(/(fora d[oe] vazio|\bvazio\b)/gi).map((t, j) =>
+  !t ? null : /^fora/i.test(t) ? <Fv key={k + "-" + j}>{t}</Fv> : /^vazio$/i.test(t) ? <Vz key={k + "-" + j}>{t}</Vz> : t);
 const A = ({ href, children, className }) => (
   <a href={href} target="_blank" rel="noopener noreferrer" className={cx("font-semibold text-[#382F83] underline decoration-[#40DDA6] decoration-2 underline-offset-2 hover:decoration-[#382F83] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#382F83] focus-visible:ring-offset-2 rounded-sm", className)}>{children}<Ext /></a>
 );
 const FOCUS = "focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-[#382F83] focus-visible:ring-offset-2";
 const BTN = "inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full px-6 text-base font-bold motion-safe:transition-colors disabled:cursor-not-allowed disabled:opacity-40 " + FOCUS;
-const BTN_P = BTN + " bg-[#382F83] text-white hover:bg-[#2A2366] active:bg-[#211B52]";
-const BTN_G = BTN + " border-2 border-[#382F83] bg-white text-[#382F83] hover:bg-[#F1EFFA]";
+const BTN_P = BTN + " bg-[#40DDA6] text-[#171424] hover:bg-[#5FE6B7] active:bg-[#2FC892]";
+/* Azul só nos botões de adesão (conversão) */
+const BTN_BLUE = BTN + " bg-[#382F83] text-white hover:bg-[#2A2366] active:bg-[#211B52]";
+const BTN_G = BTN + " border-2 border-[#514D5F] bg-white text-[#171424] hover:bg-[#F6F4F8]";
+/* Amarelo solar: acento da página de painéis solares (não é cor oficial da paleta; validar hex com Brand) */
+const BTN_SOLAR = BTN + " bg-[#FFC845] text-[#171424] hover:bg-[#FFD46E] active:bg-[#F2B623]";
+const BTN_ONGREEN = BTN + " border-2 border-[#171424] bg-transparent text-[#171424] hover:bg-white/35 focus-visible:ring-offset-[#40DDA6]";
 const LINKBTN = "rounded-sm font-semibold text-[#382F83] underline decoration-[#40DDA6] decoration-2 underline-offset-4 hover:decoration-[#382F83] " + FOCUS;
 
 /* Logótipo da marca com recurso às iniciais */
@@ -2182,10 +2234,10 @@ function Step({ n, title, state, summary, onEdit, editLabel, lockedText, headRef
   const done = state === "done", open = state === "open", locked = state === "locked";
   return (
     <section aria-labelledby={"t" + n}
-      className={cx("rounded-[1.75rem] border p-5 sm:p-7 motion-safe:transition-shadow", open ? "border-[#D9D5E0] bg-white shadow-[0_12px_32px_-18px_rgba(56,47,131,.35)]" : "border-[#E7E4EC]", locked ? "bg-white/60" : "bg-white")}>
+      className={cx("scroll-mt-20 rounded-[1.75rem] border p-5 sm:scroll-mt-28 sm:p-7 motion-safe:transition-shadow", open ? "border-[#D9D5E0] bg-white shadow-[0_12px_32px_-18px_rgba(23,20,36,.28)]" : "border-[#E7E4EC]", locked ? "bg-white/60" : "bg-white")}>
       <div className="flex items-center gap-3 sm:gap-4">
         <span aria-hidden="true" className={cx("flex h-10 w-10 flex-none items-center justify-center rounded-full text-lg font-black",
-          done ? "bg-[#40DDA6] text-[#171424]" : open ? "bg-[#382F83] text-white" : "bg-[#F1EFFA] text-[#8C87A0]")}>
+          done ? "bg-[#146B4F] text-white" : open ? "bg-[#40DDA6] text-[#171424]" : "bg-[#EEEBF2] text-[#8C87A0]")}>
           {done ? <Icon n="check" className="h-5 w-5" /> : n}
         </span>
         <h2 id={"t" + n} ref={headRef} tabIndex={-1} className={cx("min-w-0 flex-1 text-xl font-black leading-tight sm:text-2xl focus:outline-none", locked ? "text-[#8C87A0]" : "text-[#171424]")}>
@@ -2264,6 +2316,13 @@ export default function GuiaCarregamento() {
     sec.scrollIntoView && sec.scrollIntoView({ behavior: prefersReduced() ? "auto" : "smooth", block: "start" });
   };
   useEffect(() => { const r = focusNext.current; if (r) { focusNext.current = null; scrollTo(r); } });
+
+  function startGuide() {
+    track("hero_comecar");
+    if (secs[1] !== "open") setSecs(sv => ({ ...sv, 1: "open" }));
+    focusNext.current = h1;
+    setTimeout(() => { const el = document.getElementById("q"); if (el) { try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); } } }, 400);
+  }
 
   /* Seleção do carro */
   const resetGuide = () => { setStep(0); setFinished(false); setShowAll(false); };
@@ -2376,7 +2435,7 @@ export default function GuiaCarregamento() {
   );
   const sum2 = (
     <div className="flex items-center gap-3 rounded-2xl bg-[#F6F4F8] p-3">
-      <span className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-white text-[#382F83]"><Icon n="moon" /></span>
+      <span className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-white"><Moon className="h-5 w-5" /></span>
       <div><p className="font-bold text-[#171424]">Vazio das {p.s} às {p.e}</p><p className="text-sm text-[#514D5F]">{CYC_NAME[cyc]}</p></div>
     </div>
   );
@@ -2388,26 +2447,49 @@ export default function GuiaCarregamento() {
       <style>{DEVICE_CSS}</style>
       <a href="#guia" className="sr-only z-50 rounded-full bg-white px-4 py-2 font-bold text-[#382F83] focus:not-sr-only focus:fixed focus:left-3 focus:top-3">Saltar para o guia</a>
 
-      {/* Topo */}
-      <header className="bg-[#382F83] pb-16 pt-5 text-white sm:pb-20 print:hidden">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="mb-7 flex items-center gap-3 sm:mb-10">
-            <img src={LOGO} alt="Goldenergy" width="140" height="40" className="h-8 w-auto sm:h-10" />
-            <span className="rounded-full border border-white/30 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white/90">Carregar em casa</span>
+      {/* Barra superior fixa, com adesão sempre à mão */}
+      <div className="sticky top-0 z-40 border-b border-[#E7E4EC] bg-white/95 backdrop-blur print:hidden">
+        <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 sm:h-[88px] sm:px-6">
+          <a href={utm("https://goldenergy.pt/", "logo")} className={cx("flex-none rounded-md", FOCUS)} onClick={() => track("logo")}>
+            <img src={LOGO} alt="Goldenergy, página inicial" width="120" height="73" className="h-11 w-auto sm:h-[73px]" />
+          </a>
+          <span className="hidden border-l border-[#D9D5E0] pl-3 text-sm font-bold uppercase tracking-wider text-[#514D5F] lg:inline">Carregar em Casa</span>
+          <div className="ml-auto flex items-center gap-2 sm:gap-4">
+            <a href={OFFER.telefoneHref} onClick={() => track("header_telefone")} className={cx("hidden items-center gap-2 rounded-full px-2 text-[#171424] md:flex", FOCUS)}>
+              <Icon n="phone" className="h-5 w-5 text-[#146B4F]" />
+              <span className="leading-tight"><b className="block text-[0.95rem]">{OFFER.telefone}</b><span className="block text-xs text-[#514D5F]">Chamada gratuita</span></span>
+            </a>
+            <a href={utm(OFFER.adesao, "header")} target="_blank" rel="noopener noreferrer" onClick={() => track("header_aderir")} className={cx(BTN_BLUE, "min-h-[44px] px-4 text-[0.95rem] sm:px-5")}>
+              Aderir<span className="hidden sm:inline">&nbsp;ao tarifário</span><Ext />
+            </a>
           </div>
-          <h1 className="max-w-2xl text-[1.9rem] font-black leading-[1.08] sm:text-5xl">
-            Carreguem o carro nas horas de vazio. <span className="text-[#40DDA6]">Nós mostramos como.</span>
-          </h1>
-          <ol className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold text-white/85 sm:text-base" aria-label="Como funciona">
-            {["Escolham o carro", "Vejam o horário de vazio", "Sigam os passos na app"].map((t, i) => (
-              <li key={i} className="flex items-center gap-2"><span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/15 text-xs font-black text-white" aria-hidden="true">{i + 1}</span>{t}</li>
-            ))}
-          </ol>
+        </div>
+      </div>
+
+      {/* Topo */}
+      <header className="bg-[#40DDA6] pb-14 text-[#171424] sm:pb-24 print:hidden">
+        <div className="mx-auto grid max-w-6xl items-center gap-7 px-4 pt-7 sm:px-6 md:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] md:gap-10 md:pt-12">
+          <div className="min-w-0">
+            <p className="text-sm font-bold uppercase tracking-[.14em] text-[#382F83]">Mobilidade elétrica · Guia prático</p>
+            <h1 className="mt-3 text-[2rem] font-black leading-[1.05] sm:text-5xl lg:text-[3.4rem]">
+              O melhor momento para carregar é enquanto dormem. <span className="text-[#382F83]">Nós mostramos como.</span>
+            </h1>
+            <p className="mt-4 max-w-xl text-lg leading-relaxed">Programem a app do carro para carregar nas horas de <Vz />, quando a eletricidade é mais barata. Em 3 passos, sem mudar a vossa rotina.</p>
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <button type="button" onClick={startGuide} className={cx(BTN_BLUE, "px-7")}>Começar o guia<Icon n="arrow" /></button>
+              <a href={utm(OFFER.pagina, "hero")} target="_blank" rel="noopener noreferrer" onClick={() => track("hero_tarifario")} className={BTN_ONGREEN}>Conhecer o Carregar em Casa<Ext /></a>
+            </div>
+            <Cost100 />
+          </div>
+          <div className="mx-auto w-full max-w-md md:max-w-none">
+            <img src={IMG.hero} alt="A casa sorridente da Goldenergy, com painéis solares no telhado, a carregar o carro elétrico na garagem" width="727" height="473"
+              className="block aspect-[727/473] w-full rounded-[1.75rem] border-[6px] border-white bg-[#40DCA6] object-cover shadow-[0_18px_40px_-22px_rgba(23,20,36,.55)]" />
+          </div>
         </div>
       </header>
 
-      <main id="guia" tabIndex={-1} className="relative mx-auto -mt-10 flex max-w-5xl flex-col gap-4 px-3 pb-10 focus:outline-none sm:-mt-12 sm:gap-5 sm:px-6 print:mt-0">
-        <p className="hidden text-2xl font-black text-[#382F83] print:block">Goldenergy · Programar o carregamento nas horas de vazio</p>
+      <main id="guia" tabIndex={-1} className="relative mx-auto -mt-8 flex max-w-5xl flex-col gap-4 px-3 pb-10 focus:outline-none sm:-mt-12 sm:gap-5 sm:px-6 print:mt-0">
+        <p className="hidden text-2xl font-black text-[#146B4F] print:block">Goldenergy · Programar o carregamento nas horas de vazio</p>
 
         {/* PASSO 1 */}
         <Step n={1} title="Qual é o vosso carro?" state={secs[1]} headRef={h1} summary={sum1} onEdit={() => edit(1)} editLabel="carro">
@@ -2420,7 +2502,7 @@ export default function GuiaCarregamento() {
                 aria-activedescendant={showRes && active > -1 ? "o" + active : undefined}
                 onChange={e => { setQ(e.target.value); setQOpen(true); setActive(-1); }}
                 onFocus={() => setQOpen(true)} onBlur={() => setTimeout(() => setQOpen(false), 150)} onKeyDown={onKey}
-                className="min-h-[52px] w-full rounded-2xl border-2 border-[#D9D5E0] bg-white pl-12 pr-4 text-base placeholder:text-[#8C87A0] hover:border-[#B9B3C6] focus:border-[#382F83] focus:outline-none focus:ring-4 focus:ring-[#382F83]/15" />
+                className="min-h-[52px] w-full rounded-2xl border-2 border-[#D9D5E0] bg-white pl-12 pr-4 text-base placeholder:text-[#8C87A0] hover:border-[#B9B3C6] focus:border-[#146B4F] focus:outline-none focus:ring-4 focus:ring-[#40DDA6]/35" />
             </div>
             <p id="qHint" className="sr-only">Escrevam pelo menos 2 letras. Usem as setas para escolher e Enter para confirmar.</p>
             {showRes && (
@@ -2428,7 +2510,7 @@ export default function GuiaCarregamento() {
                 {hits.map((h, i) => (
                   <li key={h.b.name + h.fi} id={"o" + i} role="option" aria-selected={i === active}
                     onMouseDown={e => { e.preventDefault(); choose(i); }} onMouseEnter={() => setActive(i)}
-                    className={cx("flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5", i === active && "bg-[#F1EFFA]")}>
+                    className={cx("flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5", i === active && "bg-[#E6FAF2]")}>
                     <BrandLogo b={h.b} size="xs" />
                     <span className="min-w-0 flex-1 truncate"><b>{mark(h.b.name)}</b> {mark(h.f.name)}{h.f.old && <span className="text-sm text-[#514D5F]"> · modelo anterior</span>}</span>
                     <Icon n="chevR" className="h-4 w-4 flex-none text-[#8C87A0]" />
@@ -2437,7 +2519,7 @@ export default function GuiaCarregamento() {
                 {!hits.length && <li className="px-3 py-2.5 text-[#514D5F]" aria-hidden="true">Não encontrámos «{q.trim()}».</li>}
                 <li id={"o" + hits.length} role="option" aria-selected={active === hits.length}
                   onMouseDown={e => { e.preventDefault(); choose(hits.length); }} onMouseEnter={() => setActive(hits.length)}
-                  className={cx("mt-1 cursor-pointer rounded-xl border-t border-[#EEEBF2] px-3 py-2.5 font-semibold text-[#382F83]", active === hits.length && "bg-[#F1EFFA]")}>
+                  className={cx("mt-1 cursor-pointer rounded-xl border-t border-[#EEEBF2] px-3 py-2.5 font-semibold text-[#146B4F]", active === hits.length && "bg-[#E6FAF2]")}>
                   Não está aqui? Usar o guia geral
                 </li>
               </ul>
@@ -2451,7 +2533,7 @@ export default function GuiaCarregamento() {
               return (
                 <button key={nm} type="button" aria-pressed={on} onClick={() => pickBrand(nm)}
                   className={cx("flex min-h-[84px] flex-col items-center justify-center gap-1.5 rounded-2xl border-2 px-1 py-2 text-center text-[0.8rem] font-bold leading-tight motion-safe:transition-colors sm:text-sm", FOCUS,
-                    on ? "border-[#382F83] bg-[#F1EFFA] text-[#382F83]" : "border-[#EEEBF2] bg-white text-[#171424] hover:border-[#B9B3C6]")}>
+                    on ? "border-[#146B4F] bg-[#E6FAF2] text-[#146B4F]" : "border-[#EEEBF2] bg-white text-[#171424] hover:border-[#B9B3C6]")}>
                   <BrandLogo b={tb} size="sm" /><span className="max-w-full truncate">{nm}</span>
                 </button>
               );
@@ -2492,7 +2574,7 @@ export default function GuiaCarregamento() {
                     <p className="text-xl font-black leading-tight">{b.other ? "Outra marca ou modelo" : f ? famLabel(b, f) : "Agora escolham o modelo"}</p>
                     {v && f && f.versions.length > 1 && <p className="mt-0.5 text-[0.95rem] text-[#171424]">{v.name}</p>}
                     {b.other && <p className="mt-1 text-[0.95rem] text-[#514D5F]">Mostramos os passos comuns à maioria das apps.</p>}
-                    {!b.other && b.app && <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-sm font-semibold text-[#382F83]"><Icon n="bolt" className="h-4 w-4" />App {b.app}</p>}
+                    {!b.other && b.app && <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-sm font-semibold text-[#146B4F]"><Icon n="bolt" className="h-4 w-4" />App {b.app}</p>}
                     {v && v.id && <p className="mt-2 text-sm"><A href={evUrl(b, v)}>Ficha técnica</A></p>}
                   </div>
                 </div>
@@ -2513,7 +2595,7 @@ export default function GuiaCarregamento() {
         </Step>
 
         {/* PASSO 2 */}
-        <Step n={2} title="O vosso horário de vazio" state={secs[2]} headRef={h2} summary={sum2} onEdit={() => edit(2)} editLabel="ciclo" lockedText="Disponível depois de escolherem o carro.">
+        <Step n={2} title={<>O vosso horário de <Vz /></>} state={secs[2]} headRef={h2} summary={sum2} onEdit={() => edit(2)} editLabel="ciclo" lockedText="Disponível depois de escolherem o carro.">
           <fieldset>
             <legend className="mb-3 font-bold">Que ciclo tem o vosso tarifário bi-horário?</legend>
             <div className="grid grid-cols-2 gap-2 sm:gap-3">
@@ -2521,9 +2603,9 @@ export default function GuiaCarregamento() {
                 <label key={val} className="block cursor-pointer">
                   <input type="radio" name="cyc" value={val} checked={cyc === val} onChange={() => { setCyc(val); }} className="peer sr-only" />
                   <span className={cx("flex h-full flex-col rounded-2xl border-2 p-3.5 motion-safe:transition-colors sm:p-4 peer-focus-visible:ring-[3px] peer-focus-visible:ring-[#382F83] peer-focus-visible:ring-offset-2",
-                    cyc === val ? "border-[#382F83] bg-[#F1EFFA]" : "border-[#EEEBF2] bg-white hover:border-[#B9B3C6]")}>
+                    cyc === val ? "border-[#146B4F] bg-[#E6FAF2]" : "border-[#EEEBF2] bg-white hover:border-[#B9B3C6]")}>
                     <span className="flex items-center gap-2 font-black text-[#171424]">
-                      <span aria-hidden="true" className={cx("flex h-5 w-5 flex-none items-center justify-center rounded-full border-2", cyc === val ? "border-[#382F83]" : "border-[#B9B3C6]")}>{cyc === val && <span className="h-2.5 w-2.5 rounded-full bg-[#382F83]" />}</span>{t}
+                      <span aria-hidden="true" className={cx("flex h-5 w-5 flex-none items-center justify-center rounded-full border-2", cyc === val ? "border-[#146B4F]" : "border-[#B9B3C6]")}>{cyc === val && <span className="h-2.5 w-2.5 rounded-full bg-[#146B4F]" />}</span>{t}
                     </span>
                     <span className="mt-1 pl-7 text-sm text-[#514D5F]">{d}</span>
                   </span>
@@ -2533,9 +2615,9 @@ export default function GuiaCarregamento() {
           </fieldset>
           <p className="mt-3 text-sm text-[#514D5F]">Não sabem? Está indicado na fatura, junto à opção tarifária.</p>
 
-          <div className="mt-4 rounded-2xl bg-[#F1EFFA] p-4 sm:p-5" aria-live="polite">
-            <p className="flex flex-wrap items-baseline gap-x-2 font-black text-[#382F83]">Período de vazio{cyc === "semanal" && <span className="text-sm font-semibold text-[#514D5F]">· horário de {summer ? "verão" : "inverno"}</span>}</p>
-            <ul className="mt-2 divide-y divide-[#DCD7EA]">
+          <div className="mt-4 rounded-2xl bg-[#E6FAF2] p-4 sm:p-5" aria-live="polite">
+            <p className="flex flex-wrap items-baseline gap-x-2 font-black text-[#146B4F]"><span>Período de <Vz /></span>{cyc === "semanal" && <span className="text-sm font-semibold text-[#514D5F]">· horário de {summer ? "verão" : "inverno"}</span>}</p>
+            <ul className="mt-2 divide-y divide-[#BFEBD9]">
               {vazioRows.map(([d, hs]) => (
                 <li key={d} className="flex flex-col gap-1 py-2 sm:flex-row sm:items-center sm:justify-between">
                   <span className="text-[0.95rem] text-[#514D5F]">{d}</span>
@@ -2543,11 +2625,14 @@ export default function GuiaCarregamento() {
                 </li>
               ))}
             </ul>
-            <p className="mt-3 border-t border-[#DCD7EA] pt-3 text-[0.95rem]">
-              No carro vamos programar <Time>{p.s} → {p.e}</Time>{cyc === "semanal" ? ", todos os dias. É o horário que fica sempre em vazio." : "."}
+            <p className="mt-3 border-t border-[#BFEBD9] pt-3 text-[0.95rem] text-[#514D5F]">
+              <Fv><b className="text-[#171424]">Fora de vazio</b></Fv>: {cyc === "diario" ? <>das <b className="tabular-nums text-[#171424]">08:00</b> às <b className="tabular-nums text-[#171424]">22:00</b></> : "as restantes horas"}. A eletricidade é mais cara, por isso evitem carregar nesse período.
+            </p>
+            <p className="mt-2 text-[0.95rem]">
+              No carro vamos programar <Time>{p.s} → {p.e}</Time>{cyc === "semanal" ? <>, todos os dias. É o horário que fica sempre em <Vz />.</> : "."}
             </p>
           </div>
-          <p className="mt-3 text-sm text-[#514D5F]">Têm tarifa simples? Aí o preço é igual a qualquer hora. Para pagar menos ao carregar, conheçam o tarifário <A href="https://goldenergy.pt/mobilidade-eletrica/carregar-em-casa/">Carregar em Casa</A>.</p>
+          <OfferStrip where="passo2" />
           <div className="mt-6"><button type="button" onClick={goStep3} className={cx(BTN_P, "w-full sm:w-auto")}>Ver os passos<Icon n="chevR" /></button></div>
         </Step>
 
@@ -2555,6 +2640,8 @@ export default function GuiaCarregamento() {
         <Step n={3} title="Programar o carregamento" state={secs[3]} headRef={h3} lockedText="Os passos aparecem aqui, já com o vosso horário.">
           {G && <Guide {...{ G, b, f, v, p, cur, n, screen, photo, showAll, setShowAll, finished, go, finish, doneRef, copyLink, copied }} />}
         </Step>
+
+        <Promo />
 
         {/* Dicas */}
         <section aria-labelledby="t4" className="rounded-[1.75rem] border border-[#E7E4EC] bg-white p-5 sm:p-7 print:hidden">
@@ -2582,12 +2669,12 @@ export default function GuiaCarregamento() {
   );
 }
 
-const SELECT = "min-h-[52px] w-full cursor-pointer appearance-none rounded-2xl border-2 border-[#D9D5E0] bg-white pl-4 pr-11 text-base text-[#171424] hover:border-[#B9B3C6] focus:border-[#382F83] focus:outline-none focus:ring-4 focus:ring-[#382F83]/15 disabled:cursor-not-allowed disabled:bg-[#F6F4F8] disabled:text-[#8C87A0]";
+const SELECT = "min-h-[52px] w-full cursor-pointer appearance-none rounded-2xl border-2 border-[#D9D5E0] bg-white pl-4 pr-11 text-base text-[#171424] hover:border-[#B9B3C6] focus:border-[#146B4F] focus:outline-none focus:ring-4 focus:ring-[#40DDA6]/35 disabled:cursor-not-allowed disabled:bg-[#F6F4F8] disabled:text-[#8C87A0]";
 function Field({ id, label, opt, children }) {
   return (
     <div>
       <label htmlFor={id} className="mb-1.5 block text-sm font-bold">{label}{opt && <span className="font-normal text-[#514D5F]"> (opcional)</span>}</label>
-      <div className="relative">{children}<span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#382F83]"><Icon n="chevD" /></span></div>
+      <div className="relative">{children}<span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#146B4F]"><Icon n="chevD" /></span></div>
     </div>
   );
 }
@@ -2617,7 +2704,7 @@ function Guide({ G, b, f, v, p, cur, n, screen, photo, showAll, setShowAll, fini
       <div className="mt-5 grid gap-x-8 gap-y-5 md:grid-cols-[minmax(0,1fr)_288px] md:grid-rows-[auto_1fr]">
         {/* Lista de passos */}
         <div className="min-w-0 md:col-start-1 md:row-start-1">
-          <div className="mb-3 flex items-center gap-3 text-sm font-bold text-[#382F83] print:hidden">
+          <div className="mb-3 flex items-center gap-3 text-sm font-bold text-[#146B4F] print:hidden">
             <span className="whitespace-nowrap">Passo {cur + 1} de {n}</span>
             <span className="h-2 flex-1 overflow-hidden rounded-full bg-[#EEEBF2]" aria-hidden="true"><span className="block h-full rounded-full bg-[#40DDA6] motion-safe:transition-all" style={{ width: pct + "%" }} /></span>
           </div>
@@ -2628,9 +2715,9 @@ function Guide({ G, b, f, v, p, cur, n, screen, photo, showAll, setShowAll, fini
                 <li key={i} className={cx(!isCur && !showAll && "hidden md:block", "print:block")}>
                   <button type="button" onClick={() => go(i)} aria-current={isCur ? "step" : undefined}
                     className={cx("flex w-full items-start gap-3 rounded-2xl border-2 p-3 text-left motion-safe:transition-colors", FOCUS,
-                      isCur ? "border-[#382F83] bg-[#F1EFFA]" : "border-transparent hover:bg-[#F6F4F8]")}>
+                      isCur ? "border-[#40DDA6] bg-[#E6FAF2]" : "border-transparent hover:bg-[#F6F4F8]")}>
                     <span aria-hidden="true" className={cx("mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-full text-sm font-black",
-                      isCur ? "bg-[#382F83] text-white" : past ? "bg-[#40DDA6] text-[#171424]" : "bg-[#EEEBF2] text-[#514D5F]")}>
+                      isCur ? "bg-[#146B4F] text-white" : past ? "bg-[#40DDA6] text-[#171424]" : "bg-[#EEEBF2] text-[#514D5F]")}>
                       {past ? <Icon n="check" className="h-4 w-4" /> : i + 1}
                     </span>
                     <span className={cx("min-w-0 flex-1 leading-relaxed", isCur ? "text-[1.05rem] text-[#171424]" : "text-[0.98rem] text-[#514D5F]")}>
@@ -2647,7 +2734,7 @@ function Guide({ G, b, f, v, p, cur, n, screen, photo, showAll, setShowAll, fini
         </div>
 
         {/* Ilustração */}
-        <div className="md:sticky md:top-4 md:col-start-2 md:row-span-2 md:row-start-1 md:self-start print:hidden">
+        <div className="md:sticky md:top-28 md:col-start-2 md:row-span-2 md:row-start-1 md:self-start print:hidden">
           <PhoneMock key={gk + screen} g={g} b={b} p={p} gk={gk} screen={screen} family={f} photo={photo} />
         </div>
 
@@ -2666,8 +2753,22 @@ function Guide({ G, b, f, v, p, cur, n, screen, photo, showAll, setShowAll, fini
           <p className="mt-2">Hoje à noite, liguem o cabo e confirmem na app que a carga começa perto das <Time>{p.s}</Time>.</p>
           <p className="mt-1 text-[#514D5F]">Se não começar, revejam os passos ou programem o horário na wallbox. Usem só um dos dois.</p>
           <div className="mt-4 flex flex-col gap-3 sm:flex-row print:hidden">
-            <button type="button" onClick={copyLink} className={BTN_P}><Icon n={copied ? "check" : "link"} />{copied ? "Ligação copiada" : "Copiar ligação deste guia"}</button>
+            <button type="button" onClick={copyLink} className={BTN_BLUE}><Icon n={copied ? "check" : "link"} />{copied ? "Ligação copiada" : "Copiar ligação deste guia"}</button>
             <button type="button" onClick={() => { try { window.print(); } catch (e) { } }} className={BTN_G}><Icon n="print" />Imprimir os passos</button>
+          </div>
+          <div className="mt-5 grid gap-3 border-t border-[#40DDA6]/50 pt-5 sm:grid-cols-2 print:hidden">
+            <a href={utm(OFFER.adesao, "concluido")} target="_blank" rel="noopener noreferrer" onClick={() => track("concluido_aderir")}
+              className={cx("group flex items-center gap-3 rounded-2xl bg-white p-4 motion-safe:transition-shadow hover:shadow-md", FOCUS)}>
+              <span className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-[#40DDA6] text-[#171424]"><Icon n="moon" /></span>
+              <span className="min-w-0 flex-1"><b className="block leading-tight text-[#171424]">Ainda não têm o Carregar em Casa?</b><span className="text-sm text-[#514D5F]"><Vz>Vazio</Vz> a {OFFER.preco}*. Aderir em minutos.</span></span>
+              <Icon n="chevR" className="h-5 w-5 flex-none text-[#146B4F] motion-safe:transition-transform group-hover:translate-x-0.5" /><Ext />
+            </a>
+            <a href={utm(OFFER.solar, "concluido")} target="_blank" rel="noopener noreferrer" onClick={() => track("concluido_solar")}
+              className={cx("group flex items-center gap-3 rounded-2xl bg-white p-4 motion-safe:transition-shadow hover:shadow-md", FOCUS)}>
+              <span className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-[#FFC845] text-[#171424]"><Icon n="sun" /></span>
+              <span className="min-w-0 flex-1"><b className="block leading-tight text-[#171424]">E se fosse o sol a ajudar?</b><span className="text-sm text-[#514D5F]">Conheçam os painéis solares Goldenergy.</span></span>
+              <Icon n="chevR" className="h-5 w-5 flex-none text-[#146B4F] motion-safe:transition-transform group-hover:translate-x-0.5" /><Ext />
+            </a>
           </div>
         </div>
       )}
@@ -2676,8 +2777,8 @@ function Guide({ G, b, f, v, p, cur, n, screen, photo, showAll, setShowAll, fini
         {g.tip && <Note><Rich text={g.tip} b={b} p={p} /></Note>}
         {oldNote && <Note>Modelo anterior ({f.versions[0].note}). Se a app já não funcionar, usem o horário da wallbox.</Note>}
         <details className="group rounded-2xl border border-[#E7E4EC] bg-white print:hidden">
-          <summary className={cx("flex min-h-[52px] cursor-pointer list-none items-center gap-3 rounded-2xl px-4 font-bold text-[#382F83] [&::-webkit-details-marker]:hidden", FOCUS)}>
-            <Icon n="bolt" /><span className="flex-1">Ajustar a potência de carregamento <span className="font-normal text-[#514D5F]">(opcional)</span></span>
+          <summary className={cx("flex min-h-[52px] cursor-pointer list-none items-center gap-3 rounded-2xl px-4 font-bold text-[#171424] [&::-webkit-details-marker]:hidden", FOCUS)}>
+            <Icon n="bolt" className="h-5 w-5 text-[#146B4F]" /><span className="flex-1">Ajustar a potência de carregamento <span className="font-normal text-[#514D5F]">(opcional)</span></span>
             <Icon n="chevD" className="h-5 w-5 motion-safe:transition-transform group-open:rotate-180" />
           </summary>
           <div className="space-y-2 px-4 pb-4 text-[0.95rem] leading-relaxed text-[#514D5F]">
@@ -2709,8 +2810,115 @@ function Sources() {
         <li>BMW e MINI: funcionamento do intervalo de tempo e da hora de partida descrito na <A href="https://faq.bmwusa.com/s/article/My-BMW-App-Charging-Charge-Climate-Timer-Charging-mode-Charge-in-time-frame-rlLVj?language=en_US">FAQ da My BMW App</A> e por utilizadores em <A href="https://bmwi.bimmerpost.com/forums/showthread/2228318/question-re-charging-time-slot-departure-time">Bimmerpost</A> e <A href="https://www.reddit.com/r/BMWiX/comments/1shmfph/charging_in_time_slot_not_working/">Reddit</A>.</li>
         <li>Marcas, modelos e versões: <A href="https://ev-database.org/">EV Database</A> (novembro de 2026), mais modelos anteriores, comerciais e quadriciclos comuns em Portugal.</li>
         <li>Logótipos: <A href="https://github.com/filippofilip95/car-logos-dataset">car-logos-dataset</A>; as marcas pertencem aos respetivos fabricantes. Fotos dos modelos: Wikimedia Commons, via Wikipédia, com licenças livres (autoria na página de cada ficheiro), e EV Database quando não existe foto livre.</li>
+        <li>Tarifário Carregar em Casa: condições e preços publicados em <A href={OFFER.pagina}>goldenergy.pt</A> (<A href={OFFER.precosPdf}>preços da oferta</A>). *{OFFER.notaPreco} **{OFFER.notaDesconto}</li>
+        <li>Ilustração: campanha «Electric Love» da Goldenergy.</li>
+        <li>Custo aos 100 km: {CUSTO100_CALC}. {CUSTO100_NOTA}</li>
         <li>Ciclos de vazio: horários de referência das tarifas bi-horárias em Portugal continental. Confirmem sempre o vosso contrato.</li>
       </ul>
     </details>
+  );
+}
+
+/* ===================== Oferta: faixa no passo 2 ===================== */
+function OfferStrip({ where }) {
+  return (
+    <div className="mt-5 rounded-2xl border-2 border-[#40DDA6] bg-white p-4 sm:p-5">
+      <p className="text-sm font-bold uppercase tracking-wider text-[#146B4F]">Tarifário Carregar em Casa</p>
+      <p className="mt-1 text-xl font-black leading-tight text-[#171424]">Carreguem no <Vz /> a <span className="whitespace-nowrap text-[#382F83]">{OFFER.preco}*</span></p>
+      <p className="mt-1 text-[0.95rem] text-[#514D5F]">Já são clientes de eletricidade Goldenergy? Têm <b className="text-[#171424]">{OFFER.descontoClientes} de desconto</b> no <Vz />.**</p>
+      <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+        <a href={utm(OFFER.adesao, where)} target="_blank" rel="noopener noreferrer" onClick={() => track(where + "_aderir")} className={BTN_BLUE}>Aderir ao tarifário<Ext /></a>
+        <a href={OFFER.telefoneHref} onClick={() => track(where + "_telefone")} className={BTN_G}><Icon n="phone" />{OFFER.telefone} · grátis</a>
+      </div>
+      <p className="mt-3 text-xs leading-snug text-[#514D5F]">*{OFFER.notaPreco} **{OFFER.notaDesconto} <A href={OFFER.precosPdf}>Preços da oferta</A></p>
+    </div>
+  );
+}
+
+/* ===================== Custo aos 100 km com explicação ===================== */
+function Cost100() {
+  const [hover, setHover] = useState(false), [focus, setFocus] = useState(false), [pin, setPin] = useState(false);
+  const open = hover || focus || pin;
+  const ref = useRef(null);
+  useEffect(() => {
+    if (!open) return;
+    const close = () => { setHover(false); setFocus(false); setPin(false); };
+    const onDoc = e => { if (ref.current && !ref.current.contains(e.target)) close(); };
+    const onKey = e => { if (e.key === "Escape") close(); };
+    document.addEventListener("pointerdown", onDoc); document.addEventListener("keydown", onKey);
+    return () => { document.removeEventListener("pointerdown", onDoc); document.removeEventListener("keydown", onKey); };
+  }, [open]);
+  const isKbd = el => { try { return el.matches(":focus-visible"); } catch (e) { return true; } };
+  return (
+    <div ref={ref} className="relative mt-6 max-w-xl">
+      <div className="inline-flex max-w-full flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl bg-white/75 py-2 pl-4 pr-2">
+        <span className="text-[0.98rem] font-semibold">Gasto aos 100 km, a carregar no <Vz />:</span>
+        <span className="flex items-center gap-1"
+          onPointerEnter={e => e.pointerType === "mouse" && setHover(true)} onPointerLeave={e => e.pointerType === "mouse" && setHover(false)}>
+          <b className="text-2xl font-black tabular-nums text-[#382F83]">{CUSTO100}</b>
+          <button type="button" aria-label="Como calculámos este valor" aria-describedby="tipCusto" aria-expanded={open}
+            onClick={() => setPin(v => !v)} onFocus={e => isKbd(e.currentTarget) && setFocus(true)} onBlur={() => setFocus(false)}
+            className={cx("flex h-11 w-11 items-center justify-center rounded-full text-[#382F83] hover:bg-white", FOCUS)}>
+            <Icon n="info" className="h-6 w-6" />
+          </button>
+          <span id="tipCusto" role="tooltip"
+            className={cx("absolute left-0 right-0 top-full z-30 pt-2", open ? "block" : "hidden")}>
+            <span className="block rounded-2xl bg-[#171424] p-4 text-left text-sm leading-relaxed text-white shadow-[0_16px_40px_-12px_rgba(23,20,36,.5)]">
+              <b className="block text-[0.95rem]">Como calculámos</b>
+              <span className="mt-1 block font-semibold tabular-nums text-[#40DDA6]">{CUSTO100_CALC}</span>
+              <span className="mt-1 block text-white/85">Preço do vazio do tarifário Carregar em Casa. {CUSTO100_NOTA}</span>
+            </span>
+          </span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* ===================== Promoção: tarifário + solar ===================== */
+function Promo() {
+  return (
+    <section aria-labelledby="tpromo" className="scroll-mt-20 sm:scroll-mt-28 print:hidden">
+      <h2 id="tpromo" className="sr-only">Mais para a vossa casa</h2>
+      <div className="grid gap-4 sm:gap-5 md:grid-cols-2">
+        {/* Carregar em Casa */}
+        <article className="flex flex-col overflow-hidden rounded-[1.75rem] bg-[#40DDA6]">
+          <div className="flex flex-1 flex-col p-5 sm:p-7">
+            <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-white"><Moon className="h-6 w-6" /></span>
+            <p className="text-sm font-bold uppercase tracking-wider text-[#382F83]">Carregar em Casa</p>
+            <h3 className="mt-1 text-2xl font-black leading-tight text-[#171424] sm:text-[1.75rem]">O vosso carro carrega à noite. A fatura agradece de manhã.</h3>
+            <p className="mt-3 text-[1.05rem] text-[#171424]">Um tarifário bi-horário pensado para quem carrega em casa: <b className="whitespace-nowrap">{OFFER.preco}*</b> no <Vz />, em tarifa bi-horária.</p>
+            <ul className="mt-3 space-y-1.5 text-[0.98rem] text-[#171424]">
+              {["Carreguem nas horas de vazio, sem mudar a rotina", "Clientes de eletricidade Goldenergy: " + OFFER.descontoClientes + " de desconto no vazio**", "Adesão online, por telefone ou nós ligamos"].map(t => (
+                <li key={t} className="flex gap-2"><span className="mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full bg-[#171424] text-[#40DDA6]"><Icon n="check" className="h-3 w-3" /></span><span>{vzText(t, "p")}</span></li>
+              ))}
+            </ul>
+            <div className="mt-auto flex flex-col gap-2 pt-6 sm:flex-row sm:flex-wrap">
+              <a href={utm(OFFER.adesao, "promo")} target="_blank" rel="noopener noreferrer" onClick={() => track("promo_aderir")} className={BTN_BLUE}>Aderir agora<Icon n="arrow" /><Ext /></a>
+              <a href={OFFER.telefoneHref} onClick={() => track("promo_telefone")} className={cx(BTN, "border-2 border-[#171424] text-[#171424] hover:bg-white/30")}><Icon n="phone" />{OFFER.telefone}</a>
+            </div>
+            <p className="mt-3 text-xs text-[#171424]/80">Chamada gratuita · {OFFER.horario}</p>
+          </div>
+        </article>
+
+        {/* Painéis solares */}
+        <article className="flex flex-col overflow-hidden rounded-[1.75rem] border-2 border-[#FFC845] bg-[#FFF8E1]">
+          <div className="flex flex-1 flex-col p-5 sm:p-7">
+            <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FFC845] text-[#171424]"><Icon n="sun" className="h-6 w-6" /></span>
+            <p className="text-sm font-bold uppercase tracking-wider text-[#7A4B00]">Painéis solares</p>
+            <h3 className="mt-1 text-2xl font-black leading-tight text-[#171424] sm:text-[1.75rem]">O sol também pode dar energia ao vosso carro.</h3>
+            <p className="mt-3 text-[1.05rem] text-[#171424]">Produzam energia no vosso telhado e usem-na durante o dia, na casa e no carro, quando está estacionado ao sol.</p>
+            <ul className="mt-3 space-y-1.5 text-[0.98rem] text-[#171424]">
+              {["Fins de semana e teletrabalho: carreguem com o sol", "Nos outros dias: carreguem à noite, no vazio", "Instalação completa pela Goldenergy"].map(t => (
+                <li key={t} className="flex gap-2"><span className="mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full bg-[#FFC845] text-[#171424]"><Icon n="check" className="h-3 w-3" /></span><span>{vzText(t, "s")}</span></li>
+              ))}
+            </ul>
+            <div className="mt-auto flex flex-col gap-2 pt-6 sm:flex-row">
+              <a href={utm(OFFER.solar, "promo")} target="_blank" rel="noopener noreferrer" onClick={() => track("promo_solar")} className={BTN_SOLAR}>Conhecer os painéis solares<Icon n="arrow" /><Ext /></a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
   );
 }
