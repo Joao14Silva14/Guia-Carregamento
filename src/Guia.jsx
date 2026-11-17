@@ -350,7 +350,7 @@ const RAW = `
 - Honda e (2020–2024)
 #e:Ny1
 +e:Ny1
-@Hyundai|hk|Bluelink
+@Hyundai|hk|myHyundai
 #INSTER
 2230 INSTER Standard Range
 2231 INSTER Long Range
@@ -1273,7 +1273,7 @@ const THEMES={
   audi:{dark:1,bg:"#000000",card:"#161616",fg:"#FFFFFF",mut:"#9E9E9E",line:"#2A2A2A",acc:"#FFFFFF",on:"#000000"},
   skoda:{dark:1,bg:"#0E3A2F",card:"#17473A",fg:"#FFFFFF",mut:"#9DBDB2",line:"#215545",acc:"#78FAAE",on:"#0E3A2F"},
   cupra:{dark:1,bg:"#111111",card:"#1C1C1C",fg:"#FFFFFF",mut:"#A3A3A3",line:"#2C2C2C",acc:"#C27C4E",on:"#111111"},
-  hyundai:{dark:1,bg:"#002C5F",card:"#0B3D78",fg:"#FFFFFF",mut:"#A9C1DD",line:"#18508F",acc:"#00AAD2",on:"#002C5F",name:"Bluelink"},
+  hyundai:{dark:1,bg:"#002C5F",card:"#0B3D78",fg:"#FFFFFF",mut:"#A9C1DD",line:"#18508F",acc:"#00AAD2",on:"#002C5F",name:"myHyundai"},
   kia:{dark:1,bg:"#05141F",card:"#132633",fg:"#FFFFFF",mut:"#9FB0BC",line:"#203645",acc:"#FFFFFF",on:"#05141F",name:"Kia"},
   genesis:{dark:1,bg:"#0B0B0B",card:"#191919",fg:"#FFFFFF",mut:"#A3A3A3",line:"#2A2A2A",acc:"#C59E77",on:"#0B0B0B"},
   mercedes:{dark:1,bg:"#000000",card:"#121212",fg:"#FFFFFF",mut:"#9A9A9A",line:"#262626",acc:"#00ADEF",on:"#000000",name:"Mercedes-Benz"},
@@ -1505,17 +1505,17 @@ mercedes:{level:IND, th:"mercedes",
 hk:{level:IND, th:"hyundai",
   screens:[
     {t:"",cap:"Ecrã inicial da app",rows:[["hero"],["link","Carregamento","62 % · Cabo ligado"],["link","Climatização"]],hl:[1]},
-    {t:"Carregamento agendado",cap:"Fora das horas de ponta",rows:[["tog","Carregamento fora das horas de ponta",1],["time","Início","S"],["time","Fim","E"],["seg",["Prioridade","Só fora de ponta"],1]],btn:"Enviar",hl:[0,1,2,3]}
+    {t:"Carregamento planeado",cap:"Horário fora de hora de ponta",rows:[["tog","Carregamento planeado",1],["time","Início","S"],["time","Fim","E"],["seg",["Priorizadas","Só fora de ponta"],1]],btn:"OK",hl:[0,1,2,3]}
   ],
   map:[0,1,1,1],
   steps:[
-    "Abram a app {app} e entrem em <b>Carregamento › Carregamento agendado</b>. No carro, o mesmo menu está nas definições do veículo elétrico.",
-    "Ativem o <b>carregamento fora das horas de ponta</b> e definam {inicio}–{fim}.",
-    "Escolham <b>apenas fora das horas de ponta</b>, para que o carro não carregue fora desse horário.",
-    "Enviem para o carro e confirmem a mensagem de sucesso."
+    "Abram a app {app} e entrem no agendamento do carregamento. No ecrã do carro, o caminho é <b>EV › Gestão de carregamento › Carregam/Climatiz.</b>",
+    "Ativem o <b>Carregamento planeado</b> e definam o horário fora de hora de ponta: {inicio}–{fim}.",
+    "Escolham <b>Apenas tarifas fora das horas de ponta</b>, para que o carro não carregue fora desse horário.",
+    "Confirmem com <b>OK</b> (ou enviem a partir da app) e esperem pela mensagem de confirmação."
   ],
-  power:"No ecrã do carro, nas definições do veículo elétrico, procurem <b>Corrente de carga AC</b>: «máxima», «reduzida» ou «mínima».",
-  tip:""
+  power:"No ecrã do carro, em <b>EV › Gestão de carregamento</b>, procurem <b>Corrente de carga CA</b> e escolham um valor mais baixo. Também podem definir o <b>Limite de carregamento (CA)</b>.",
+  tip:"O carregamento planeado só começa se o cabo já estiver ligado à hora marcada."
 },
 volvo:{level:IND, th:"volvo",
   screens:[
@@ -2251,7 +2251,7 @@ function Step({ n, title, state, summary, onEdit, editLabel, lockedText, headRef
           </button>
         )}
       </div>
-      {locked && <p className="mt-2 pl-[3.25rem] text-[0.95rem] text-[#6E6980] sm:pl-14">{lockedText}</p>}
+      {locked && <p className="mt-2 pl-[3.25rem] text-base text-[#6E6980] sm:pl-14">{lockedText}</p>}
       {done && summary && <div className="mt-3 sm:pl-14">{summary}</div>}
       {open && <div className="mt-5 sm:mt-6">{children}</div>}
     </section>
@@ -2446,7 +2446,7 @@ export default function GuiaCarregamento() {
     <div className="min-h-screen bg-[#F6F4F8] text-[#171424] antialiased" style={{ fontFamily: "'Brandon Grotesque','Brandon Text',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif" }}>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700&family=Poppins:wght@400;500;600&family=Roboto:wght@400;500;700&family=Source+Sans+3:wght@400;600&display=swap" />
-      <style>{DEVICE_CSS}</style>
+      <style>{DEVICE_CSS + PAGE_CSS}</style>
       <a href="#guia" className="sr-only z-50 rounded-full bg-white px-4 py-2 font-bold text-[#382F83] focus:not-sr-only focus:fixed focus:left-3 focus:top-3">Saltar para o guia</a>
 
       {/* Barra superior fixa, com adesão sempre à mão */}
@@ -2459,9 +2459,9 @@ export default function GuiaCarregamento() {
           <div className="ml-auto flex items-center gap-2 sm:gap-4">
             <a href={OFFER.telefoneHref} onClick={() => track("header_telefone")} className={cx("hidden items-center gap-2 rounded-full px-2 text-[#171424] md:flex", FOCUS)}>
               <Icon n="phone" className="h-5 w-5 text-[#146B4F]" />
-              <span className="leading-tight"><b className="block text-[0.95rem]">{OFFER.telefone}</b><span className="block text-xs text-[#514D5F]">Chamada gratuita</span></span>
+              <span className="leading-tight"><b className="block text-base">{OFFER.telefone}</b><span className="block text-xs text-[#514D5F]">Chamada gratuita</span></span>
             </a>
-            <a href={utm(OFFER.adesao, "header")} target="_blank" rel="noopener noreferrer" onClick={() => track("header_aderir")} className={cx(BTN_BLUE, "min-h-[44px] px-4 text-[0.95rem] sm:px-5")}>
+            <a href={utm(OFFER.adesao, "header")} target="_blank" rel="noopener noreferrer" onClick={() => track("header_aderir")} className={cx(BTN_BLUE, "min-h-[44px] px-4 text-base sm:px-5")}>
               <span>Aderir<span className="hidden sm:inline"> ao tarifário</span></span><Ext />
             </a>
           </div>
@@ -2474,19 +2474,19 @@ export default function GuiaCarregamento() {
           <div className="min-w-0">
             <p className="text-sm font-bold uppercase tracking-[.14em] text-[#382F83]">Mobilidade elétrica · Guia prático</p>
             <h1 className="mt-3 text-[2rem] font-black leading-[1.05] sm:text-5xl lg:text-[3.4rem]">
-              O melhor momento para carregar é enquanto dormem. <span className="text-[#382F83]">Nós mostramos como.</span>
+              Programem o carro para carregar nas horas de <span className="whitespace-nowrap text-[#382F83]"><Moon className="mr-[0.15em] inline-block h-[0.85em] w-[0.85em] align-[-0.06em]" />vazio</span>
             </h1>
-            <p className="mt-4 max-w-xl text-lg leading-relaxed">Programem a app do carro para carregar nas horas de <Vz />, quando a eletricidade é mais barata. Em 3 passos, sem mudar a vossa rotina.</p>
+            <p className="mt-4 max-w-xl text-lg leading-relaxed">Escolham o carro e sigam os passos na app. São 3 passos e poucos minutos. Depois, o carro passa a carregar à noite, quando a eletricidade custa menos.</p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <button type="button" onClick={startGuide} className={cx(BTN_BLUE, "px-7")}>Começar o guia<Icon n="arrow" /></button>
-              <a href={utm(OFFER.pagina, "hero")} target="_blank" rel="noopener noreferrer" onClick={() => track("hero_tarifario")} className={BTN_ONGREEN}>Conhecer o tarifário Carregar em Casa<Ext /></a>
+              <a href={utm(OFFER.pagina, "hero")} target="_blank" rel="noopener noreferrer" onClick={() => track("hero_tarifario")} className={BTN_ONGREEN}>Ver o tarifário Carregar em Casa<Ext /></a>
             </div>
             <Cost100 />
           </div>
           <div className="mx-auto w-full max-w-md md:max-w-none">
             <img src={IMG.hero} alt="A casa sorridente da Goldenergy, com painéis solares no telhado, a carregar o carro elétrico na garagem" width="727" height="473"
-              className="block aspect-[727/473] w-full bg-[#40DDA6] object-cover"
-              style={{ WebkitMaskImage: "linear-gradient(to left, transparent 0, #000 8%)", maskImage: "linear-gradient(to left, transparent 0, #000 8%)" }} />
+              fetchpriority="high" decoding="async"
+              className="mx-auto block aspect-[727/473] w-full max-w-sm bg-[#40DDA6] object-contain sm:max-w-md md:max-w-none" />
           </div>
         </div>
       </header>
@@ -2575,8 +2575,8 @@ export default function GuiaCarregamento() {
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-[#514D5F]">{b.other ? "Guia geral" : b.name}</p>
                     <p className="text-xl font-black leading-tight">{b.other ? "Outra marca ou modelo" : f ? famLabel(b, f) : "Agora escolham o modelo"}</p>
-                    {v && f && f.versions.length > 1 && <p className="mt-0.5 text-[0.95rem] text-[#171424]">{v.name}</p>}
-                    {b.other && <p className="mt-1 text-[0.95rem] text-[#514D5F]">Mostramos os passos comuns à maioria das apps.</p>}
+                    {v && f && f.versions.length > 1 && <p className="mt-0.5 text-base text-[#171424]">{v.name}</p>}
+                    {b.other && <p className="mt-1 text-base text-[#514D5F]">Mostramos os passos comuns à maioria das apps.</p>}
                     {!b.other && b.app && <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-sm font-semibold text-[#146B4F]"><Icon n="bolt" className="h-4 w-4" />App {b.app}</p>}
                     {v && v.id && <p className="mt-2 text-sm"><A href={evUrl(b, v)}>Ficha técnica</A></p>}
                   </div>
@@ -2616,22 +2616,22 @@ export default function GuiaCarregamento() {
               ))}
             </div>
           </fieldset>
-          <p className="mt-3 text-sm text-[#514D5F]">Não sabem? Está indicado na fatura, junto à opção tarifária.</p>
+          <p className="mt-3 text-base text-[#514D5F]">Não sabem qual é? Está na fatura, junto à opção tarifária.</p>
 
           <div className="mt-4 rounded-2xl bg-[#E6FAF2] p-4 sm:p-5" aria-live="polite">
             <p className="flex flex-wrap items-baseline gap-x-2 font-black text-[#146B4F]"><span>Período de <Vz /></span>{cyc === "semanal" && <span className="text-sm font-semibold text-[#514D5F]">· horário de {summer ? "verão" : "inverno"}</span>}</p>
             <ul className="mt-2 divide-y divide-[#BFEBD9]">
               {vazioRows.map(([d, hs]) => (
                 <li key={d} className="flex flex-col gap-1 py-2 sm:flex-row sm:items-center sm:justify-between">
-                  <span className="text-[0.95rem] text-[#514D5F]">{d}</span>
-                  <span className="flex flex-wrap gap-1.5">{hs.map(h => <b key={h} className={cx("rounded-lg bg-white px-2 py-0.5 font-bold tabular-nums", cyc === "diario" ? "text-xl" : "text-[0.95rem]")}>{h}</b>)}</span>
+                  <span className="text-base text-[#514D5F]">{d}</span>
+                  <span className="flex flex-wrap gap-1.5">{hs.map(h => <b key={h} className={cx("rounded-lg bg-white px-2 py-0.5 font-bold tabular-nums", cyc === "diario" ? "text-xl" : "text-base")}>{h}</b>)}</span>
                 </li>
               ))}
             </ul>
-            <p className="mt-3 border-t border-[#BFEBD9] pt-3 text-[0.95rem] text-[#514D5F]">
+            <p className="mt-3 border-t border-[#BFEBD9] pt-3 text-base text-[#514D5F]">
               <Fv><b className="text-[#171424]">Fora de vazio</b></Fv>: {cyc === "diario" ? <>das <b className="tabular-nums text-[#171424]">08:00</b> às <b className="tabular-nums text-[#171424]">22:00</b></> : "as restantes horas"}. A eletricidade é mais cara, por isso evitem carregar nesse período.
             </p>
-            <p className="mt-2 text-[0.95rem]">
+            <p className="mt-2 text-base">
               No carro vamos programar <Time>{p.s} → {p.e}</Time>{cyc === "semanal" ? <>, todos os dias. É o horário que fica sempre em <Vz />.</> : "."}
             </p>
           </div>
@@ -2648,14 +2648,14 @@ export default function GuiaCarregamento() {
 
         {/* Dicas */}
         <section aria-labelledby="t4" className="rounded-[1.75rem] border border-[#E7E4EC] bg-white p-5 sm:p-7 print:hidden">
-          <h2 id="t4" className="text-xl font-black sm:text-2xl">Para correr bem</h2>
+          <h2 id="t4" className="text-xl font-black sm:text-2xl">Para tudo correr bem</h2>
           <div className="mt-4 grid gap-3 md:grid-cols-3">
             {[["plug", "Um só horário", <>Programem o horário no carro <b>ou</b> na wallbox, nunca nos dois. Se tiverem horários diferentes, o carro pode não carregar.</>],
               ["moon", "Confirmem na primeira noite", "Liguem o cabo à noite e confirmem na app que a carga começou à hora certa."],
               ["refresh", "Mantenham tudo atualizado", "Atualizem a app e o software do carro. Os nomes dos menus podem mudar com as atualizações."]].map(([ic, t, d]) => (
               <div key={t} className="flex gap-3 rounded-2xl bg-[#F6F4F8] p-4 md:flex-col">
                 <span className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-[#40DDA6]/25 text-[#146B4F]"><Icon n={ic} /></span>
-                <div><h3 className="font-black">{t}</h3><p className="mt-1 text-[0.95rem] leading-relaxed text-[#514D5F]">{d}</p></div>
+                <div><h3 className="font-black">{t}</h3><p className="mt-1 text-base leading-relaxed text-[#514D5F]">{d}</p></div>
               </div>
             ))}
           </div>
@@ -2672,6 +2672,11 @@ export default function GuiaCarregamento() {
   );
 }
 
+/* Boas práticas: o foco e as âncoras não ficam escondidos pela barra fixa (WCAG 2.4.11) e o movimento respeita a preferência do sistema */
+const PAGE_CSS = `html{scroll-padding-top:5rem;scroll-padding-bottom:6.5rem;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@media (min-width:640px){html{scroll-padding-top:7rem}}
+@media (min-width:768px){html{scroll-padding-bottom:1rem}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}`;
 const SELECT = "min-h-[52px] w-full cursor-pointer appearance-none rounded-2xl border-2 border-[#D9D5E0] bg-white pl-4 pr-11 text-base text-[#171424] hover:border-[#B9B3C6] focus:border-[#146B4F] focus:outline-none focus:ring-4 focus:ring-[#40DDA6]/35 disabled:cursor-not-allowed disabled:bg-[#F6F4F8] disabled:text-[#8C87A0]";
 function Field({ id, label, opt, children }) {
   return (
@@ -2699,7 +2704,7 @@ function Guide({ G, b, f, v, p, cur, n, screen, photo, showAll, setShowAll, fini
         <BrandLogo b={b} size="md" />
         <div className="min-w-0 flex-1">
           <h3 className="text-lg font-black leading-tight sm:text-xl">{title}</h3>
-          <p className="text-[0.95rem] text-[#514D5F]">{sub}</p>
+          <p className="text-base text-[#514D5F]">{sub}</p>
         </div>
         {g.level === OK && <span className="inline-flex items-center gap-1 rounded-full bg-[#E6FAF2] px-3 py-1 text-xs font-bold text-[#146B4F]"><Icon n="check" className="h-3.5 w-3.5" />Confirmado com fontes públicas</span>}
       </div>
@@ -2723,7 +2728,7 @@ function Guide({ G, b, f, v, p, cur, n, screen, photo, showAll, setShowAll, fini
                       isCur ? "bg-[#146B4F] text-white" : past ? "bg-[#40DDA6] text-[#171424]" : "bg-[#EEEBF2] text-[#514D5F]")}>
                       {past ? <Icon n="check" className="h-4 w-4" /> : i + 1}
                     </span>
-                    <span className={cx("min-w-0 flex-1 leading-relaxed", isCur ? "text-[1.05rem] text-[#171424]" : "text-[0.98rem] text-[#514D5F]")}>
+                    <span className={cx("min-w-0 flex-1 leading-relaxed", isCur ? "text-[1.05rem] text-[#171424]" : "text-base text-[#514D5F]")}>
                       <span className="sr-only">Passo {i + 1}: </span><Rich text={s} b={b} p={p} />
                     </span>
                   </button>
@@ -2731,7 +2736,7 @@ function Guide({ G, b, f, v, p, cur, n, screen, photo, showAll, setShowAll, fini
               );
             })}
           </ol>
-          <button type="button" aria-expanded={showAll} onClick={() => setShowAll(!showAll)} className={cx("mt-2 py-2 text-sm md:hidden print:hidden", LINKBTN)}>
+          <button type="button" aria-expanded={showAll} onClick={() => setShowAll(!showAll)} className={cx("mt-2 inline-flex min-h-[44px] items-center px-1 text-base md:hidden print:hidden", LINKBTN)}>
             {showAll ? "Mostrar só o passo atual" : "Ver todos os " + n + " passos"}
           </button>
         </div>
@@ -2763,13 +2768,13 @@ function Guide({ G, b, f, v, p, cur, n, screen, photo, showAll, setShowAll, fini
             <a href={utm(OFFER.adesao, "concluido")} target="_blank" rel="noopener noreferrer" onClick={() => track("concluido_aderir")}
               className={cx("group flex items-center gap-3 rounded-2xl bg-white p-4 motion-safe:transition-shadow hover:shadow-md", FOCUS)}>
               <span className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-[#40DDA6] text-[#171424]"><Icon n="moon" /></span>
-              <span className="min-w-0 flex-1"><b className="block leading-tight text-[#171424]">Ainda não têm o tarifário Carregar em Casa?</b><span className="text-sm text-[#514D5F]"><Vz>Vazio</Vz> a {OFFER.preco}*. Aderir em minutos.</span></span>
+              <span className="min-w-0 flex-1"><b className="block leading-tight text-[#171424]">Ainda não têm o tarifário Carregar em Casa?</b><span className="text-sm text-[#514D5F]"><Vz>Vazio</Vz> a {OFFER.preco}*. Vejam as condições e como aderir.</span></span>
               <Icon n="chevR" className="h-5 w-5 flex-none text-[#146B4F] motion-safe:transition-transform group-hover:translate-x-0.5" /><Ext />
             </a>
             <a href={utm(OFFER.solar, "concluido")} target="_blank" rel="noopener noreferrer" onClick={() => track("concluido_solar")}
               className={cx("group flex items-center gap-3 rounded-2xl bg-white p-4 motion-safe:transition-shadow hover:shadow-md", FOCUS)}>
               <span className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-[#FFC845] text-[#171424]"><Icon n="sun" /></span>
-              <span className="min-w-0 flex-1"><b className="block leading-tight text-[#171424]">E se fosse o sol a ajudar?</b><span className="text-sm text-[#514D5F]">Conheçam os painéis solares Goldenergy.</span></span>
+              <span className="min-w-0 flex-1"><b className="block leading-tight text-[#171424]">Painéis solares Goldenergy</b><span className="text-sm text-[#514D5F]">Produzam energia em casa durante o dia.</span></span>
               <Icon n="chevR" className="h-5 w-5 flex-none text-[#146B4F] motion-safe:transition-transform group-hover:translate-x-0.5" /><Ext />
             </a>
           </div>
@@ -2784,7 +2789,7 @@ function Guide({ G, b, f, v, p, cur, n, screen, photo, showAll, setShowAll, fini
             <Icon n="bolt" className="h-5 w-5 text-[#146B4F]" /><span className="flex-1">Ajustar a potência de carregamento <span className="font-normal text-[#514D5F]">(opcional)</span></span>
             <Icon n="chevD" className="h-5 w-5 motion-safe:transition-transform group-open:rotate-180" />
           </summary>
-          <div className="space-y-2 px-4 pb-4 text-[0.95rem] leading-relaxed text-[#514D5F]">
+          <div className="space-y-2 px-4 pb-4 text-base leading-relaxed text-[#514D5F]">
             <p><Rich text={g.power} b={b} p={p} /></p>
             <p>Só é preciso se a instalação elétrica não aguentar a potência máxima. Com uma wallbox com balanceamento dinâmico, normalmente não precisam de mexer nesta definição.</p>
           </div>
@@ -2794,7 +2799,7 @@ function Guide({ G, b, f, v, p, cur, n, screen, photo, showAll, setShowAll, fini
   );
 }
 const Note = ({ children }) => (
-  <div className="flex gap-3 rounded-2xl bg-[#FFF6E5] p-4 text-[0.95rem] leading-relaxed text-[#4A3500]">
+  <div className="flex gap-3 rounded-2xl bg-[#FFF6E5] p-4 text-base leading-relaxed text-[#4A3500]">
     <Icon n="info" className="mt-0.5 h-5 w-5 flex-none text-[#7A4B00]" /><p>{children}</p>
   </div>
 );
@@ -2811,6 +2816,7 @@ function Sources() {
         <li>Guias marcados como confirmados, cruzados com manuais ou documentação pública: <A href="https://www.tesla.com/ownersmanual/modely/en_us/GUID-76995CEC-6402-4BFF-99FA-CEFA36E64A19.html">Tesla</A>, <A href="https://www.vw-id3.com/charging-247.html">Volkswagen ID.</A>, <A href="https://www.user-manual.renault.com/pt/content/openr-link/veiculo/veiculo-eletrico">Renault openR link (manual em português)</A>, <A href="https://www.autouserguide.com/byd/byd-dolphin-charging-and-discharging-user-guide/">BYD</A> e <A href="https://www.speakev.com/threads/peugeot-e2008-and-deffered-charging.159499/">Stellantis</A>.</li>
         <li>Nomes dos menus em português: <A href="https://www.peugeot.pt/conselhos-sugestoes/eletrificacao/carregamento/como-encontrar-pontos-de-carregamento-publicos-para-um-carro-eletrico.html">Peugeot Portugal</A> e <A href="https://www.media.stellantis.com/pt-pt/peugeot/press/abertas-as-encomendas-para-a-versao-eletrica-do-furgao-mais-vendido-em-portugal">Stellantis Media</A> (carregamento diferido e menu «Electric»), <A href="https://www.volkswagen.pt/conectividade-e-mobilidade/vw-connect-id/conforto">Volkswagen Portugal</A> (horas de partida por local de carregamento) e <A href="https://www.bmw.pt/pt/veiculos-eletricos/home-charging.html">BMW Portugal</A> (hora de partida e nível de carga).</li>
         <li>BMW e MINI: funcionamento do intervalo de tempo e da hora de partida descrito na <A href="https://faq.bmwusa.com/s/article/My-BMW-App-Charging-Charge-Climate-Timer-Charging-mode-Charge-in-time-frame-rlLVj?language=en_US">FAQ da My BMW App</A> e por utilizadores em <A href="https://bmwi.bimmerpost.com/forums/showthread/2228318/question-re-charging-time-slot-departure-time">Bimmerpost</A> e <A href="https://www.reddit.com/r/BMWiX/comments/1shmfph/charging_in_time_slot_not_working/">Reddit</A>.</li>
+        <li>Kia e Hyundai: nomes dos menus do <A href="http://webmanual.kia.com/DA_GEN2_V/AV/EUR/Portuguese/002_Features_electricvehicle.html">manual oficial Kia em português</A> (Gestão de carregamento, Carregamento planeado, Corrente de carga CA). Nomes atuais das apps confirmados no Google Play em novembro de 2026: <A href="https://play.google.com/store/apps/details?id=com.kia.oneapp.eu&hl=pt_PT">Kia App</A> e <A href="https://play.google.com/store/apps/details?id=com.hyundai.oneapp.eu&hl=pt_PT">myHyundai</A>.</li>
         <li>Marcas, modelos e versões: <A href="https://ev-database.org/">EV Database</A> (novembro de 2026), mais modelos anteriores, comerciais e quadriciclos comuns em Portugal.</li>
         <li>Logótipos: <A href="https://github.com/filippofilip95/car-logos-dataset">car-logos-dataset</A>; as marcas pertencem aos respetivos fabricantes. Fotos dos modelos: Wikimedia Commons, via Wikipédia, com licenças livres (autoria na página de cada ficheiro), e EV Database quando não existe foto livre.</li>
         <li>Tarifário Carregar em Casa: condições e preços publicados em <A href={OFFER.pagina}>goldenergy.pt</A> (<A href={OFFER.precosPdf}>preços da oferta</A>). *{OFFER.notaPreco} **{OFFER.notaDesconto}</li>
@@ -2828,10 +2834,10 @@ function OfferStrip({ where }) {
     <div className="mt-5 rounded-2xl border-2 border-[#40DDA6] bg-white p-4 sm:p-5">
       <p className="text-sm font-bold uppercase tracking-wider text-[#146B4F]">Tarifário Carregar em Casa</p>
       <p className="mt-1 text-xl font-black leading-tight text-[#171424]">Carreguem no <Vz /> a <span className="whitespace-nowrap text-[#382F83]">{OFFER.preco}*</span></p>
-      <p className="mt-1 text-[0.95rem] text-[#514D5F]">Já são clientes de eletricidade Goldenergy? Têm <b className="text-[#171424]">{OFFER.descontoClientes} de desconto</b> no <Vz />.**</p>
+      <p className="mt-1 text-base text-[#514D5F]">Já são clientes de eletricidade Goldenergy? Têm <b className="text-[#171424]">{OFFER.descontoClientes} de desconto</b> no <Vz />.**</p>
       <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
         <a href={utm(OFFER.adesao, where)} target="_blank" rel="noopener noreferrer" onClick={() => track(where + "_aderir")} className={BTN_BLUE}>Aderir ao tarifário<Ext /></a>
-        <a href={OFFER.telefoneHref} onClick={() => track(where + "_telefone")} className={BTN_G}><Icon n="phone" />{OFFER.telefone} · grátis</a>
+        <a href={OFFER.telefoneHref} onClick={() => track(where + "_telefone")} className={BTN_G}><Icon n="phone" />Ligar {OFFER.telefone}<span className="font-semibold text-[#514D5F]">(grátis)</span></a>
       </div>
       <p className="mt-3 text-xs leading-snug text-[#514D5F]">*{OFFER.notaPreco} **{OFFER.notaDesconto} <A href={OFFER.precosPdf}>Preços da oferta</A></p>
     </div>
@@ -2855,7 +2861,7 @@ function Cost100() {
   return (
     <div ref={ref} className="relative mt-6 max-w-xl">
       <div className="inline-flex max-w-full flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl bg-white/75 py-2 pl-4 pr-2">
-        <span className="text-[0.98rem] font-semibold">Gasto aos 100 km, a carregar no <Vz />:</span>
+        <span className="text-base font-semibold">Gasto aos 100 km, a carregar no <Vz />:</span>
         <span className="flex items-center gap-1"
           onPointerEnter={e => e.pointerType === "mouse" && setHover(true)} onPointerLeave={e => e.pointerType === "mouse" && setHover(false)}>
           <b className="text-2xl font-black tabular-nums text-[#382F83]">{CUSTO100}</b>
@@ -2867,7 +2873,7 @@ function Cost100() {
           <span id="tipCusto" role="tooltip"
             className={cx("absolute left-0 right-0 top-full z-30 pt-2", open ? "block" : "hidden")}>
             <span className="block rounded-2xl bg-[#171424] p-4 text-left text-sm leading-relaxed text-white shadow-[0_16px_40px_-12px_rgba(23,20,36,.5)]">
-              <b className="block text-[0.95rem]">Como calculámos</b>
+              <b className="block text-base">Como calculámos</b>
               <span className="mt-1 block font-semibold tabular-nums text-[#40DDA6]">{CUSTO100_CALC}</span>
               <span className="mt-1 block text-white/85">Preço do vazio do tarifário Carregar em Casa. {CUSTO100_NOTA}</span>
             </span>
@@ -2889,18 +2895,18 @@ function Promo() {
           <div className="flex flex-1 flex-col p-5 sm:p-7">
             <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-white"><Moon className="h-6 w-6" /></span>
             <p className="text-sm font-bold uppercase tracking-wider text-[#382F83]">Tarifário Carregar em Casa</p>
-            <h3 className="mt-1 text-2xl font-black leading-tight text-[#171424] sm:text-[1.75rem]">O vosso carro carrega à noite. A fatura agradece de manhã.</h3>
-            <p className="mt-3 text-[1.05rem] text-[#171424]">Um tarifário bi-horário pensado para quem carrega em casa: <b className="whitespace-nowrap">{OFFER.preco}*</b> no <Vz />, em tarifa bi-horária.</p>
-            <ul className="mt-3 space-y-1.5 text-[0.98rem] text-[#171424]">
-              {["Carreguem nas horas de vazio, sem mudar a rotina", "Clientes de eletricidade Goldenergy: " + OFFER.descontoClientes + " de desconto no vazio**", "Adesão online, por telefone ou nós ligamos"].map(t => (
+            <h3 className="mt-1 text-2xl font-black leading-tight text-[#171424] sm:text-[1.75rem]">Um tarifário pensado para carregar o carro em casa</h3>
+            <p className="mt-3 text-[1.05rem] text-[#171424]">Preço no <Vz />: <b className="whitespace-nowrap">{OFFER.preco}*</b>, em tarifa bi-horária.</p>
+            <ul className="mt-3 space-y-1.5 text-base text-[#171424]">
+              {["O carro carrega à noite, sem mudar a rotina", "Para clientes de eletricidade Goldenergy: " + OFFER.descontoClientes + " de desconto no vazio**", "Adesão online ou por telefone"].map(t => (
                 <li key={t} className="flex gap-2"><span className="mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full bg-[#171424] text-[#40DDA6]"><Icon n="check" className="h-3 w-3" /></span><span>{vzText(t, "p")}</span></li>
               ))}
             </ul>
             <div className="mt-auto flex flex-col gap-2 pt-6 sm:flex-row sm:flex-wrap">
-              <a href={utm(OFFER.adesao, "promo")} target="_blank" rel="noopener noreferrer" onClick={() => track("promo_aderir")} className={BTN_BLUE}>Aderir agora<Icon n="arrow" /><Ext /></a>
-              <a href={OFFER.telefoneHref} onClick={() => track("promo_telefone")} className={cx(BTN, "border-2 border-[#171424] text-[#171424] hover:bg-white/30")}><Icon n="phone" />{OFFER.telefone}</a>
+              <a href={utm(OFFER.adesao, "promo")} target="_blank" rel="noopener noreferrer" onClick={() => track("promo_aderir")} className={BTN_BLUE}>Aderir ao tarifário<Icon n="arrow" /><Ext /></a>
+              <a href={OFFER.telefoneHref} onClick={() => track("promo_telefone")} className={cx(BTN, "border-2 border-[#171424] text-[#171424] hover:bg-white/30")}><Icon n="phone" />Ligar {OFFER.telefone}</a>
             </div>
-            <p className="mt-3 text-xs text-[#171424]/80">Chamada gratuita · {OFFER.horario}</p>
+            <p className="mt-3 text-sm text-[#171424]">Chamada gratuita · {OFFER.horario}</p>
           </div>
         </article>
 
@@ -2910,9 +2916,9 @@ function Promo() {
             <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FFC845] text-[#171424]"><Icon n="sun" className="h-6 w-6" /></span>
             <p className="text-sm font-bold uppercase tracking-wider text-[#7A4B00]">Painéis solares</p>
             <h3 className="mt-1 text-2xl font-black leading-tight text-[#171424] sm:text-[1.75rem]">O sol também pode dar energia ao vosso carro.</h3>
-            <p className="mt-3 text-[1.05rem] text-[#171424]">Produzam energia no vosso telhado e usem-na durante o dia, na casa e no carro, quando está estacionado ao sol.</p>
-            <ul className="mt-3 space-y-1.5 text-[0.98rem] text-[#171424]">
-              {["Fins de semana e teletrabalho: carreguem com o sol", "Nos outros dias: carreguem à noite, no vazio", "Instalação completa pela Goldenergy"].map(t => (
+            <p className="mt-3 text-[1.05rem] text-[#171424]">Com painéis no telhado, a casa produz energia durante o dia. Essa energia serve para a casa e para o carro, quando está em casa.</p>
+            <ul className="mt-3 space-y-1.5 text-base text-[#171424]">
+              {["Quando o carro está em casa de dia, carrega com o sol", "Nos outros dias, carrega à noite, no vazio", "Equipamento, instalação e acompanhamento pela Goldenergy"].map(t => (
                 <li key={t} className="flex gap-2"><span className="mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full bg-[#FFC845] text-[#171424]"><Icon n="check" className="h-3 w-3" /></span><span>{vzText(t, "s")}</span></li>
               ))}
             </ul>
