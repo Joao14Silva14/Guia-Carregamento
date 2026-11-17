@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 
 /*
  * Goldenergy · Carregar em casa
@@ -24,7 +24,7 @@ const RAW = `
 #Junior Elettrica
 2184 Junior Elettrica 54 kWh
 2185 Junior Elettrica 54 kWh Veloce
-@Alpine|renault|
+@Alpine|renault|My Alpine
 #A290
 2268 A290 Electric 180 hp
 2269 A290 Electric 220 hp
@@ -220,7 +220,7 @@ const RAW = `
 3729 Spring Electric 80
 3409 Spring Electric 100
 - Spring (2021–2023)
-@Denza|cn|
+@Denza|cn|DENZA
 #Z9GT
 3730 Z9GT 122.49 kWh AWD
 @Dongfeng|cn|
@@ -336,7 +336,7 @@ const RAW = `
 3683 GV60 Magma
 #GV70
 3237 GV70 Electrified
-@GWM|cn|
+@GWM|cn|My GWM
 #ORA 07
 2245 ORA 07 Pure
 2246 ORA 07 Pro
@@ -670,7 +670,7 @@ const RAW = `
 +ET7
 #EL7
 +EL7
-@Nissan|nissan|NissanConnect Services
+@Nissan|nissan|MyNISSAN
 #Ariya
 3689 Ariya 63kWh
 3681 Ariya 87kWh
@@ -1322,7 +1322,7 @@ const SKIN={
   audi:{home:"min",list:"flat",hd:"l",sw:"sq",time:"chip",day:"square",btn:"full",batt:"bar",seg:"line",r:"0",br:"0",tabs:4,tabsL:["Veículo","Mapa","Serviços","Perfil"],ind:"bar",ff:FONT.rob,tw:500,licon:1},
   skoda:{ringc:"#78FAAE",home:"ring",list:"sep",hd:"L",sw:"md",time:"chip",day:"circle",btn:"fill",batt:"ring",seg:"pill",r:"14px",br:"999px",tabs:4,tabsL:["Carro","Mapa","Serviços","Perfil"],ind:"pill",ff:FONT.inter,tw:700,licon:1},
   cupra:{home:"ring",list:"flat",hd:"l",sw:"sq",time:"chip",day:"square",btn:"sq",batt:"ring",seg:"line",r:"2px",br:"2px",tabs:4,ind:"bar",ff:FONT.mont,tw:600,up:1,licon:1},
-  hyundai:{ringc:"#00AAD2",home:"dash",list:"sep",hd:"c",sw:"ios",time:"pair",day:"circle",btn:"fill",batt:"ring",seg:"pill",r:"14px",br:"999px",tabs:4,tabsL:["Início","Controlo","Mapa","Mais"],ind:"plain",quick:"lab",ff:FONT.dm,tw:700},
+  hyundai:{ringc:"#00AAD2",home:"dash",list:"sep",hd:"c",sw:"ios",time:"pair",day:"circle",btn:"fill",batt:"ring",seg:"pill",r:"14px",br:"999px",tabs:4,tabsL:["Início","Estado","Controlo","Serviços"],ind:"plain",quick:"lab",ff:FONT.dm,tw:700},
   kia:{home:"dash",list:"sep",hd:"l",sw:"md",time:"field",day:"pill",btn:"fill",batt:"bar",seg:"pill",r:"8px",br:"999px",tabs:4,tabsL:["Início","Controlo","Mapa","Menu"],ind:"pill",quick:"round",ff:FONT.pop,tw:600},
   genesis:{home:"min",list:"flat",hd:"c",sw:"sq",time:"plain",day:"square",btn:"outline",batt:"cell",seg:"line",r:"2px",br:"2px",tabs:0,ff:FONT.src,hf:FONT.serif,tw:400,up:1,licon:1},
   mercedes:{home:"min",list:"flat",hd:"c",sw:"ios",time:"plain",day:"ring",btn:"sq",batt:"bar",seg:"line",r:"4px",br:"4px",tabs:5,tabsL:["Início","Mapa","Loja","Carregar","Perfil"],ind:"bar",ff:FONT.src,tw:600,licon:1},
@@ -1363,13 +1363,13 @@ tesla:{level:OK, th:"tesla",
   ],
   map:[0,1,2,1],
   steps:[
-    "Abram a app {app} e toquem em <b>Carregamento</b>.",
-    "Toquem em <b>Agendar</b> e escolham o separador <b>Carregamento</b> (não «Partida»).",
-    "Definam <b>Começar às</b> {inicio} e <b>Terminar às</b> {fim}, escolham os dias e guardem. O horário fica associado à localização «Casa».",
-    "Liguem o cabo. A app deve mostrar que o carregamento está agendado."
+    "Abra a app {app} e toque em <b>Carregamento</b>.",
+    "Toque em <b>Agendar</b> e escolha o separador <b>Carregamento</b> (não «Partida»).",
+    "Defina <b>Começar às</b> {inicio} e <b>Terminar às</b> {fim}, escolha os dias e guarde. O horário fica associado à localização «Casa».",
+    "Ligue o cabo. A app deve mostrar que o carregamento está agendado."
   ],
-  power:"Com o cabo ligado, ajustem a corrente com os botões <b>−</b> e <b>+</b> no ecrã de carregamento (app ou carro). O valor fica guardado para casa.",
-  tip:"Definam sempre a hora de fim. Se usarem apenas a <b>Partida</b> e o vazio não chegar para completar a carga, o carro continua a carregar depois de o vazio acabar."
+  power:"Com o cabo ligado, ajuste a corrente com os botões <b>−</b> e <b>+</b> no ecrã de carregamento (app ou carro). O valor fica guardado para casa.",
+  tip:"Defina sempre a hora de fim. Se usar apenas a <b>Partida</b> e o vazio não chegar para completar a carga, o carro continua a carregar depois de o vazio acabar."
 },
 bmw:{level:IND, th:"bmw",
   screens:[
@@ -1380,14 +1380,14 @@ bmw:{level:IND, th:"bmw",
   ],
   map:[0,1,2,3,1],
   steps:[
-    "Na app {app}, no ecrã do vosso carro, toquem em <b>Carregamento</b>.",
-    "Definam o <b>objetivo de carga</b> (por exemplo, 80%) e abram o <b>temporizador de carga e climatização</b>. Em algumas versões da app, a opção chama-se <b>Definições de carregamento</b>.",
-    "Em <b>Modo de carregamento</b>, escolham <b>Carregar no intervalo de tempo</b> e definam o início às {inicio} e o fim às {fim}.",
-    "Ativem uma <b>hora de partida</b> às {fim} para os dias em que querem carregar. Sem uma partida ativa, o intervalo não é aplicado. Desliguem a climatização, se não precisarem dela.",
-    "Guardem e liguem o cabo. O carro pode carregar alguns minutos e depois parar até à hora de início. É normal."
+    "Na app {app}, no ecrã do seu carro, toque em <b>Carregamento</b>.",
+    "Defina o <b>objetivo de carga</b> (por exemplo, 80%) e abra o <b>temporizador de carga e climatização</b>. Em algumas versões da app, a opção chama-se <b>Definições de carregamento</b>.",
+    "Em <b>Modo de carregamento</b>, escolha <b>Carregar no intervalo de tempo</b> e defina o início às {inicio} e o fim às {fim}.",
+    "Ative uma <b>hora de partida</b> às {fim} para os dias em que quer carregar. Sem uma partida ativa, o intervalo não é aplicado. Desligue a climatização, se não precisar dela.",
+    "Guarde e ligue o cabo. O carro pode carregar alguns minutos e depois parar até à hora de início. É normal."
   ],
-  power:"No ecrã do carro (iDrive), no menu de <b>carregamento</b>, procurem o limite de <b>corrente de carga AC</b>. Em alguns modelos, a mesma opção também aparece na app.",
-  tip:"<b>Atenção:</b> o BMW dá prioridade a atingir o objetivo de carga até à hora de partida. Se a bateria estiver muito descarregada, pode começar antes das {inicio} ou continuar depois das {fim}. Para garantir que só carrega no vazio, escolham <b>Carregar imediatamente</b> e programem o horário na wallbox. Alguns textos da app podem aparecer em português do Brasil."
+  power:"No ecrã do carro (iDrive), no menu de <b>carregamento</b>, procure o limite de <b>corrente de carga AC</b>. Em alguns modelos, a mesma opção também aparece na app.",
+  tip:"<b>Atenção:</b> o BMW dá prioridade a atingir o objetivo de carga até à hora de partida. Se a bateria estiver muito descarregada, pode começar antes das {inicio} ou continuar depois das {fim}. Para garantir que só carrega no vazio, escolha <b>Carregar imediatamente</b> e programe o horário na wallbox. Alguns textos da app pode aparecer em português do Brasil."
 },
 volkswagen:{level:OK, th:"vw",
   screens:[
@@ -1397,12 +1397,12 @@ volkswagen:{level:OK, th:"vw",
   ],
   map:[0,1,2,2],
   steps:[
-    "Abram a app {app}, escolham o carro e toquem em <b>Carregamento</b>. No ecrã do carro, o menu tem o mesmo nome.",
-    "Abram <b>Locais de carregamento</b> e escolham «Casa». Se ainda não existir, criem-no no ecrã do carro, com o carro estacionado em casa.",
-    "Ativem <b>Horas de carregamento preferenciais</b>, definam {inicio}–{fim} e ponham o <b>Nível mínimo de carga</b> a 0%.",
-    "Guardem. O horário fica associado a esse local e é aplicado sempre que carregarem em casa."
+    "Abra a app {app}, escolha o carro e toque em <b>Carregamento</b>. No ecrã do carro, o menu tem o mesmo nome.",
+    "Abra <b>Locais de carregamento</b> e escolha «Casa». Se ainda não existir, crie-o no ecrã do carro, com o carro estacionado em casa.",
+    "Ative <b>Horas de carregamento preferenciais</b>, defina {inicio}–{fim} e ponha o <b>Nível mínimo de carga</b> a 0%.",
+    "Guarde. O horário fica associado a esse local e é aplicado sempre que carregar em casa."
   ],
-  power:"No local «Casa», ativem <b>Reduzir corrente de carga AC</b>. Normalmente, as opções são apenas «máxima» e «reduzida».",
+  power:"No local «Casa», ative <b>Reduzir corrente de carga AC</b>. Normalmente, as opções são apenas «máxima» e «reduzida».",
   tip:"Até atingir o nível mínimo, o carro carrega logo que é ligado, mesmo fora do vazio. Por isso convém pô-lo a 0%. Nos ID. com software mais antigo, a criação de locais só existe no ecrã do carro."
 },
 
@@ -1414,12 +1414,12 @@ vw:{level:IND, th:"vw",
   ],
   map:[0,1,2,2],
   steps:[
-    "Abram a app {app}, escolham o carro e entrem em <b>Carregamento</b>.",
-    "Abram os <b>perfis</b> (ou <b>locais</b>) <b>de carregamento</b> e criem «Casa».",
-    "Ativem o <b>horário de carregamento preferencial</b> (ou um <b>temporizador</b>) de {inicio} a {fim}.",
-    "Se existir <b>nível mínimo de carga</b>, ponham-no a 0% e guardem."
+    "Abra a app {app}, escolha o carro e entre em <b>Carregamento</b>.",
+    "Abra os <b>perfis</b> (ou <b>locais</b>) <b>de carregamento</b> e crie «Casa».",
+    "Ative o <b>horário de carregamento preferencial</b> (ou um <b>temporizador</b>) de {inicio} a {fim}.",
+    "Se existir <b>nível mínimo de carga</b>, ponha-o a 0% e guarde."
   ],
-  power:"No mesmo perfil, procurem <b>Corrente de carga AC</b> e escolham «reduzida», se precisarem.",
+  power:"No mesmo perfil, procure <b>Corrente de carga AC</b> e escolha «reduzida», se precisar.",
   tip:"O horário só funciona no local onde foi criado. Noutro sítio, o carro carrega logo que é ligado."
 },
 stellantis:{level:OK, th:"peugeot",
@@ -1429,13 +1429,13 @@ stellantis:{level:OK, th:"peugeot",
   ],
   map:[0,1,1,1],
   steps:[
-    "Abram a app {app}, escolham o carro e toquem em <b>Carregamento</b>.",
-    "Ativem o <b>carregamento diferido</b> e definam a hora de início às {inicio}.",
-    "Guardem e liguem o cabo. O carro fica à espera até às {inicio} e depois carrega até ao fim.",
-    "Também podem fazer isto no ecrã do carro: menu <b>Electric</b> › <b>Carregamento</b>."
+    "Abra a app {app}, escolha o carro e toque em <b>Carregamento</b>.",
+    "Ative o <b>carregamento diferido</b> e defina a hora de início às {inicio}.",
+    "Guarde e ligue o cabo. O carro fica à espera até às {inicio} e depois carrega até ao fim.",
+    "Também pode fazer isto no ecrã do carro: menu <b>Electric</b> › <b>Carregamento</b>."
   ],
-  power:"A maioria destes modelos não permite limitar a corrente no carro. Se for preciso, ajustem-na na wallbox.",
-  tip:"Em muitas versões só se escolhe a hora de início. Com o vazio das {inicio} às {fim}, uma carga normal costuma caber. Se precisarem de garantir que para às {fim}, usem o horário da wallbox em vez do carro."
+  power:"A maioria destes modelos não permite limitar a corrente no carro. Se for preciso, ajuste-a na wallbox.",
+  tip:"Em muitas versões só se escolhe a hora de início. Com o vazio das {inicio} às {fim}, uma carga normal costuma caber. Se precisar de garantir que para às {fim}, use o horário da wallbox em vez do carro."
 },
 byd:{level:IND, th:"byd",
   screens:[
@@ -1445,13 +1445,13 @@ byd:{level:IND, th:"byd",
   ],
   map:[0,1,2,2],
   steps:[
-    "Abram a app {app} e, no ecrã inicial, toquem no cartão de <b>Carregamento</b> (bateria).",
-    "Toquem em <b>Carregamento agendado</b> e ativem a opção.",
-    "Definam o início às {inicio} e o fim às {fim}, escolham os dias e guardem.",
-    "No ecrã do carro, a mesma opção está em <b>Energia</b> (ou <b>Nova Energia</b>) › <b>Carregar/Descarregar</b>. Desliguem e tranquem o carro antes de ligar o cabo."
+    "Abra a app {app} e, no ecrã inicial, toque no cartão de <b>Carregamento</b> (bateria).",
+    "Toque em <b>Carregamento agendado</b> e ative a opção.",
+    "Defina o início às {inicio} e o fim às {fim}, escolha os dias e guarde.",
+    "No ecrã do carro, a mesma opção está em <b>Energia</b> (ou <b>Nova Energia</b>) › <b>Carregar/Descarregar</b>. Desligue e tranque o carro antes de ligar o cabo."
   ],
-  power:"Se o menu de carregamento do carro não tiver opção de corrente, ajustem-na na wallbox.",
-  tip:"Os nomes dos menus variam com o modelo e a versão da app. Se, com a vossa wallbox, o carro não começar a carregar à hora marcada, desliguem o agendamento no carro e programem o horário na wallbox."
+  power:"Se o menu de carregamento do carro não tiver opção de corrente, ajuste-a na wallbox.",
+  tip:"Os nomes dos menus variam com o modelo e a versão da app. Se, com a sua wallbox, o carro não começar a carregar à hora marcada, desligue o agendamento no carro e programe o horário na wallbox."
 },
 
 renault:{level:IND, th:"renault",
@@ -1462,14 +1462,14 @@ renault:{level:IND, th:"renault",
   ],
   map:[0,1,2,2,1],
   steps:[
-    "Abram a app {app}, escolham o carro e toquem em <b>Carregamento</b>.",
-    "Abram a programação do carregamento e escolham <b>Carga agendada</b>.",
-    "Definam a hora de início às {inicio} e a hora de fim às {fim}.",
-    "Selecionem os dias da semana e guardem. Sem nenhum dia selecionado, o programa não fica guardado.",
-    "Opcional: definam o <b>nível de carga máxima</b> (por exemplo, 80%). No ecrã do carro (openR link), o mesmo está em <b>Veículo › Elétrico › Programas › Definições de carga</b>."
+    "Abra a app {app}, escolha o carro e toque em <b>Carregamento</b>.",
+    "Abra a programação do carregamento e escolha <b>Carga agendada</b>.",
+    "Defina a hora de início às {inicio} e a hora de fim às {fim}.",
+    "Selecione os dias da semana e guarde. Sem nenhum dia selecionado, o programa não fica guardado.",
+    "Opcional: defina o <b>nível de carga máxima</b> (por exemplo, 80%). No ecrã do carro (openR link), o mesmo está em <b>Veículo › Elétrico › Programas › Definições de carga</b>."
   ],
-  power:"Se o menu de carregamento do carro tiver <b>corrente de carga AC</b>, podem ajustá-la aí. Se não tiver, ajustem-na na wallbox.",
-  tip:"Não usem a opção de <b>hora de partida</b> para isto: define a hora a que o carro deve estar pronto, não o horário de vazio. Os nomes exatos dos menus variam entre o ZOE, o Mégane E-Tech, o Scenic e o 5 E-Tech."
+  power:"Se o menu de carregamento do carro tiver <b>corrente de carga AC</b>, pode ajustá-la aí. Se não tiver, ajuste-a na wallbox.",
+  tip:"Não use a opção de <b>hora de partida</b> para isto: define a hora a que o carro deve estar pronto, não o horário de vazio. Os nomes exatos dos menus variam entre o ZOE, o Mégane E-Tech, o Scenic e o 5 E-Tech."
 },
 
 dacia:{level:IND, th:"dacia",
@@ -1479,13 +1479,13 @@ dacia:{level:IND, th:"dacia",
   ],
   map:[0,1,1,1],
   steps:[
-    "Abram a app {app} e associem o carro. É preciso ter os serviços conectados ativos.",
-    "Entrem em <b>Carregamento › Programar carregamento</b>.",
-    "Definam {inicio}–{fim} e os dias, e guardem.",
-    "Na primeira noite, confirmem que o carregamento começou à hora certa."
+    "Abra a app {app} e associe o carro. É preciso ter os serviços conectados ativos.",
+    "Entre em <b>Carregamento › Programar carregamento</b>.",
+    "Defina {inicio}–{fim} e os dias, e guarde.",
+    "Na primeira noite, confirme que o carregamento começou à hora certa."
   ],
-  power:"O Spring não permite limitar a corrente na app. Se for preciso, ajustem-na na wallbox.",
-  tip:"Se o vosso Spring não tiver serviços conectados, programem o horário na wallbox."
+  power:"O Spring não permite limitar a corrente na app. Se for preciso, ajuste-a na wallbox.",
+  tip:"Se o seu Spring não tiver serviços conectados, programe o horário na wallbox."
 },
 mercedes:{level:IND, th:"mercedes",
   screens:[
@@ -1494,12 +1494,12 @@ mercedes:{level:IND, th:"mercedes",
   ],
   map:[0,0,1,1],
   steps:[
-    "Na app {app}, entrem em <b>Carregamento</b> e escolham o programa de carregamento («Padrão» ou «Casa») e o nível máximo de carga.",
+    "Na app {app}, entre em <b>Carregamento</b> e escolha o programa de carregamento («Padrão» ou «Casa») e o nível máximo de carga.",
     "Muitos modelos não deixam escolher a hora de início, apenas a hora de partida.",
-    "Para carregar só no vazio, programem o horário {inicio}–{fim} na <b>wallbox</b> e deixem o carro em carregamento imediato.",
-    "Na primeira noite, confirmem que o carro começou a carregar à hora certa."
+    "Para carregar só no vazio, programe o horário {inicio}–{fim} na <b>wallbox</b> e deixe o carro em carregamento imediato.",
+    "Na primeira noite, confirme que o carro começou a carregar à hora certa."
   ],
-  power:"No ecrã MBUX, em <b>Veículo › Carregamento</b>, procurem <b>Corrente de carga AC</b> («máxima», «reduzida» ou «mínima», consoante o modelo).",
+  power:"No ecrã MBUX, em <b>Veículo › Carregamento</b>, procure <b>Corrente de carga AC</b> («máxima», «reduzida» ou «mínima», consoante o modelo).",
   tip:"Nos modelos sem hora de início na app, quem controla o horário é a wallbox."
 },
 hk:{level:IND, th:"hyundai",
@@ -1509,12 +1509,12 @@ hk:{level:IND, th:"hyundai",
   ],
   map:[0,1,1,1],
   steps:[
-    "Abram a app {app} e entrem no agendamento do carregamento. No ecrã do carro, o caminho é <b>EV › Gestão de carregamento › Carregam/Climatiz.</b>",
-    "Ativem o <b>Carregamento planeado</b> e definam o horário fora de hora de ponta: {inicio}–{fim}.",
-    "Escolham <b>Apenas tarifas fora das horas de ponta</b>, para que o carro não carregue fora desse horário.",
-    "Confirmem com <b>OK</b> (ou enviem a partir da app) e esperem pela mensagem de confirmação."
+    "Abra a app {app} e entre no agendamento do carregamento. No ecrã do carro, o caminho é <b>EV › Gestão de carregamento › Carregam/Climatiz.</b>",
+    "Ative o <b>Carregamento planeado</b> e defina o horário fora de hora de ponta: {inicio}–{fim}.",
+    "Escolha <b>Apenas tarifas fora das horas de ponta</b>, para que o carro não carregue fora desse horário.",
+    "Confirme com <b>OK</b> (ou envie a partir da app) e espere pela mensagem de confirmação."
   ],
-  power:"No ecrã do carro, em <b>EV › Gestão de carregamento</b>, procurem <b>Corrente de carga CA</b> e escolham um valor mais baixo. Também podem definir o <b>Limite de carregamento (CA)</b>.",
+  power:"No ecrã do carro, em <b>EV › Gestão de carregamento</b>, procure <b>Corrente de carga CA</b> e escolha um valor mais baixo. Também pode definir o <b>Limite de carregamento (CA)</b>.",
   tip:"O carregamento planeado só começa se o cabo já estiver ligado à hora marcada."
 },
 volvo:{level:IND, th:"volvo",
@@ -1525,12 +1525,12 @@ volvo:{level:IND, th:"volvo",
   ],
   map:[0,1,2,1],
   steps:[
-    "Abram a app {app}, escolham o carro e entrem em <b>Carregamento</b>.",
-    "Toquem em <b>Carregamento agendado</b> e adicionem um horário. Em alguns modelos, a opção só existe no ecrã central.",
-    "Definam {inicio}–{fim}, escolham os dias e guardem.",
-    "Confirmem o limite de carga."
+    "Abra a app {app}, escolha o carro e entre em <b>Carregamento</b>.",
+    "Toque em <b>Carregamento agendado</b> e adicione um horário. Em alguns modelos, a opção só existe no ecrã central.",
+    "Defina {inicio}–{fim}, escolha os dias e guarde.",
+    "Confirme o limite de carga."
   ],
-  power:"No ecrã central, nas definições de carregamento, procurem <b>limite de corrente</b> e escolham o valor pretendido.",
+  power:"No ecrã central, nas definições de carregamento, procure <b>limite de corrente</b> e escolha o valor pretendido.",
   tip:""
 },
 polestar:{level:IND, th:"polestar",
@@ -1540,12 +1540,12 @@ polestar:{level:IND, th:"polestar",
   ],
   map:[1,1,1,0],
   steps:[
-    "No ecrã central do carro, abram <b>Carregamento</b> e criem um <b>horário de carregamento</b>.",
-    "Definam o horário de {inicio} a {fim} e escolham os dias.",
-    "Confirmem o limite de carga. Na app {app}, em <b>Carregamento</b>, podem ver o horário e ligá-lo ou desligá-lo.",
-    "Mantenham a app e o software do carro atualizados. As opções da app têm vindo a aumentar."
+    "No ecrã central do carro, abra <b>Carregamento</b> e crie um <b>horário de carregamento</b>.",
+    "Defina o horário de {inicio} a {fim} e escolha os dias.",
+    "Confirme o limite de carga. Na app {app}, em <b>Carregamento</b>, pode ver o horário e ligá-lo ou desligá-lo.",
+    "Mantenha a app e o software do carro atualizados. As opções da app têm vindo a aumentar."
   ],
-  power:"No mesmo menu do ecrã central, procurem <b>Corrente de carga AC</b> (ou «limite de corrente»).",
+  power:"No mesmo menu do ecrã central, procure <b>Corrente de carga AC</b> (ou «limite de corrente»).",
   tip:""
 },
 
@@ -1556,12 +1556,12 @@ mg:{level:IND, th:"mg",
   ],
   map:[0,1,1,1],
   steps:[
-    "Abram a app {app} e escolham o carro.",
-    "Entrem em <b>Carregamento › Carregamento agendado</b>.",
-    "Definam {inicio}–{fim} e a repetição, e guardem.",
-    "Também podem programar no ecrã do carro, no menu de energia."
+    "Abra a app {app} e escolha o carro.",
+    "Entre em <b>Carregamento › Carregamento agendado</b>.",
+    "Defina {inicio}–{fim} e a repetição, e guarde.",
+    "Também pode programar no ecrã do carro, no menu de energia."
   ],
-  power:"No ecrã do carro, no menu de carregamento, procurem o <b>limite de corrente AC</b>.",
+  power:"No ecrã do carro, no menu de carregamento, procure o <b>limite de corrente AC</b>.",
   tip:""
 },
 ford:{level:IND, th:"ford",
@@ -1571,141 +1571,141 @@ ford:{level:IND, th:"ford",
   ],
   map:[0,0,1,1],
   steps:[
-    "Abram a app {app} (antiga FordPass) e escolham o carro.",
-    "Entrem em <b>Carregamento › Locais de carregamento</b> e escolham ou criem «Casa».",
-    "Ativem os <b>horários de carregamento preferidos</b> e definam {inicio}–{fim}.",
-    "Definam o nível de carga e guardem."
+    "Abra a app {app} (antiga FordPass) e escolha o carro.",
+    "Entre em <b>Carregamento › Locais de carregamento</b> e escolha ou crie «Casa».",
+    "Ative os <b>horários de carregamento preferidos</b> e defina {inicio}–{fim}.",
+    "Defina o nível de carga e guarde."
   ],
-  power:"Em alguns modelos, o ecrã do carro tem <b>Corrente de carga AC</b>. Nos restantes, ajustem-na na wallbox.",
+  power:"Em alguns modelos, o ecrã do carro tem <b>Corrente de carga AC</b>. Nos restantes, ajuste-a na wallbox.",
   tip:""
 },
 toyota:{level:IND, th:"toyota", rows:[["tog","Horário",1],["time","Início","S"],["time","Fim","E"],["days"]], title:"Programação de carregamento",
   steps:[
-    "Abram a app {app} e escolham o carro.",
-    "Entrem em <b>Carregamento › Programação de carregamento</b>.",
-    "Criem um horário com início às {inicio} e fim às {fim}.",
-    "Escolham os dias e ativem o horário."
+    "Abra a app {app} e escolha o carro.",
+    "Entre em <b>Carregamento › Programação de carregamento</b>.",
+    "Crie um horário com início às {inicio} e fim às {fim}.",
+    "Escolha os dias e ative o horário."
   ],
-  power:"Normalmente não há limite de corrente na app. Se for preciso, ajustem-na na wallbox.",
+  power:"Normalmente não há limite de corrente na app. Se for preciso, ajuste-a na wallbox.",
   tip:""
 },
 nissan:{level:IND, th:"nissan", rows:[["tog","Temporizador 1",1],["time","Início","S"],["time","Fim","E"],["days"]], title:"Temporizador de carregamento",
   steps:[
-    "Abram a app {app} e escolham o carro.",
-    "Entrem em <b>Carregamento</b> e procurem os <b>temporizadores de carregamento</b>.",
-    "Criem um temporizador de {inicio} a {fim} e escolham os dias.",
+    "Abra a app {app} e escolha o carro.",
+    "Entre em <b>Carregamento</b> e procure os <b>temporizadores de carregamento</b>.",
+    "Crie um temporizador de {inicio} a {fim} e escolha os dias.",
     "Nos LEAF mais antigos, o temporizador configura-se no ecrã do carro."
   ],
-  power:"Na maioria dos modelos não há limite de corrente no carro. Se for preciso, ajustem-na na wallbox.",
+  power:"Na maioria dos modelos não há limite de corrente no carro. Se for preciso, ajuste-a na wallbox.",
   tip:""
 },
 porsche:{level:IND, th:"porsche", rows:[["tog","Horário preferencial",1],["time","Início","S"],["time","Fim","E"],["val","Nível de carga","80 %"]], title:"Perfil «Casa»",
   steps:[
-    "Abram a app {app} e entrem em <b>Carregamento</b>.",
-    "Criem ou abram o perfil de carregamento «Casa».",
-    "Ativem o <b>horário preferencial</b> de {inicio} a {fim}.",
-    "Definam o nível de carga e ativem o temporizador para os dias pretendidos."
+    "Abra a app {app} e entre em <b>Carregamento</b>.",
+    "Crie ou abra o perfil de carregamento «Casa».",
+    "Ative o <b>horário preferencial</b> de {inicio} a {fim}.",
+    "Defina o nível de carga e ative o temporizador para os dias pretendidos."
   ],
-  power:"No ecrã PCM, no perfil «Casa», procurem <b>Corrente de carga máxima</b>.",
+  power:"No ecrã PCM, no perfil «Casa», procure <b>Corrente de carga máxima</b>.",
   tip:""
 },
 honda:{level:IND, th:"honda", rows:[["tog","Horário",1],["time","Início","S"],["time","Fim","E"],["days"]], title:"Programação de carregamento",
   steps:[
-    "Abram a app {app} e escolham o carro.",
-    "Entrem em <b>Carregamento › Programação de carregamento</b>.",
-    "Adicionem um horário de {inicio} a {fim}, escolham os dias e guardem.",
-    "Também podem programar no ecrã do carro, nas definições de carregamento."
+    "Abra a app {app} e escolha o carro.",
+    "Entre em <b>Carregamento › Programação de carregamento</b>.",
+    "Adicione um horário de {inicio} a {fim}, escolha os dias e guarde.",
+    "Também pode programar no ecrã do carro, nas definições de carregamento."
   ],
-  power:"Na maioria das versões não há limite de corrente no carro. Se for preciso, ajustem-na na wallbox.",
+  power:"Na maioria das versões não há limite de corrente no carro. Se for preciso, ajuste-a na wallbox.",
   tip:""
 },
 mazda:{level:IND, th:"mazda", rows:[["tog","Temporizador de carga",1],["time","Início","S"],["time","Fim","E"],["days"]], title:"Temporizador de carga",
   steps:[
-    "Abram a app {app}, escolham o carro e entrem em <b>Carregamento</b>.",
-    "Abram o <b>temporizador de carga</b> (no 6e e CX-6e: <b>Carregamento agendado</b>) e ativem-no.",
-    "Definam {inicio}–{fim}, escolham os dias e guardem.",
+    "Abra a app {app}, escolha o carro e entre em <b>Carregamento</b>.",
+    "Abra o <b>temporizador de carga</b> (no 6e e CX-6e: <b>Carregamento agendado</b>) e ative-o.",
+    "Defina {inicio}–{fim}, escolha os dias e guarde.",
     "No ecrã do carro, o mesmo está em <b>Definições › Veículo › Carregamento</b> (MX-30) ou <b>Energia › Carregamento agendado</b> (6e e CX-6e)."
   ],
-  power:"Procurem <b>Corrente de carga AC</b> no menu de carregamento do carro. Se não existir, ajustem-na na wallbox.",
+  power:"Procure <b>Corrente de carga AC</b> no menu de carregamento do carro. Se não existir, ajuste-a na wallbox.",
   tip:""
 },
 jlr:{level:IND, th:"jlr", rows:[["tog","Carregamento fora das horas de ponta",1],["time","Início","S"],["time","Fim","E"]], title:"Definições de carregamento",
   steps:[
-    "Abram a app {app} e entrem em <b>Carregamento › Definições de carregamento</b>.",
-    "Ativem o <b>carregamento fora das horas de ponta</b>.",
-    "Definam o início às {inicio} e o fim às {fim}, e guardem.",
-    "Confirmem no ecrã do carro."
+    "Abra a app {app} e entre em <b>Carregamento › Definições de carregamento</b>.",
+    "Ative o <b>carregamento fora das horas de ponta</b>.",
+    "Defina o início às {inicio} e o fim às {fim}, e guarde.",
+    "Confirme no ecrã do carro."
   ],
-  power:"No ecrã do carro, nas definições de carregamento, procurem <b>Limite de corrente de carga</b>.",
+  power:"No ecrã do carro, nas definições de carregamento, procure <b>Limite de corrente de carga</b>.",
   tip:""
 },
 smart:{level:IND, th:"smart", rows:[["tog","Agendamento",1],["time","Início","S"],["time","Fim","E"],["days"]], title:"Carregamento agendado",
   steps:[
-    "<b>smart #1, #3 e #5:</b> abram a app {app} e entrem em <b>Carregamento › Carregamento agendado</b>.",
-    "Definam {inicio}–{fim}, escolham os dias e guardem.",
-    "Também podem programar no ecrã central, em <b>Energia</b>.",
-    "<b>EQ fortwo e forfour:</b> estes modelos só deixam definir a hora de partida. Para carregar só no vazio, usem o horário da wallbox."
+    "<b>smart #1, #3 e #5:</b> abra a app {app} e entre em <b>Carregamento › Carregamento agendado</b>.",
+    "Defina {inicio}–{fim}, escolha os dias e guarde.",
+    "Também pode programar no ecrã central, em <b>Energia</b>.",
+    "<b>EQ fortwo e forfour:</b> estes modelos só deixam definir a hora de partida. Para carregar só no vazio, use o horário da wallbox."
   ],
-  power:"No ecrã central, em <b>Energia</b>, procurem <b>Corrente de carga AC</b>.",
+  power:"No ecrã central, em <b>Energia</b>, procure <b>Corrente de carga AC</b>.",
   tip:""
 },
 nio:{level:IND, th:"nio", rows:[["tog","Agendamento",1],["time","Início","S"],["time","Fim","E"],["days"]], title:"Carregamento agendado",
   steps:[
-    "Abram a app {app} e escolham o carro.",
-    "Entrem em <b>Carregamento › Carregamento agendado</b>.",
-    "Definam {inicio}–{fim}, escolham os dias e guardem.",
+    "Abra a app {app} e escolha o carro.",
+    "Entre em <b>Carregamento › Carregamento agendado</b>.",
+    "Defina {inicio}–{fim}, escolha os dias e guarde.",
     "No ecrã central, o mesmo menu está em <b>Energia</b>."
   ],
-  power:"No ecrã central, em <b>Energia</b>, procurem <b>Corrente de carga AC</b>.",
+  power:"No ecrã central, em <b>Energia</b>, procure <b>Corrente de carga AC</b>.",
   tip:""
 },
 xpeng:{level:IND, th:"xpeng", rows:[["tog","Reserva",1],["time","Início","S"],["time","Fim","E"],["days"]], title:"Reserva de carregamento",
   steps:[
-    "Abram a app {app} e escolham o carro.",
-    "Entrem em <b>Carregamento › Reserva de carregamento</b>.",
-    "Definam {inicio}–{fim}, escolham os dias e guardem.",
+    "Abra a app {app} e escolha o carro.",
+    "Entre em <b>Carregamento › Reserva de carregamento</b>.",
+    "Defina {inicio}–{fim}, escolha os dias e guarde.",
     "No ecrã central, o mesmo menu está em <b>Energia › Carregamento</b>."
   ],
-  power:"No ecrã, em <b>Energia › Carregamento</b>, procurem <b>Corrente de carga AC</b>.",
+  power:"No ecrã, em <b>Energia › Carregamento</b>, procure <b>Corrente de carga AC</b>.",
   tip:""
 },
 cn:{level:IND, th:"cn", rows:[["tog","Agendamento",1],["time","Início","S"],["time","Fim","E"],["days"]], title:"Carregamento agendado",
   steps:[
-    "Abram a app {app} e escolham o carro.",
-    "Entrem em <b>Carregamento</b> (ou <b>Energia</b>) › <b>Carregamento agendado</b>.",
-    "Definam {inicio}–{fim}, escolham os dias e guardem.",
+    "Abra a app {app} e escolha o carro.",
+    "Entre em <b>Carregamento</b> (ou <b>Energia</b>) › <b>Carregamento agendado</b>.",
+    "Defina {inicio}–{fim}, escolha os dias e guarde.",
     "Em muitos modelos, o mesmo menu também está no ecrã central."
   ],
-  power:"No ecrã central, procurem <b>Corrente de carga AC</b>. Se não existir, ajustem-na na wallbox.",
+  power:"No ecrã central, procure <b>Corrente de carga AC</b>. Se não existir, ajuste-a na wallbox.",
   tip:""
 },
 quad:{level:IND, th:"wb", k:"wb", rows:[["tog","Carregar só neste horário",1],["time","Início","S"],["time","Fim","E"],["days"]], title:"Horário de carregamento", single:1,
   steps:[
     "A maioria dos quadriciclos elétricos não tem carregamento agendado e começa a carregar assim que é ligada.",
-    "Se o vosso modelo tiver cabo <b>Tipo 2</b>, liguem-no à wallbox e programem nela o horário {inicio}–{fim}.",
-    "Se carregam numa tomada, peçam a um eletricista certificado que instale um <b>relógio programador</b> no quadro elétrico, no circuito dessa tomada.",
-    "Se a app da marca tiver agendamento, usem só esse e não acrescentem outro temporizador."
+    "Se o seu modelo tiver cabo <b>Tipo 2</b>, ligue-o à wallbox e programe nela o horário {inicio}–{fim}.",
+    "Se carrega numa tomada, peça a um eletricista certificado que instale um <b>relógio programador</b> no quadro elétrico, no circuito dessa tomada.",
+    "Se a app da marca tiver agendamento, use só esse e não acrescente outro temporizador."
   ],
   power:"A potência destes veículos é baixa e fixa. Não há nada a ajustar.",
-  tip:"Nunca carreguem com extensões nem com tomadas múltiplas."
+  tip:"Nunca carregue com extensões nem com tomadas múltiplas."
 },
 legacy:{level:IND, th:"wb", k:"wb", rows:[["tog","Carregar só neste horário",1],["time","Início","S"],["time","Fim","E"],["days"]], title:"Horário de carregamento", single:1,
   steps:[
     "Nos modelos mais antigos, a app original pode já não funcionar.",
-    "Procurem no manual por <b>temporizador de carga</b>. Se existir, definam no carro o início às {inicio} e o fim às {fim}.",
-    "Se não existir, programem o horário {inicio}–{fim} na wallbox. É a solução mais simples e fiável."
+    "Procure no manual por <b>temporizador de carga</b>. Se existir, defina no carro o início às {inicio} e o fim às {fim}.",
+    "Se não existir, programe o horário {inicio}–{fim} na wallbox. É a solução mais simples e fiável."
   ],
-  power:"Estes modelos não permitem ajustar a corrente no carro. Se for preciso, ajustem-na na wallbox.",
+  power:"Estes modelos não permitem ajustar a corrente no carro. Se for preciso, ajuste-a na wallbox.",
   tip:""
 },
 generic:{level:IND, th:"generic", rows:[["tog","Agendamento",1],["time","Início","S"],["time","Fim","E"],["days"]], title:"Carregamento agendado",
   steps:[
-    "Instalem a app {app} e associem o carro. Normalmente pede o número do quadro (VIN).",
-    "Procurem a área <b>Carregamento</b>, <b>Energia</b> ou <b>Bateria</b>.",
-    "Procurem <b>carregamento agendado</b>, <b>programado</b> ou <b>diferido</b> e definam {inicio}–{fim} e os dias.",
-    "Se não encontrarem a opção, programem o horário na wallbox."
+    "Instale a app {app} e associe o carro. Normalmente pede o número do quadro (VIN).",
+    "Procure a área <b>Carregamento</b>, <b>Energia</b> ou <b>Bateria</b>.",
+    "Procure <b>carregamento agendado</b>, <b>programado</b> ou <b>diferido</b> e defina {inicio}–{fim} e os dias.",
+    "Se não encontrar a opção, programe o horário na wallbox."
   ],
-  power:"Procurem <b>Corrente de carga AC</b> no ecrã do carro. Se não existir, ajustem-na na wallbox.",
+  power:"Procure <b>Corrente de carga AC</b> no ecrã do carro. Se não existir, ajuste-a na wallbox.",
   tip:""
 }
 };
@@ -1739,6 +1739,74 @@ const BRANDS=[];
   BRANDS.sort((a,c)=>a.name.localeCompare(c.name,"pt"));
   BRANDS.forEach(b=>b.families.forEach(f=>f.old=f.versions.length&&f.versions.every(v=>v.old)));
 })();
+/* ---------- Lojas de apps ----------
+   [id Google Play, id App Store]. Sem id da App Store → abre a pesquisa da App Store.
+   A loja escolhe-se pelo sistema operativo: iPhone, iPad e Mac → App Store; Android, Windows, Linux e ChromeOS → Google Play. */
+const STORES={
+  "myAudi":["de.myaudi.mobile.assistant","440464115"],
+  "Volkswagen":["com.volkswagen.weconnect","1517566572"],
+  "My BMW":["de.bmw.connected.mobile20.row","1519034860"],
+  "MINI":["de.mini.connected.mobile20.row","1519459056"],
+  "Ford":["com.ford.fordpass","1095418609"],
+  "Tesla":["com.teslamotors.tesla","582007913"],
+  "Mercedes-Benz":["com.daimler.ris.mercedesme.ece.android","1487652920"],
+  "My Dacia":["com.dacia.mydacia.one.fr","1490242820"],
+  "CUPRA":["com.cupra.mycupra","1576693756"],
+  "MyDS":["com.psa.mym.myds","1021590964"],
+  "BYD":["com.byd.bydautolink","1492400299"],
+  "DENZA":["com.byd.overseas.denzalink",""],
+  "MyCitroën":["com.psa.mym.mycitroen","1019563307"],
+  "MyPeugeot":["com.psa.mym.mypeugeot","1021587274"],
+  "My Renault":["com.renault.myrenault.one.fr","1440073013"],
+  "My Alpine":["com.alpine.myalpine.one.fr","1598098658"],
+  "MyŠkoda":["cz.skodaauto.myskoda","1632202810"],
+  "MyMazda":["com.interrait.mymazda",""],
+  "Kia":["com.kia.oneapp.eu","6740517042"],
+  "MyOpel":["com.psa.mym.myopel","1439342035"],
+  "myHyundai":["com.hyundai.oneapp.eu","6741947307"],
+  "Volvo Cars":["se.volvo.vcc","439635293"],
+  "Polestar":["com.polestar.explore","1451196635"],
+  "Lexus Link+":["com.lexus.oneapp.eu","1618744308"],
+  "MyToyota":["com.toyota.oneapp.eu","1617623127"],
+  "My SEAT":["com.seat.myseat.ola","6472646580"],
+  "FIAT":["com.fca.myconnect.fiat",""],
+  "Jeep":["com.fca.myconnect",""],
+  "Jaguar Remote":["com.jlr.jaguar.incontrolremote.appstore",""],
+  "Land Rover Remote":["com.jlr.landrover.incontrolremote.appstore",""],
+  "My Porsche":["de.porsche.one","1559529059"],
+  "smart":["com.smart.hellosmart","6443878915"],
+  "MG iSMART":["com.saicmotor.iov.europe",""],
+  "Leapmotor":["com.leapmotorinternational.global",""],
+  "My GWM":["com.gwm.eu",""],
+  "ZEEKR":["com.zeekr.overseas",""],
+  "XPENG":["com.xiaopeng.globalcarinfo",""],
+  "NIO":["com.nio.nioapp",""],
+  "My Honda+":["com.honda_eu.connected.app",""],
+  "Lynk & Co":["com.lynkco.prod.lynkco_app_android",""],
+  "Lotus Cars":["com.lotus.carsdomestic.intl",""],
+  "Maserati Connect":["com.fca.myconnect.maseraticonnect",""],
+  "Trumore":["com.togg.toggmobile",""],
+  "VinFast":["com.vinfast.eu",""],
+  "My Bentley":["uk.co.bentley.mybentley",""],
+  "Lucid":["com.lucidmotors.mobile.prod",""],
+  "MyNISSAN":["eu.nissan.nissanconnect.services","1451280347"]
+};
+function detectStore(){
+  try{
+    const n=navigator, ua=n.userAgent||"", pf=(n.userAgentData&&n.userAgentData.platform)||n.platform||"";
+    if(/iPhone|iPad|iPod/i.test(ua)) return "apple";
+    if(/Android/i.test(ua)||/Android/i.test(pf)) return "google";
+    if(/Mac|iOS/i.test(pf)||/Macintosh|Mac OS X/i.test(ua)) return "apple";
+  }catch(e){}
+  return "google";
+}
+const STORE=typeof navigator!=="undefined"?detectStore():"google";
+const STORE_NAME=STORE==="apple"?"App Store":"Google Play";
+function storeUrl(app){
+  const s=app&&STORES[app]; if(!s) return null;
+  if(STORE==="apple") return s[1]?"https://apps.apple.com/pt/app/id"+s[1]:"https://apps.apple.com/pt/iphone/search?term="+encodeURIComponent(app);
+  return s[0]?"https://play.google.com/store/apps/details?id="+s[0]+"&hl=pt_PT":"https://play.google.com/store/search?q="+encodeURIComponent(app)+"&c=apps&hl=pt_PT";
+}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const norm=s=>s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 const LOGO_SLUG={"Lynk&Co":"lynk-and-co","DS Automobiles":"ds","GWM":"great-wall","KGM":"ssangyong","e.GO Mobile":"e-go","Mercedes-Benz":"mercedes-benz"};
@@ -1810,6 +1878,7 @@ const DEVICE_CSS = `.gm svg,.gm img{display:inline-block;vertical-align:middle;m
 .gm .m-sect{font-size:10.5px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.07em;padding:4px 2px 0;margin-bottom:-4px}
 .gm .dev .hl{outline:2px solid var(--hlc);outline-offset:-2px;background-image:linear-gradient(rgba(64,221,166,.16),rgba(64,221,166,.16))}
 .gm .l-flat .m-row.hl{border-radius:6px}
+.gm .dev.spot .m-grp>:not(.hl),.gm .dev.spot .m-pair>:not(.hl),.gm .dev.spot .m-tl>:not(.hl){opacity:.42}
 .gm .m-sw{flex:none;position:relative;width:38px;height:23px;border-radius:999px;background:var(--line)}
 .gm .m-sw i{position:absolute;top:2px;left:2px;width:19px;height:19px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3)}
 .gm .m-sw.on{background:var(--acc)}
@@ -1939,7 +2008,7 @@ const DEVICE_CSS = `.gm svg,.gm img{display:inline-block;vertical-align:middle;m
 .gm .m-tabs>span{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:1px;color:var(--mut);font-size:9.5px;padding-top:4px;border-top:2px solid transparent;margin-top:-1px}
 .gm .m-tabs i{display:flex;align-items:center;justify-content:center;width:44px;height:24px;border-radius:999px}
 .gm .m-tabs svg{width:19px;height:19px}
-.gm .m-tabs em{font-style:normal;white-space:nowrap}
+.gm .m-tabs em{font-style:normal;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
 .gm .m-tabs.nol em{display:none}
 .gm .m-tabs.nol>span{padding-top:8px}
 .gm .m-tabs>span.on{color:var(--acct)}
@@ -1978,7 +2047,7 @@ function iconKey(l){const n=norm(l);return /carreg|eletric|energia|bateria/.test
 function icon(l){return svg(iconKey(l));}
 const DAYS=["S","T","Q","Q","S","S","D"];
 const QUICK=[["lock","Trancar"],["fan","Clima"],["light","Luzes"],["pin","Localizar"]];
-const TAB_IC={"Início":"home","Carro":"car","Veículo":"car","Mapa":"pin","Serviços":"wrench","Perfil":"user","Conta":"user","Eu":"user","Carregar":"bolt","Loja":"grid","Controlo":"lock","Remoto":"lock","Mais":"more","Menu":"more","Explorar":"route"};
+const TAB_IC={"Início":"home","Estado":"car","Carro":"car","Veículo":"car","Mapa":"pin","Serviços":"wrench","Perfil":"user","Conta":"user","Eu":"user","Carregar":"bolt","Loja":"grid","Controlo":"lock","Remoto":"lock","Mais":"more","Menu":"more","Explorar":"route"};
 const TAB_DEF=["Início","Mapa","Carregar","Serviços","Perfil"];
 const fillT=(t,p)=>String(t).replace(/\{inicio\}/g,p.s).replace(/\{fim\}/g,p.e);
 /* cores auxiliares */
@@ -2061,7 +2130,7 @@ function deviceHTML(g,b,p){
   const s=g.screens[MS.screen], {k,T,key}=themeFor(g,s,b);
   const K=Object.assign({},SKIN_DEF,(typeof SKIN!=="undefined"&&SKIN[key])||{});
   const fam=MS.family?(b.name==="Smart"&&/^\d$/.test(MS.family.name)?"#"+MS.family.name:MS.family.name):"";
-  const name=b.other?"O vosso carro":(fam?(K.short?fam:(b.name==="Smart"?"smart "+fam:b.name+" "+fam)):b.name);
+  const name=b.other?"O seu carro":(fam?(K.short?fam:(b.name==="Smart"?"smart "+fam:b.name+" "+fam)):b.name);
   const home=s.rows.length&&s.rows[0][0]==="hero";
   const band=!!(K.band&&T.hd);
   const acct=contrast(T.acc,T.bg)<2.6?T.fg:T.acc;
@@ -2069,7 +2138,7 @@ function deviceHTML(g,b,p){
   const vars="--bg:"+T.bg+";--card:"+T.card+";--fg:"+T.fg+";--mut:"+T.mut+";--line:"+T.line+";--acc:"+T.acc+";--on:"+T.on+";--acct:"+acct+
     ";--hd:"+(T.hd||T.bg)+";--hdfg:"+(T.hdfg||T.fg)+";--r:"+K.r+";--rs:"+rs+";--br:"+K.br+";--tw:"+K.tw+";--ff:"+K.ff+";--hf:"+(K.hf||K.ff)+
     ";--chip:"+rgba(T.fg,T.dark?.1:.06)+";--pill:"+rgba(acct,.16)+";--ringc:"+(K.ringc||"#34C759");
-  const cls="dev phone sk-"+key+(T.dark?" dark":" light")+" l-"+K.list+" hd-"+K.hd+" sw-"+K.sw+" tm-"+K.time+" dy-"+K.day+" bt-"+K.btn+" sg-"+K.seg+" ind-"+K.ind+(K.up?" up":"")+(band?" band":"")+(s.btn?" has-btn":"")+((k==="app"&&home&&K.tabs)?" has-tabs":"")+(home?" is-home h-"+K.home:"");
+  const cls="dev phone sk-"+key+(T.dark?" dark":" light")+" l-"+K.list+" hd-"+K.hd+" sw-"+K.sw+" tm-"+K.time+" dy-"+K.day+" bt-"+K.btn+" sg-"+K.seg+" ind-"+K.ind+(K.up?" up":"")+(band?" band":"")+(s.btn?" has-btn":"")+((s.hl||[]).length?" spot":"")+((k==="app"&&home&&K.tabs)?" has-tabs":"")+(home?" is-home h-"+K.home:"");
   const sb='<div class="m-sb"><span>21:58</span><span class="isl"></span>'+SB_ICONS+'</div>';
   const nav=home?"":'<div class="m-nav">'+(MS.screen>0?'<span class="m-back">'+svg("back")+'</span>':'')+'<b>'+esc(s.t||appLabel(k,T,b))+'</b></div>';
   const top='<div class="m-top">'+sb+(home&&K.home==="band"?heroHTML(K,name):nav)+'</div>';
@@ -2108,6 +2177,8 @@ const OFFER = {
   notaDesconto: "Face ao tarifário de referência «Tarifário GOLD», opção bi-horária, potência contratada de 6,90 kVA.",
 };
 /* Ilustração oficial Goldenergy (campanha «Electric Love»). Usar sem cortes nem alterações. */
+/* Data da última revisão dos guias (mostrada aos clientes) */
+const REVISTO = "novembro de 2026";
 const IMG = { hero: "/img/electric-love-casa.webp" };
 /* Custo indicativo de 100 km no vazio: consumo × preço do vazio × (1 + IVA) */
 const eur = x => x.toFixed(2).replace(".", ",") + " €";
@@ -2124,7 +2195,7 @@ const track = id => { try { (window.dataLayer = window.dataLayer || []).push({ e
 /* Imagens externas (logótipos jsdelivr, fotos Wikimedia/EV Database).
    "auto": ativas quando a página abre diretamente no navegador; desativadas dentro de pré-visualizações
    em iframe com política de segurança restritiva (aí usamos iniciais e silhueta, sem pedidos bloqueados).
-   Em produção, definam true depois de autorizarem estes domínios na CSP do site (img-src). */
+   Em produção, defina true depois de autorizar estes domínios na CSP do site (img-src). */
 const REMOTE_IMAGES = "auto";
 const REMOTE = REMOTE_IMAGES === "auto"
   ? (() => { try { return typeof window !== "undefined" && window.self === window.top; } catch (e) { return false; } })()
@@ -2145,11 +2216,11 @@ const famLabel = (b, f) => (b.name === "Smart" && /^\d$/.test(f.name) ? "#" + f.
 function guideFor(b, f) { if (!b) return null; const gk = (f && f.guide) || b.guide; return { gk, g: GUIDES[gk] || GUIDES.generic }; }
 
 /* Texto dos guias: <b>…</b>, {app}, {inicio}, {fim} → nós React */
-function Rich({ text, b, p }) {
+function Rich({ text, b, p, link = true }) {
   const out = [];
   String(text).split(/(<b>.*?<\/b>|\{app\}|\{inicio\}|\{fim\})/g).forEach((part, i) => {
     if (!part) return;
-    if (part === "{app}") out.push(b.app ? <b key={i}>{b.app}</b> : (b.other ? "da marca" : "oficial da " + b.name));
+    if (part === "{app}") out.push(b.app ? (link ? <AppName key={i} name={b.app} /> : <b key={i}>{b.app}</b>) : (b.other ? "da marca" : "oficial da " + b.name));
     else if (part === "{inicio}" || part === "{fim}") out.push(<Time key={i}>{part === "{inicio}" ? p.s : p.e}</Time>);
     else if (part.startsWith("<b>")) out.push(<b key={i} className="font-bold text-[#171424]">{vzText(part.slice(3, -4), i)}</b>);
     else out.push(...vzText(part, i));
@@ -2177,12 +2248,26 @@ const I = {
   sun: <><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></>,
   phone: <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" />,
   arrow: <><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></>,
+  share: <><circle cx="18" cy="5" r="2.5" /><circle cx="6" cy="12" r="2.5" /><circle cx="18" cy="19" r="2.5" /><path d="m8.2 10.8 7.6-4.4M8.2 13.2l7.6 4.4" /></>,
+  mail: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3.5 6.5 8.5 6.5 8.5-6.5" /></>,
+  chat: <path d="M4 19.5 5.3 15A8 8 0 1 1 9 18.7z" />,
   car: <><path d="M5 16V11l2-5h10l2 5v5" /><path d="M3 16h18v3H3z" /><circle cx="7.5" cy="13" r=".8" /><circle cx="16.5" cy="13" r=".8" /></>,
 };
 const Icon = ({ n, className = "h-5 w-5" }) => (
   <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">{I[n]}</svg>
 );
 const Ext = () => <span className="sr-only"> (abre numa nova janela)</span>;
+/* Nome da app com link para a loja do sistema operativo de quem visita */
+const AppName = ({ name, className }) => {
+  const url = storeUrl(name);
+  if (!url) return <b className={className}>{name}</b>;
+  return (
+    <a href={url} target="_blank" rel="noopener noreferrer" onClick={() => track("app_store_" + STORE)} title={"Abrir " + name + " na " + STORE_NAME}
+      className={cx("rounded-sm font-bold text-[#382F83] underline decoration-[#40DDA6] decoration-2 underline-offset-2 hover:decoration-[#382F83] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#382F83] focus-visible:ring-offset-2", className)}>
+      {name}<span className="sr-only"> (abrir na {STORE_NAME}, numa nova janela)</span><Icon n="ext" className="ml-0.5 inline-block h-[0.85em] w-[0.85em] align-[-0.05em]" />
+    </a>
+  );
+};
 /* Lua = vazio · Sol = fora de vazio */
 const Moon = ({ className = "mr-[0.2em] inline-block h-[1.05em] w-[1.05em] align-[-0.16em]" }) => (
   <svg viewBox="0 0 24 24" className={cx("flex-none", className)} aria-hidden="true" focusable="false"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="#382F83" stroke="#382F83" strokeWidth="1.5" strokeLinejoin="round" /></svg>
@@ -2218,7 +2303,7 @@ function BrandLogo({ b, size = "md" }) {
     <span className={cx("flex flex-none items-center justify-center overflow-hidden rounded-xl border border-[#D9D5E0] bg-white p-1.5", dim)} aria-hidden="true">
       {isOther ? <Icon n="car" className="h-3/4 w-3/4 text-[#514D5F]" />
         : (fail || !REMOTE) ? <b className="flex h-full w-full items-center justify-center rounded-lg font-black tracking-tight" style={{ background: "hsl(" + BRAND_HUE(b.name) + " 45% 93%)", color: "hsl(" + BRAND_HUE(b.name) + " 55% 28%)" }}>{initials(b.name)}</b>
-        : <img src={logoUrl(b.name)} alt="" loading="lazy" className="h-full w-full object-contain" onError={() => setFail(true)} />}
+        : <img src={logoUrl(b.name)} alt="" loading="lazy" decoding="async" className="h-full w-full object-contain" onError={() => setFail(true)} />}
     </span>
   );
 }
@@ -2228,7 +2313,7 @@ function CarPhoto({ photo, alt, className }) {
   const [fail, setFail] = useState(false);
   useEffect(() => setFail(false), [photo && photo.src]);
   if (!photo || fail) return <span className={cx("flex items-center justify-center bg-[#F6F4F8] text-[#9A95A8]", className)} dangerouslySetInnerHTML={{ __html: CAR_SVG }} />;
-  return <img src={photo.src} alt={alt} className={cx("bg-[#F6F4F8] object-cover", className)} onError={() => setFail(true)} />;
+  return <img src={photo.src} alt={alt} loading="lazy" decoding="async" className={cx("bg-[#F6F4F8] object-cover", className)} onError={() => setFail(true)} />;
 }
 
 /* Cabeçalho e moldura de cada passo */
@@ -2259,22 +2344,49 @@ function Step({ n, title, state, summary, onEdit, editLabel, lockedText, headRef
 }
 
 /* Telemóvel com a ilustração do ecrã da app */
+/* Fontes das maquetas (Google Fonts): carrega-se só a família da app mostrada, uma vez */
+const GFONTS = { "Inter": "Inter:wght@400;500;600;700", "Montserrat": "Montserrat:wght@500;600;700", "DM Sans": "DM+Sans:wght@400;500;700", "Poppins": "Poppins:wght@400;500;600", "Roboto": "Roboto:wght@400;500;700", "Source Sans 3": "Source+Sans+3:wght@400;600" };
+const fontsLoaded = new Set();
+function loadMockFont(ff) {
+  const m = /'([^']+)'/.exec(ff || ""), fam = m && m[1];
+  if (!fam || !GFONTS[fam] || fontsLoaded.has(fam) || typeof document === "undefined") return;
+  fontsLoaded.add(fam);
+  const l = document.createElement("link");
+  l.rel = "stylesheet"; l.href = "https://fonts.googleapis.com/css2?family=" + GFONTS[fam] + "&display=swap";
+  document.head.appendChild(l);
+}
+/* Só se desenha uma maqueta: dentro do passo (telemóvel) ou ao lado (computador) */
+function useDesktop() {
+  const q = "(min-width: 768px)";
+  const get = () => (typeof window !== "undefined" && window.matchMedia ? window.matchMedia(q).matches : null);
+  const [d, setD] = useState(get);
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia(q), on = () => setD(mq.matches);
+    mq.addEventListener ? mq.addEventListener("change", on) : mq.addListener(on);
+    return () => { mq.removeEventListener ? mq.removeEventListener("change", on) : mq.removeListener(on); };
+  }, []);
+  return d;
+}
 function PhoneMock({ g, b, p, gk, screen, family, photo }) {
   MS = { screen, family, photo };
   const s = g.screens[screen];
-  const { k, T } = themeFor(g, s, b);
+  const { k, T, key } = themeFor(g, s, b);
   const label = appLabel(k, T, b) + " · " + (s.cap || s.t || "Ecrã");
   const shot = shotFor(gk, b, screen);
   const [shotFail, setShotFail] = useState(false);
-  const html = deviceHTML(g, b, p);
+  /* O HTML da maqueta só se recalcula quando muda o carro, o ecrã ou o horário */
+  const html = useMemo(() => { MS = { screen, family, photo }; return deviceHTML(g, b, p); }, [g, b, p.s, p.e, screen, family, photo]);
+  const sk = (typeof SKIN !== "undefined" && SKIN[key]) || {};
+  useEffect(() => { loadMockFont(sk.ff); loadMockFont(sk.hf); }, [sk.ff, sk.hf]);
   return (
     <figure className="m-0 flex flex-col items-center">
       {shot && !shotFail
-        ? <img src={shot} alt={"Captura real da app: " + label} onError={() => setShotFail(true)} className="w-[272px] max-w-full rounded-[2.5rem] border-[.55rem] border-[#0A0A0A] bg-white shadow-[0_18px_40px_rgba(23,20,36,.22)]" />
+        ? <img src={shot} alt={"Captura real da app: " + label} decoding="async" onError={() => setShotFail(true)} className="w-[272px] max-w-full rounded-[2.5rem] border-[.55rem] border-[#0A0A0A] bg-white shadow-[0_18px_40px_rgba(23,20,36,.22)]" />
         : <div className="gm w-[272px] max-w-full" aria-hidden="true" dangerouslySetInnerHTML={{ __html: html }} />}
       <figcaption className="mt-3 max-w-[280px] text-center text-[0.82rem] leading-snug text-[#514D5F]">
         <b className="text-[#171424]">{label}</b><br />
-        {shot && !shotFail ? "Captura real da app. Pode variar com a versão." : "Ilustração aproximada. Os menus podem variar com a versão da app."}
+        {shot && !shotFail ? "Captura real da app. Pode variar com a versão." : "Ilustração simplificada. Siga os nomes a negrito nos passos: o aspeto da app pode ser diferente."}
       </figcaption>
     </figure>
   );
@@ -2406,18 +2518,23 @@ export default function GuiaCarregamento() {
     }
     setSecs({ 1: "done", 2: "done", 3: "open" });
   }, []);
+  const linkUrl = () => { let base = ""; try { base = location.href.split("#")[0]; } catch (e) { } return base + "#" + hashStr(); };
   function copyLink() {
-    let base = ""; try { base = location.href.split("#")[0]; } catch (e) { }
-    const url = base + "#" + hashStr();
+    const url = linkUrl();
     const ok = () => { setCopied(true); say("Ligação copiada."); setTimeout(() => setCopied(false), 2500); };
     const fb = () => {
-      try { const ta = document.createElement("textarea"); ta.value = url; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select(); const r = document.execCommand("copy"); ta.remove(); r ? ok() : say("Não foi possível copiar. Copiem o endereço na barra do navegador."); }
-      catch (e) { say("Não foi possível copiar. Copiem o endereço na barra do navegador."); }
+      try { const ta = document.createElement("textarea"); ta.value = url; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select(); const r = document.execCommand("copy"); ta.remove(); r ? ok() : say("Não foi possível copiar. Copie o endereço na barra do navegador."); }
+      catch (e) { say("Não foi possível copiar. Copie o endereço na barra do navegador."); }
     };
     try { navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(url).then(ok, fb) : fb(); } catch (e) { fb(); }
   }
 
   const summer = isSummer();
+  const foraRows = cyc === "diario"
+    ? [["Todos os dias", ["08:00 → 22:00"]]]
+    : [["Segunda a sexta", ["07:00 → 24:00"]],
+       ["Sábado", summer ? ["09:00–14:00", "20:00–22:00"] : ["09:30–13:00", "18:30–22:00"]],
+       ["Domingo", ["Sem horas fora de vazio"]]];
   const vazioRows = cyc === "diario"
     ? [["Todos os dias", ["22:00 → 08:00"]]]
     : [["Segunda a sexta", ["00:00 → 07:00"]],
@@ -2444,9 +2561,7 @@ export default function GuiaCarregamento() {
 
   return (
     <div className="min-h-screen bg-[#F6F4F8] text-[#171424] antialiased" style={{ fontFamily: "'Brandon Grotesque','Brandon Text',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif" }}>
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700&family=Poppins:wght@400;500;600&family=Roboto:wght@400;500;700&family=Source+Sans+3:wght@400;600&display=swap" />
-      <style>{DEVICE_CSS + PAGE_CSS}</style>
+      <style>{ALL_CSS}</style>
       <a href="#guia" className="sr-only z-50 rounded-full bg-white px-4 py-2 font-bold text-[#382F83] focus:not-sr-only focus:fixed focus:left-3 focus:top-3">Saltar para o guia</a>
 
       {/* Barra superior fixa, com adesão sempre à mão */}
@@ -2474,9 +2589,9 @@ export default function GuiaCarregamento() {
           <div className="min-w-0">
             <p className="text-sm font-bold uppercase tracking-[.14em] text-[#382F83]">Mobilidade elétrica · Guia prático</p>
             <h1 className="mt-3 text-[2rem] font-black leading-[1.05] sm:text-5xl lg:text-[3.4rem]">
-              Programem o carro para carregar nas horas de <span className="whitespace-nowrap text-[#382F83]"><Moon className="mr-[0.15em] inline-block h-[0.85em] w-[0.85em] align-[-0.06em]" />vazio</span>
+              Programe o carro para carregar nas horas de <span className="whitespace-nowrap text-[#382F83]"><Moon className="mr-[0.15em] inline-block h-[0.85em] w-[0.85em] align-[-0.06em]" />vazio</span>
             </h1>
-            <p className="mt-4 max-w-xl text-lg leading-relaxed">Escolham o carro e sigam os passos na app. São 3 passos e poucos minutos. Depois, o carro passa a carregar à noite, quando a eletricidade custa menos.</p>
+            <p className="mt-4 max-w-xl text-lg leading-relaxed">Escolha o carro e siga os passos na app. São 3 passos e poucos minutos. Depois, o carro passa a carregar à noite, quando a eletricidade custa menos.</p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <button type="button" onClick={startGuide} className={cx(BTN_BLUE, "px-7")}>Começar o guia<Icon n="arrow" /></button>
               <a href={utm(OFFER.pagina, "hero")} target="_blank" rel="noopener noreferrer" onClick={() => track("hero_tarifario")} className={BTN_ONGREEN}>Ver o tarifário Carregar em Casa<Ext /></a>
@@ -2485,7 +2600,7 @@ export default function GuiaCarregamento() {
           </div>
           <div className="mx-auto w-full max-w-md md:max-w-none">
             <img src={IMG.hero} alt="A casa sorridente da Goldenergy, com painéis solares no telhado, a carregar o carro elétrico na garagem" width="727" height="473"
-              fetchpriority="high" decoding="async"
+              fetchPriority="high"
               className="mx-auto block aspect-[727/473] w-full max-w-sm bg-[#40DDA6] object-contain sm:max-w-md md:max-w-none" />
           </div>
         </div>
@@ -2495,9 +2610,9 @@ export default function GuiaCarregamento() {
         <p className="hidden text-2xl font-black text-[#146B4F] print:block">Goldenergy · Programar o carregamento nas horas de vazio</p>
 
         {/* PASSO 1 */}
-        <Step n={1} title="Qual é o vosso carro?" state={secs[1]} headRef={h1} summary={sum1} onEdit={() => edit(1)} editLabel="carro">
+        <Step n={1} title="Qual é o seu carro?" state={secs[1]} headRef={h1} summary={sum1} onEdit={() => edit(1)} editLabel="carro">
           <div className="relative">
-            <label htmlFor="q" className="mb-2 block font-bold">Pesquisem pelo modelo</label>
+            <label htmlFor="q" className="mb-2 block font-bold">Pesquise pelo modelo</label>
             <div className="relative">
               <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#514D5F]"><Icon n="search" /></span>
               <input id="q" type="search" value={q} autoComplete="off" spellCheck={false} placeholder="Ex.: Model Y, e-208, iX1, Dolphin"
@@ -2507,7 +2622,7 @@ export default function GuiaCarregamento() {
                 onFocus={() => setQOpen(true)} onBlur={() => setTimeout(() => setQOpen(false), 150)} onKeyDown={onKey}
                 className="min-h-[52px] w-full rounded-2xl border-2 border-[#D9D5E0] bg-white pl-12 pr-4 text-base placeholder:text-[#8C87A0] hover:border-[#B9B3C6] focus:border-[#146B4F] focus:outline-none focus:ring-4 focus:ring-[#40DDA6]/35" />
             </div>
-            <p id="qHint" className="sr-only">Escrevam pelo menos 2 letras. Usem as setas para escolher e Enter para confirmar.</p>
+            <p id="qHint" className="sr-only">Escreva pelo menos 2 letras. Use as setas para escolher e Enter para confirmar.</p>
             {showRes && (
               <ul id="qres" role="listbox" aria-label="Modelos encontrados" className="absolute inset-x-0 top-full z-30 mt-2 max-h-[min(420px,60vh)] overflow-auto rounded-2xl border border-[#D9D5E0] bg-white p-1.5 shadow-[0_16px_40px_-12px_rgba(23,20,36,.35)]">
                 {hits.map((h, i) => (
@@ -2529,7 +2644,7 @@ export default function GuiaCarregamento() {
             )}
           </div>
 
-          <p id="chipsT" className="mb-3 mt-6 text-sm font-semibold text-[#514D5F]">ou escolham a marca</p>
+          <p id="chipsT" className="mb-3 mt-6 text-sm font-semibold text-[#514D5F]">ou escolha a marca</p>
           <div role="group" aria-labelledby="chipsT" className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6">
             {TOP.map(nm => {
               const tb = BRANDS.find(x => x.name === nm), on = brandName === nm;
@@ -2574,10 +2689,14 @@ export default function GuiaCarregamento() {
                   <BrandLogo b={b} size="lg" />
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-[#514D5F]">{b.other ? "Guia geral" : b.name}</p>
-                    <p className="text-xl font-black leading-tight">{b.other ? "Outra marca ou modelo" : f ? famLabel(b, f) : "Agora escolham o modelo"}</p>
+                    <p className="text-xl font-black leading-tight">{b.other ? "Outra marca ou modelo" : f ? famLabel(b, f) : "Agora escolha o modelo"}</p>
                     {v && f && f.versions.length > 1 && <p className="mt-0.5 text-base text-[#171424]">{v.name}</p>}
                     {b.other && <p className="mt-1 text-base text-[#514D5F]">Mostramos os passos comuns à maioria das apps.</p>}
-                    {!b.other && b.app && <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-sm font-semibold text-[#146B4F]"><Icon n="bolt" className="h-4 w-4" />App {b.app}</p>}
+                    {!b.other && b.app && (storeUrl(b.app)
+                      ? <a href={storeUrl(b.app)} target="_blank" rel="noopener noreferrer" onClick={() => track("app_store_" + STORE)} className={cx("mt-2 inline-flex min-h-[44px] max-w-full items-center gap-1.5 rounded-full bg-white px-3.5 text-sm font-semibold text-[#146B4F] ring-1 ring-[#CFEFE2] transition-colors hover:bg-[#E6FAF2] hover:ring-[#40DDA6]", FOCUS)}>
+                          <Icon n="bolt" className="h-4 w-4 flex-none" /><span className="truncate">App {b.app}</span><span className="flex-none font-normal text-[#514D5F]">· {STORE_NAME}</span><Icon n="ext" className="h-3.5 w-3.5 flex-none" /><Ext />
+                        </a>
+                      : <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-sm font-semibold text-[#146B4F]"><Icon n="bolt" className="h-4 w-4" />App {b.app}</p>)}
                     {v && v.id && <p className="mt-2 text-sm"><A href={evUrl(b, v)}>Ficha técnica</A></p>}
                   </div>
                 </div>
@@ -2598,9 +2717,9 @@ export default function GuiaCarregamento() {
         </Step>
 
         {/* PASSO 2 */}
-        <Step n={2} title={<>O vosso horário de <Vz /></>} state={secs[2]} headRef={h2} summary={sum2} onEdit={() => edit(2)} editLabel="ciclo" lockedText="Disponível depois de escolherem o carro.">
+        <Step n={2} title={<>O seu horário de <Vz /></>} state={secs[2]} headRef={h2} summary={sum2} onEdit={() => edit(2)} editLabel="ciclo" lockedText="Disponível depois de escolher o carro.">
           <fieldset>
-            <legend className="mb-3 font-bold">Que ciclo tem o vosso tarifário bi-horário?</legend>
+            <legend className="mb-3 font-bold">Que ciclo tem o seu tarifário bi-horário?</legend>
             <div className="grid grid-cols-2 gap-2 sm:gap-3">
               {[["diario", "Ciclo diário", "Igual todos os dias"], ["semanal", "Ciclo semanal", "Muda ao fim de semana"]].map(([val, t, d]) => (
                 <label key={val} className="block cursor-pointer">
@@ -2616,32 +2735,44 @@ export default function GuiaCarregamento() {
               ))}
             </div>
           </fieldset>
-          <p className="mt-3 text-base text-[#514D5F]">Não sabem qual é? Está na fatura, junto à opção tarifária.</p>
+          <p className="mt-3 text-base text-[#514D5F]">Não sabe qual é? Está na fatura, junto à opção tarifária.</p>
 
           <div className="mt-4 rounded-2xl bg-[#E6FAF2] p-4 sm:p-5" aria-live="polite">
-            <p className="flex flex-wrap items-baseline gap-x-2 font-black text-[#146B4F]"><span>Período de <Vz /></span>{cyc === "semanal" && <span className="text-sm font-semibold text-[#514D5F]">· horário de {summer ? "verão" : "inverno"}</span>}</p>
-            <ul className="mt-2 divide-y divide-[#BFEBD9]">
-              {vazioRows.map(([d, hs]) => (
-                <li key={d} className="flex flex-col gap-1 py-2 sm:flex-row sm:items-center sm:justify-between">
-                  <span className="text-base text-[#514D5F]">{d}</span>
-                  <span className="flex flex-wrap gap-1.5">{hs.map(h => <b key={h} className={cx("rounded-lg bg-white px-2 py-0.5 font-bold tabular-nums", cyc === "diario" ? "text-xl" : "text-base")}>{h}</b>)}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-3 border-t border-[#BFEBD9] pt-3 text-base text-[#514D5F]">
-              <Fv><b className="text-[#171424]">Fora de vazio</b></Fv>: {cyc === "diario" ? <>das <b className="tabular-nums text-[#171424]">08:00</b> às <b className="tabular-nums text-[#171424]">22:00</b></> : "as restantes horas"}. A eletricidade é mais cara, por isso evitem carregar nesse período.
-            </p>
+            {/* Vazio e fora de vazio no mesmo formato: dia à esquerda, horas logo ao lado */}
+            {[["vz", vazioRows], ["fv", foraRows]].map(([kind, rows], gi) => (
+              <div key={kind} className={cx(gi && "mt-3 border-t border-[#BFEBD9] pt-3")}>
+                <p className={cx("flex flex-wrap items-baseline gap-x-2 font-black", kind === "vz" ? "text-[#146B4F]" : "text-[#171424]")}>
+                  {kind === "vz" ? <Vz>Vazio</Vz> : <Fv>Fora de vazio</Fv>}
+                  {kind === "vz" && cyc === "semanal" && <span className="text-sm font-semibold text-[#514D5F]">· horário de {summer ? "verão" : "inverno"}</span>}
+                  {kind === "fv" && <span className="text-sm font-semibold text-[#514D5F]">· mais caro</span>}
+                </p>
+                <ul className="mt-1.5 space-y-1.5">
+                  {rows.map(([d, hs]) => (
+                    <li key={d} className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                      <span className="w-full text-base text-[#514D5F] sm:w-36 sm:flex-none">{d}</span>
+                      <span className="flex flex-wrap gap-1.5">{hs.map(h => (
+                        <b key={h} className={cx("rounded-lg px-2 py-0.5 font-bold tabular-nums", kind === "vz" ? "bg-white text-[#171424]" : "bg-white/60 text-[#514D5F]", cyc === "diario" ? "text-xl" : "text-base")}>{h}</b>
+                      ))}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+            <p className="mt-3 text-base text-[#514D5F]">Evite carregar <Fv />: a eletricidade é mais cara.</p>
             <p className="mt-2 text-base">
               No carro vamos programar <Time>{p.s} → {p.e}</Time>{cyc === "semanal" ? <>, todos os dias. É o horário que fica sempre em <Vz />.</> : "."}
             </p>
           </div>
+          <div className="mt-4"><Note>
+            <b className="text-[#171424]">Em 2027, as horas de vazio mudam.</b> Entre julho e dezembro de 2027, quando o seu contador for atualizado, o <Vz /> {cyc === "diario" ? <>passa a ser das <b>22:30</b> às <b>08:30</b></> : <>dos dias úteis passa a ser das <b>00:30</b> às <b>07:30</b></>}. Se preferir não ter de mudar nada, programe já {cyc === "diario" ? <Time>22:30 → 08:00</Time> : <Time>00:30 → 07:00</Time>}: serve para os dois horários.
+          </Note></div>
           <OfferStrip where="passo2" />
           <div className="mt-6"><button type="button" onClick={goStep3} className={cx(BTN_P, "w-full sm:w-auto")}>Ver os passos<Icon n="chevR" /></button></div>
         </Step>
 
         {/* PASSO 3 */}
-        <Step n={3} title="Programar o carregamento" state={secs[3]} headRef={h3} lockedText="Os passos aparecem aqui, já com o vosso horário.">
-          {G && <Guide {...{ G, b, f, v, p, cur, n, screen, photo, showAll, setShowAll, finished, go, finish, doneRef, copyLink, copied }} />}
+        <Step n={3} title="Programar o carregamento" state={secs[3]} headRef={h3} lockedText="Os passos aparecem aqui, já com o seu horário.">
+          {G && <Guide {...{ G, b, f, v, p, cur, n, screen, photo, finished, go, finish, doneRef, copyLink, copied, linkUrl, carTitle }} />}
         </Step>
 
         <Promo />
@@ -2650,9 +2781,9 @@ export default function GuiaCarregamento() {
         <section aria-labelledby="t4" className="rounded-[1.75rem] border border-[#E7E4EC] bg-white p-5 sm:p-7 print:hidden">
           <h2 id="t4" className="text-xl font-black sm:text-2xl">Para tudo correr bem</h2>
           <div className="mt-4 grid gap-3 md:grid-cols-3">
-            {[["plug", "Um só horário", <>Programem o horário no carro <b>ou</b> na wallbox, nunca nos dois. Se tiverem horários diferentes, o carro pode não carregar.</>],
-              ["moon", "Confirmem na primeira noite", "Liguem o cabo à noite e confirmem na app que a carga começou à hora certa."],
-              ["refresh", "Mantenham tudo atualizado", "Atualizem a app e o software do carro. Os nomes dos menus podem mudar com as atualizações."]].map(([ic, t, d]) => (
+            {[["plug", "Um só horário", <>Programe o horário no carro <b>ou</b> na wallbox, nunca nos dois. Se tiver horários diferentes, o carro pode não carregar.</>],
+              ["moon", "Confirme na primeira noite", "Ligue o cabo à noite e confirme na app que a carga começou à hora certa."],
+              ["refresh", "Mantenha tudo atualizado", "Atualize a app e o software do carro. Os nomes dos menus podem mudar com as atualizações."]].map(([ic, t, d]) => (
               <div key={t} className="flex gap-3 rounded-2xl bg-[#F6F4F8] p-4 md:flex-col">
                 <span className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-[#40DDA6]/25 text-[#146B4F]"><Icon n={ic} /></span>
                 <div><h3 className="font-black">{t}</h3><p className="mt-1 text-base leading-relaxed text-[#514D5F]">{d}</p></div>
@@ -2664,8 +2795,14 @@ export default function GuiaCarregamento() {
         <Sources />
       </main>
 
-      <footer className="mx-auto max-w-5xl px-4 pb-10 text-sm text-[#514D5F] sm:px-6 print:hidden">
-        <p>Este guia é uma ajuda prática e não substitui o manual do veículo. As apps e os menus podem mudar com as atualizações.</p>
+      <footer className="mx-auto max-w-5xl space-y-3 px-4 pb-10 text-sm leading-relaxed text-[#514D5F] sm:px-6 print:hidden">
+        <div id="notas" tabIndex={-1} className="scroll-mt-24 rounded-2xl border border-[#E7E4EC] bg-white p-4 focus:outline-none sm:p-5">
+          <h2 className="font-bold text-[#171424]">Notas sobre o tarifário Carregar em Casa</h2>
+          <p className="mt-1">*{OFFER.notaPreco}</p>
+          <p className="mt-1">**{OFFER.notaDesconto}</p>
+          <p className="mt-1">Condições completas em <A href={OFFER.pagina}>goldenergy.pt</A> e nos <A href={OFFER.precosPdf}>preços da oferta</A>.</p>
+        </div>
+        <p>Este guia é uma ajuda prática e não substitui o manual do veículo.</p>
       </footer>
       <div role="status" aria-live="polite" className="sr-only">{msg}</div>
     </div>
@@ -2677,6 +2814,7 @@ const PAGE_CSS = `html{scroll-padding-top:5rem;scroll-padding-bottom:6.5rem;-web
 @media (min-width:640px){html{scroll-padding-top:7rem}}
 @media (min-width:768px){html{scroll-padding-bottom:1rem}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}`;
+const ALL_CSS = DEVICE_CSS + PAGE_CSS;
 const SELECT = "min-h-[52px] w-full cursor-pointer appearance-none rounded-2xl border-2 border-[#D9D5E0] bg-white pl-4 pr-11 text-base text-[#171424] hover:border-[#B9B3C6] focus:border-[#146B4F] focus:outline-none focus:ring-4 focus:ring-[#40DDA6]/35 disabled:cursor-not-allowed disabled:bg-[#F6F4F8] disabled:text-[#8C87A0]";
 function Field({ id, label, opt, children }) {
   return (
@@ -2688,15 +2826,27 @@ function Field({ id, label, opt, children }) {
 }
 
 /* ===================== Guia passo a passo ===================== */
-function Guide({ G, b, f, v, p, cur, n, screen, photo, showAll, setShowAll, finished, go, finish, doneRef, copyLink, copied }) {
+function Guide({ G, b, f, v, p, cur, n, screen, photo, finished, go, finish, doneRef, copyLink, copied, linkUrl, carTitle }) {
   const { gk, g } = G;
+  const desk = useDesktop();
   const last = cur === n - 1;
   const k0 = g.screens[g.screens.length - 1].k || g.k || "app";
   const where = k0 === "car" ? "no ecrã do carro" : k0 === "wb" ? "na wallbox" : "na app";
   const sub = b.other ? "Passos comuns à maioria das apps" : gk === "quad" ? "Quadriciclo · programa-se normalmente " + where : gk === "legacy" ? "Modelo anterior · programa-se normalmente " + where : (b.app ? "App " + b.app + " · " : "") + "programa-se " + where;
   const title = b.other ? "Guia geral" : b.name + " " + famLabel(b, f) + (v && f.versions.length > 1 ? " · " + (v.name.replace(f.name, "").trim() || v.name) : "");
   const oldNote = f && f.old && f.versions[0].note;
-  const pct = Math.round((cur + 1) / n * 100);
+
+  /* Ao mudar de passo: o passo ativo fica visível e recebe o foco (sem saltos no primeiro carregamento) */
+  const prev = useRef(cur);
+  useEffect(() => {
+    if (prev.current === cur) return;
+    prev.current = cur;
+    const el = typeof document !== "undefined" && document.getElementById("gs-" + cur);
+    if (!el) return;
+    try { el.focus({ preventScroll: true }); } catch (e) { }
+    const r = el.getBoundingClientRect && el.getBoundingClientRect();
+    if (r && (r.top < 80 || r.top > window.innerHeight * 0.6) && el.scrollIntoView) el.scrollIntoView({ behavior: prefersReduced() ? "auto" : "smooth", block: "start" });
+  }, [cur]);
 
   return (
     <div>
@@ -2706,84 +2856,63 @@ function Guide({ G, b, f, v, p, cur, n, screen, photo, showAll, setShowAll, fini
           <h3 className="text-lg font-black leading-tight sm:text-xl">{title}</h3>
           <p className="text-base text-[#514D5F]">{sub}</p>
         </div>
-        {g.level === OK && <span className="inline-flex items-center gap-1 rounded-full bg-[#E6FAF2] px-3 py-1 text-xs font-bold text-[#146B4F]"><Icon n="check" className="h-3.5 w-3.5" />Confirmado com fontes públicas</span>}
       </div>
 
-      <div className="mt-5 grid gap-x-8 gap-y-5 md:grid-cols-[minmax(0,1fr)_288px] md:grid-rows-[auto_1fr]">
-        {/* Lista de passos */}
-        <div className="min-w-0 md:col-start-1 md:row-start-1">
-          <div className="mb-3 flex items-center gap-3 text-sm font-bold text-[#146B4F] print:hidden">
-            <span className="whitespace-nowrap">Passo {cur + 1} de {n}</span>
-            <span className="h-2 flex-1 overflow-hidden rounded-full bg-[#EEEBF2]" aria-hidden="true"><span className="block h-full rounded-full bg-[#40DDA6] motion-safe:transition-all" style={{ width: pct + "%" }} /></span>
-          </div>
-          <ol className="flex flex-col gap-1.5">
-            {g.steps.map((s, i) => {
-              const isCur = i === cur, past = i < cur;
-              return (
-                <li key={i} className={cx(!isCur && !showAll && "hidden md:block", "print:block")}>
-                  <button type="button" onClick={() => go(i)} aria-current={isCur ? "step" : undefined}
-                    className={cx("flex w-full items-start gap-3 rounded-2xl border-2 p-3 text-left motion-safe:transition-colors", FOCUS,
-                      isCur ? "border-[#40DDA6] bg-[#E6FAF2]" : "border-transparent hover:bg-[#F6F4F8]")}>
-                    <span aria-hidden="true" className={cx("mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-full text-sm font-black",
-                      isCur ? "bg-[#146B4F] text-white" : past ? "bg-[#40DDA6] text-[#171424]" : "bg-[#EEEBF2] text-[#514D5F]")}>
-                      {past ? <Icon n="check" className="h-4 w-4" /> : i + 1}
-                    </span>
-                    <span className={cx("min-w-0 flex-1 leading-relaxed", isCur ? "text-[1.05rem] text-[#171424]" : "text-base text-[#514D5F]")}>
-                      <span className="sr-only">Passo {i + 1}: </span><Rich text={s} b={b} p={p} />
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ol>
-          <button type="button" aria-expanded={showAll} onClick={() => setShowAll(!showAll)} className={cx("mt-2 inline-flex min-h-[44px] items-center px-1 text-base md:hidden print:hidden", LINKBTN)}>
-            {showAll ? "Mostrar só o passo atual" : "Ver todos os " + n + " passos"}
-          </button>
-        </div>
+      <Prep b={b} k0={k0} />
 
-        {/* Ilustração */}
-        <div className="md:sticky md:top-28 md:col-start-2 md:row-span-2 md:row-start-1 md:self-start print:hidden">
+      <div className="mt-6 grid gap-x-8 gap-y-5 md:grid-cols-[minmax(0,1fr)_288px]">
+        {/* Passos: lista única; o passo ativo abre e mostra o ecrã */}
+        <ol className="flex min-w-0 flex-col gap-2" aria-label={"Passos para programar, " + n + " no total"}>
+          {g.steps.map((s, i) => {
+            const isCur = i === cur, past = i < cur;
+            return (
+              <li key={i} className={cx("rounded-2xl border-2 motion-safe:transition-colors", isCur ? "border-[#40DDA6] bg-[#F3FDF9]" : "border-transparent")}>
+                <button id={"gs-" + i} type="button" onClick={() => go(i)} aria-current={isCur ? "step" : undefined}
+                  className={cx("flex w-full items-start gap-3 rounded-2xl p-3 text-left", FOCUS, !isCur && "hover:bg-[#F6F4F8]")}>
+                  <span aria-hidden="true" className={cx("mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-full text-sm font-black",
+                    isCur ? "bg-[#146B4F] text-white" : past ? "bg-[#40DDA6] text-[#171424]" : "bg-[#EEEBF2] text-[#514D5F]")}>
+                    {past ? <Icon n="check" className="h-4 w-4" /> : i + 1}
+                  </span>
+                  <span className={cx("min-w-0 flex-1 text-base leading-relaxed", isCur ? "text-[#171424]" : "text-[#514D5F]")}>
+                    <span className="sr-only">Passo {i + 1} de {n}: </span><Rich text={s} b={b} p={p} link={false} />
+                  </span>
+                </button>
+                {isCur && (
+                  <div className="px-3 pb-4 sm:pl-[3.25rem]">
+                    {/\{app\}/.test(s) && b.app && storeUrl(b.app) && (
+                      <p className="mb-3 text-sm text-[#514D5F]">Ainda não tem a app <AppName name={b.app} />? Instale-a a partir da {STORE_NAME}.</p>
+                    )}
+                    {desk !== true && <div className="mb-4 md:hidden print:hidden">
+                      <PhoneMock key={gk + screen} g={g} b={b} p={p} gk={gk} screen={screen} family={f} photo={photo} />
+                    </div>}
+                    {last
+                      ? <button type="button" onClick={finish} className={cx(BTN_P, "w-full sm:w-auto print:hidden")}>Já programei<Icon n="check" /></button>
+                      : <button type="button" onClick={() => go(i + 1)} className={cx(BTN_P, "w-full sm:w-auto print:hidden")}>Passo seguinte<Icon n="chevR" /></button>}
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+
+        {/* Ecrã da app ao lado, no computador */}
+        {desk !== false && <div className="hidden md:sticky md:top-28 md:block md:self-start print:hidden">
           <PhoneMock key={gk + screen} g={g} b={b} p={p} gk={gk} screen={screen} family={f} photo={photo} />
-        </div>
-
-        {/* Navegação: fixa em baixo no telemóvel */}
-        <div className="sticky bottom-0 z-20 -mx-5 flex gap-3 border-t border-[#EEEBF2] bg-white/95 px-5 pb-[calc(.75rem+env(safe-area-inset-bottom))] pt-3 backdrop-blur sm:-mx-7 sm:px-7 md:static md:col-start-1 md:row-start-2 md:mx-0 md:self-start md:border-0 md:bg-transparent md:p-0 md:backdrop-blur-none print:hidden">
-          <button type="button" onClick={() => go(cur - 1)} disabled={cur === 0} className={cx(BTN_G, "flex-1 px-4 md:flex-none")}><Icon n="chevL" />Anterior</button>
-          {last
-            ? <button type="button" onClick={finish} className={cx(BTN_P, "flex-[2] px-4 md:flex-none")}>Já programei<Icon n="check" /></button>
-            : <button type="button" onClick={() => go(cur + 1)} className={cx(BTN_P, "flex-[2] px-4 md:flex-none")}>Passo seguinte<Icon n="chevR" /></button>}
-        </div>
+        </div>}
       </div>
 
       {finished && (
         <div ref={doneRef} tabIndex={-1} className="mt-6 rounded-2xl border-2 border-[#40DDA6] bg-[#E6FAF2] p-5 focus:outline-none sm:p-6">
           <h4 className="flex items-center gap-2 text-lg font-black text-[#146B4F]"><span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#40DDA6] text-[#171424]"><Icon n="check" className="h-4 w-4" /></span>Está programado</h4>
-          <p className="mt-2">Hoje à noite, liguem o cabo e confirmem na app que a carga começa perto das <Time>{p.s}</Time>.</p>
-          <p className="mt-1 text-[#514D5F]">Se não começar, revejam os passos ou programem o horário na wallbox. Usem só um dos dois.</p>
-          <div className="mt-4 flex flex-col gap-3 sm:flex-row print:hidden">
-            <button type="button" onClick={copyLink} className={BTN_BLUE}><Icon n={copied ? "check" : "link"} />{copied ? "Ligação copiada" : "Copiar ligação deste guia"}</button>
-            <button type="button" onClick={() => { try { window.print(); } catch (e) { } }} className={BTN_G}><Icon n="print" />Imprimir os passos</button>
-          </div>
-          <div className="mt-5 grid gap-3 border-t border-[#40DDA6]/50 pt-5 sm:grid-cols-2 print:hidden">
-            <a href={utm(OFFER.adesao, "concluido")} target="_blank" rel="noopener noreferrer" onClick={() => track("concluido_aderir")}
-              className={cx("group flex items-center gap-3 rounded-2xl bg-white p-4 motion-safe:transition-shadow hover:shadow-md", FOCUS)}>
-              <span className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-[#40DDA6] text-[#171424]"><Icon n="moon" /></span>
-              <span className="min-w-0 flex-1"><b className="block leading-tight text-[#171424]">Ainda não têm o tarifário Carregar em Casa?</b><span className="text-sm text-[#514D5F]"><Vz>Vazio</Vz> a {OFFER.preco}*. Vejam as condições e como aderir.</span></span>
-              <Icon n="chevR" className="h-5 w-5 flex-none text-[#146B4F] motion-safe:transition-transform group-hover:translate-x-0.5" /><Ext />
-            </a>
-            <a href={utm(OFFER.solar, "concluido")} target="_blank" rel="noopener noreferrer" onClick={() => track("concluido_solar")}
-              className={cx("group flex items-center gap-3 rounded-2xl bg-white p-4 motion-safe:transition-shadow hover:shadow-md", FOCUS)}>
-              <span className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-[#FFC845] text-[#171424]"><Icon n="sun" /></span>
-              <span className="min-w-0 flex-1"><b className="block leading-tight text-[#171424]">Painéis solares Goldenergy</b><span className="text-sm text-[#514D5F]">Produzam energia em casa durante o dia.</span></span>
-              <Icon n="chevR" className="h-5 w-5 flex-none text-[#146B4F] motion-safe:transition-transform group-hover:translate-x-0.5" /><Ext />
-            </a>
-          </div>
+          <p className="mt-2">Hoje à noite, ligue o cabo e confirme na app que a carga começa perto das <Time>{p.s}</Time>.</p>
+          <p className="mt-1 text-[#514D5F]">Se não começar, reveja os passos ou programe o horário na wallbox. Use só um dos dois.</p>
+          <ShareGuide linkUrl={linkUrl} carTitle={carTitle} copyLink={copyLink} copied={copied} />
         </div>
       )}
 
       <div className="mt-6 flex flex-col gap-3">
         {g.tip && <Note><Rich text={g.tip} b={b} p={p} /></Note>}
-        {oldNote && <Note>Modelo anterior ({f.versions[0].note}). Se a app já não funcionar, usem o horário da wallbox.</Note>}
+        {oldNote && <Note>Modelo anterior ({f.versions[0].note}). Se a app já não funcionar, use o horário da wallbox.</Note>}
         <details className="group rounded-2xl border border-[#E7E4EC] bg-white print:hidden">
           <summary className={cx("flex min-h-[52px] cursor-pointer list-none items-center gap-3 rounded-2xl px-4 font-bold text-[#171424] [&::-webkit-details-marker]:hidden", FOCUS)}>
             <Icon n="bolt" className="h-5 w-5 text-[#146B4F]" /><span className="flex-1">Ajustar a potência de carregamento <span className="font-normal text-[#514D5F]">(opcional)</span></span>
@@ -2791,13 +2920,115 @@ function Guide({ G, b, f, v, p, cur, n, screen, photo, showAll, setShowAll, fini
           </summary>
           <div className="space-y-2 px-4 pb-4 text-base leading-relaxed text-[#514D5F]">
             <p><Rich text={g.power} b={b} p={p} /></p>
-            <p>Só é preciso se a instalação elétrica não aguentar a potência máxima. Com uma wallbox com balanceamento dinâmico, normalmente não precisam de mexer nesta definição.</p>
+            <p>Só é preciso se a instalação elétrica não aguentar a potência máxima. Com uma wallbox com balanceamento dinâmico, normalmente não precisa de mexer nesta definição.</p>
           </div>
         </details>
       </div>
+
+      <Feedback gk={gk} b={b} f={f} />
+      <p className="mt-4 text-sm text-[#514D5F]">Guia revisto em {REVISTO}. As apps mudam com as atualizações; se encontrar um nome diferente, procure a opção mais parecida.</p>
     </div>
   );
 }
+
+/* Antes de começar: o que é preciso ter pronto */
+function Prep({ b, k0 }) {
+  const app = b.app ? <AppName name={b.app} /> : b.other ? "da marca" : "oficial da " + b.name;
+  const items = k0 === "car"
+    ? [<>Este horário programa-se no ecrã central do carro. Não precisa da app.</>,
+       <>Faça-o com o carro parado e o ecrã ligado.</>,
+       <>Tenha o cabo à mão para confirmar no fim.</>]
+    : k0 === "wb"
+      ? [<>A app da wallbox instalada no telemóvel, com sessão iniciada.</>,
+         <>A wallbox ligada à internet (Wi-Fi ou rede móvel).</>,
+         <>Um só horário: se usar o da wallbox, desligue o do carro.</>]
+      : [<>A app {app} instalada no telemóvel, com sessão iniciada.</>,
+         <>O carro associado à sua conta na app.</>,
+         <>Os serviços conectados ativos. Em algumas marcas, ativam-se no ecrã do carro ou no concessionário.</>,
+         <>O carro com rede móvel. Numa garagem subterrânea, as alterações podem demorar a chegar ao carro.</>];
+  return (
+    <div className="mt-5 rounded-2xl bg-[#F6F4F8] p-4 sm:p-5">
+      <h4 className="font-black text-[#171424]">Antes de começar</h4>
+      <ul className="mt-2 space-y-2">
+        {items.map((t, i) => (
+          <li key={i} className="flex gap-2.5 text-base leading-relaxed text-[#514D5F]">
+            <span aria-hidden="true" className="mt-1 flex h-5 w-5 flex-none items-center justify-center rounded-full bg-white text-[#146B4F]"><Icon n="check" className="h-3.5 w-3.5" /></span>
+            <span>{t}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/* Enviar o guia para o telemóvel (computador) ou partilhar (telemóvel) */
+function ShareGuide({ linkUrl, carTitle, copyLink, copied }) {
+  const [native, setNative] = useState(false);
+  useEffect(() => {
+    try { setNative(!!(navigator.share && window.matchMedia && window.matchMedia("(pointer: coarse)").matches)); } catch (e) { }
+  }, []);
+  const title = "Guia Goldenergy: carregar " + (carTitle ? "o " + carTitle + " " : "") + "nas horas de vazio";
+  const url = linkUrl();
+  const share = () => { track("guia_partilhar"); try { navigator.share({ title, url }).catch(() => { }); } catch (e) { } };
+  const mail = "mailto:?subject=" + encodeURIComponent(title) + "&body=" + encodeURIComponent("Passos para programar o carregamento:\n" + url);
+  const wa = "https://wa.me/?text=" + encodeURIComponent(title + "\n" + url);
+  const COPY = <button type="button" onClick={copyLink} className={BTN_G}><Icon n={copied ? "check" : "link"} />{copied ? "Ligação copiada" : "Copiar ligação"}</button>;
+  return (
+    <div className="mt-5 border-t border-[#40DDA6]/50 pt-5 print:hidden">
+      {native ? (
+        <>
+          <p className="font-bold text-[#171424]">Guarde este guia para a próxima vez</p>
+          <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+            <button type="button" onClick={share} className={BTN_BLUE}><Icon n="share" />Partilhar este guia</button>
+            {COPY}
+          </div>
+        </>
+      ) : (
+        <>
+          <p className="font-bold text-[#171424]">Enviar para o telemóvel</p>
+          <p className="text-base text-[#514D5F]">Assim tem os passos à mão quando estiver junto do carro.</p>
+          <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <a href={mail} onClick={() => track("guia_enviar_email")} className={BTN_BLUE}><Icon n="mail" />Enviar por email</a>
+            <a href={wa} target="_blank" rel="noopener noreferrer" onClick={() => track("guia_enviar_whatsapp")} className={BTN_G}><Icon n="chat" />Enviar por WhatsApp<Ext /></a>
+            {COPY}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+/* Este guia ajudou? Respostas fechadas, sem dados pessoais. Enviadas para o Google Tag Manager (evento guia_feedback). */
+const MOTIVOS = ["Os menus têm outro nome", "Não encontro a opção na app", "O carro não carregou no vazio", "Outro motivo"];
+function Feedback({ gk, b, f }) {
+  const [ans, setAns] = useState(null), [motivo, setMotivo] = useState(null);
+  const send = (resposta, m) => { try { (window.dataLayer = window.dataLayer || []).push({ event: m ? "guia_feedback_motivo" : "guia_feedback", resposta, motivo: m || "", marca: b.other ? "outra" : b.name, modelo: f ? f.name : "", guia: gk }); } catch (e) { } };
+  const pill = cx(BTN_G, "min-h-[44px] px-5");
+  const done = ans === "sim" || motivo;
+  return (
+    <div className="mt-6 rounded-2xl border border-[#E7E4EC] bg-white p-4 sm:p-5 print:hidden" aria-live="polite">
+      {done ? (
+        <p className="flex items-center gap-2 font-bold text-[#146B4F]"><Icon n="check" />{ans === "sim" ? "Agradecemos a resposta." : "Agradecemos a ajuda. Vamos rever este guia."}</p>
+      ) : ans === "nao" ? (
+        <fieldset>
+          <legend className="font-bold text-[#171424]">O que correu mal?</legend>
+          <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+            {MOTIVOS.map(m => <button key={m} type="button" onClick={() => { setMotivo(m); send("nao", m); }} className={cx(pill, "justify-start sm:justify-center")}>{m}</button>)}
+          </div>
+        </fieldset>
+      ) : (
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <p className="flex-1 font-bold text-[#171424]">Este guia ajudou?</p>
+          <div className="flex gap-2">
+            <button type="button" onClick={() => { setAns("sim"); send("sim"); }} className={cx(pill, "flex-1 sm:flex-none")}>Sim</button>
+            <button type="button" onClick={() => { setAns("nao"); send("nao"); }} className={cx(pill, "flex-1 sm:flex-none")}>Não</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 const Note = ({ children }) => (
   <div className="flex gap-3 rounded-2xl bg-[#FFF6E5] p-4 text-base leading-relaxed text-[#4A3500]">
     <Icon n="info" className="mt-0.5 h-5 w-5 flex-none text-[#7A4B00]" /><p>{children}</p>
@@ -2807,22 +3038,20 @@ const Note = ({ children }) => (
 /* ===================== Fontes e notas ===================== */
 function Sources() {
   return (
-    <details className="group rounded-[1.75rem] border border-[#E7E4EC] bg-white print:hidden">
+    <details className="group rounded-[1.75rem] border border-[#E7E4EC] bg-white [contain-intrinsic-size:auto_80px] [content-visibility:auto] print:hidden">
       <summary className={cx("flex min-h-[56px] cursor-pointer list-none items-center gap-3 rounded-[1.75rem] px-5 font-bold sm:px-7 [&::-webkit-details-marker]:hidden", FOCUS)}>
         <span className="flex-1">Fontes e notas</span><Icon n="chevD" className="h-5 w-5 motion-safe:transition-transform group-open:rotate-180" />
       </summary>
       <ul className="list-disc space-y-2 px-5 pb-6 pl-10 text-sm leading-relaxed text-[#514D5F] sm:px-7 sm:pl-12">
-        <li>As imagens das apps são ilustrações inspiradas nos ecrãs reais (cores, estrutura e nomes dos menus aproximados). Não são capturas de ecrã oficiais e podem variar com a versão da app ou do software do carro.</li>
-        <li>Guias marcados como confirmados, cruzados com manuais ou documentação pública: <A href="https://www.tesla.com/ownersmanual/modely/en_us/GUID-76995CEC-6402-4BFF-99FA-CEFA36E64A19.html">Tesla</A>, <A href="https://www.vw-id3.com/charging-247.html">Volkswagen ID.</A>, <A href="https://www.user-manual.renault.com/pt/content/openr-link/veiculo/veiculo-eletrico">Renault openR link (manual em português)</A>, <A href="https://www.autouserguide.com/byd/byd-dolphin-charging-and-discharging-user-guide/">BYD</A> e <A href="https://www.speakev.com/threads/peugeot-e2008-and-deffered-charging.159499/">Stellantis</A>.</li>
-        <li>Nomes dos menus em português: <A href="https://www.peugeot.pt/conselhos-sugestoes/eletrificacao/carregamento/como-encontrar-pontos-de-carregamento-publicos-para-um-carro-eletrico.html">Peugeot Portugal</A> e <A href="https://www.media.stellantis.com/pt-pt/peugeot/press/abertas-as-encomendas-para-a-versao-eletrica-do-furgao-mais-vendido-em-portugal">Stellantis Media</A> (carregamento diferido e menu «Electric»), <A href="https://www.volkswagen.pt/conectividade-e-mobilidade/vw-connect-id/conforto">Volkswagen Portugal</A> (horas de partida por local de carregamento) e <A href="https://www.bmw.pt/pt/veiculos-eletricos/home-charging.html">BMW Portugal</A> (hora de partida e nível de carga).</li>
-        <li>BMW e MINI: funcionamento do intervalo de tempo e da hora de partida descrito na <A href="https://faq.bmwusa.com/s/article/My-BMW-App-Charging-Charge-Climate-Timer-Charging-mode-Charge-in-time-frame-rlLVj?language=en_US">FAQ da My BMW App</A> e por utilizadores em <A href="https://bmwi.bimmerpost.com/forums/showthread/2228318/question-re-charging-time-slot-departure-time">Bimmerpost</A> e <A href="https://www.reddit.com/r/BMWiX/comments/1shmfph/charging_in_time_slot_not_working/">Reddit</A>.</li>
+        <li>As imagens das apps são ilustrações simplificadas, com as cores e os nomes dos menus de cada app. Não são capturas de ecrã oficiais e podem variar com a versão da app ou do software do carro.</li>
+        <li>Nomes dos menus e funcionamento, a partir de manuais e páginas oficiais dos fabricantes: <A href="https://www.tesla.com/ownersmanual/modely/en_us/GUID-76995CEC-6402-4BFF-99FA-CEFA36E64A19.html">manual Tesla</A>, <A href="https://www.user-manual.renault.com/pt/content/openr-link/veiculo/veiculo-eletrico">manual Renault em português</A>, <A href="https://faq.bmwusa.com/s/article/My-BMW-App-Charging-Charge-Climate-Timer-Charging-mode-Charge-in-time-frame-rlLVj?language=en_US">perguntas frequentes da My BMW App</A>, <A href="https://www.bmw.pt/pt/veiculos-eletricos/home-charging.html">BMW Portugal</A>, <A href="https://www.volkswagen.pt/conectividade-e-mobilidade/vw-connect-id/conforto">Volkswagen Portugal</A>, <A href="https://www.peugeot.pt/conselhos-sugestoes/eletrificacao/carregamento/como-encontrar-pontos-de-carregamento-publicos-para-um-carro-eletrico.html">Peugeot Portugal</A> e <A href="https://www.media.stellantis.com/pt-pt/peugeot/press/abertas-as-encomendas-para-a-versao-eletrica-do-furgao-mais-vendido-em-portugal">Stellantis Media</A>.</li>
         <li>Kia e Hyundai: nomes dos menus do <A href="http://webmanual.kia.com/DA_GEN2_V/AV/EUR/Portuguese/002_Features_electricvehicle.html">manual oficial Kia em português</A> (Gestão de carregamento, Carregamento planeado, Corrente de carga CA). Nomes atuais das apps confirmados no Google Play em novembro de 2026: <A href="https://play.google.com/store/apps/details?id=com.kia.oneapp.eu&hl=pt_PT">Kia App</A> e <A href="https://play.google.com/store/apps/details?id=com.hyundai.oneapp.eu&hl=pt_PT">myHyundai</A>.</li>
         <li>Marcas, modelos e versões: <A href="https://ev-database.org/">EV Database</A> (novembro de 2026), mais modelos anteriores, comerciais e quadriciclos comuns em Portugal.</li>
         <li>Logótipos: <A href="https://github.com/filippofilip95/car-logos-dataset">car-logos-dataset</A>; as marcas pertencem aos respetivos fabricantes. Fotos dos modelos: Wikimedia Commons, via Wikipédia, com licenças livres (autoria na página de cada ficheiro), e EV Database quando não existe foto livre.</li>
-        <li>Tarifário Carregar em Casa: condições e preços publicados em <A href={OFFER.pagina}>goldenergy.pt</A> (<A href={OFFER.precosPdf}>preços da oferta</A>). *{OFFER.notaPreco} **{OFFER.notaDesconto}</li>
+        <li>Tarifário Carregar em Casa: condições e preços publicados em <A href={OFFER.pagina}>goldenergy.pt</A>. As notas sobre o preço estão no fim da página.</li>
         <li>Ilustração: campanha «Electric Love» da Goldenergy.</li>
         <li>Custo aos 100 km: {CUSTO100_CALC}. {CUSTO100_NOTA}</li>
-        <li>Ciclos de vazio: horários de referência das tarifas bi-horárias em Portugal continental. Confirmem sempre o vosso contrato.</li>
+        <li>Ciclos de vazio: horários de referência das tarifas bi-horárias em Portugal continental. Confirme sempre o seu contrato. Novos horários a partir de 2027: <A href="https://www.erse.pt/media/uhpieyio/comunicado_novos-per%C3%ADodos-hor%C3%A1rios-_vfinal31julho2026.pdf">comunicado da ERSE</A>.</li>
       </ul>
     </details>
   );
@@ -2833,13 +3062,13 @@ function OfferStrip({ where }) {
   return (
     <div className="mt-5 rounded-2xl border-2 border-[#40DDA6] bg-white p-4 sm:p-5">
       <p className="text-sm font-bold uppercase tracking-wider text-[#146B4F]">Tarifário Carregar em Casa</p>
-      <p className="mt-1 text-xl font-black leading-tight text-[#171424]">Carreguem no <Vz /> a <span className="whitespace-nowrap text-[#382F83]">{OFFER.preco}*</span></p>
-      <p className="mt-1 text-base text-[#514D5F]">Já são clientes de eletricidade Goldenergy? Têm <b className="text-[#171424]">{OFFER.descontoClientes} de desconto</b> no <Vz />.**</p>
+      <p className="mt-1 text-xl font-black leading-tight text-[#171424]">Carregue no <Vz /> a <span className="whitespace-nowrap text-[#382F83]">{OFFER.preco}*</span></p>
+      <p className="mt-1 text-base text-[#514D5F]">Já é cliente de eletricidade Goldenergy? Tem <b className="text-[#171424]">{OFFER.descontoClientes} de desconto</b> no <Vz />.**</p>
       <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
         <a href={utm(OFFER.adesao, where)} target="_blank" rel="noopener noreferrer" onClick={() => track(where + "_aderir")} className={BTN_BLUE}>Aderir ao tarifário<Ext /></a>
         <a href={OFFER.telefoneHref} onClick={() => track(where + "_telefone")} className={BTN_G}><Icon n="phone" />Ligar {OFFER.telefone}<span className="font-semibold text-[#514D5F]">(grátis)</span></a>
       </div>
-      <p className="mt-3 text-xs leading-snug text-[#514D5F]">*{OFFER.notaPreco} **{OFFER.notaDesconto} <A href={OFFER.precosPdf}>Preços da oferta</A></p>
+      <p className="mt-3 text-sm text-[#514D5F]"><a href="#notas" className={LINKBTN}>*Condições no fim da página</a></p>
     </div>
   );
 }
@@ -2861,10 +3090,11 @@ function Cost100() {
   return (
     <div ref={ref} className="relative mt-6 max-w-xl">
       <div className="inline-flex max-w-full flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl bg-white/75 py-2 pl-4 pr-2">
-        <span className="text-base font-semibold">Gasto aos 100 km, a carregar no <Vz />:</span>
-        <span className="flex items-center gap-1"
+        <span className="flex flex-wrap items-center gap-x-1.5 gap-y-1"
           onPointerEnter={e => e.pointerType === "mouse" && setHover(true)} onPointerLeave={e => e.pointerType === "mouse" && setHover(false)}>
+          <span className="text-base font-semibold">Gaste apenas</span>
           <b className="text-2xl font-black tabular-nums text-[#382F83]">{CUSTO100}</b>
+          <span className="text-base font-semibold">aos 100 km, a carregar no <Vz />.</span>
           <button type="button" aria-label="Como calculámos este valor" aria-describedby="tipCusto" aria-expanded={open}
             onClick={() => setPin(v => !v)} onFocus={e => isKbd(e.currentTarget) && setFocus(true)} onBlur={() => setFocus(false)}
             className={cx("flex h-11 w-11 items-center justify-center rounded-full text-[#382F83] hover:bg-white", FOCUS)}>
@@ -2888,7 +3118,7 @@ function Cost100() {
 function Promo() {
   return (
     <section aria-labelledby="tpromo" className="scroll-mt-20 sm:scroll-mt-28 print:hidden">
-      <h2 id="tpromo" className="sr-only">Mais para a vossa casa</h2>
+      <h2 id="tpromo" className="sr-only">Mais para a sua casa</h2>
       <div className="grid gap-4 sm:gap-5 md:grid-cols-2">
         {/* Carregar em Casa */}
         <article className="flex flex-col overflow-hidden rounded-[1.75rem] bg-[#40DDA6]">
@@ -2915,7 +3145,7 @@ function Promo() {
           <div className="flex flex-1 flex-col p-5 sm:p-7">
             <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FFC845] text-[#171424]"><Icon n="sun" className="h-6 w-6" /></span>
             <p className="text-sm font-bold uppercase tracking-wider text-[#7A4B00]">Painéis solares</p>
-            <h3 className="mt-1 text-2xl font-black leading-tight text-[#171424] sm:text-[1.75rem]">O sol também pode dar energia ao vosso carro.</h3>
+            <h3 className="mt-1 text-2xl font-black leading-tight text-[#171424] sm:text-[1.75rem]">O sol também pode dar energia ao seu carro.</h3>
             <p className="mt-3 text-[1.05rem] text-[#171424]">Com painéis no telhado, a casa produz energia durante o dia. Essa energia serve para a casa e para o carro, quando está em casa.</p>
             <ul className="mt-3 space-y-1.5 text-base text-[#171424]">
               {["Quando o carro está em casa de dia, carrega com o sol", "Nos outros dias, carrega à noite, no vazio", "Equipamento, instalação e acompanhamento pela Goldenergy"].map(t => (
