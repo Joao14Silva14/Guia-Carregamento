@@ -1,0 +1,22 @@
+Ecrã inicial da app|Pantalla inicial de la app|App home screen|Écran d'accueil de l'app|Startbildschirm der App
+Carregamento diferido (app)|Carga diferida (app)|Delayed charging (app)|Recharge différée (app)|Verzögertes Laden (App)
+Temporizador|Temporizador|Timer|Minuterie|Timer
+Temporizador de carregamento|Temporizador de carga|Charging timer|Minuterie de recharge|Ladetimer
+Hora de partida (obrigatória)|Hora de salida (obligatoria)|Departure time (required)|Heure de départ (obligatoire)|Abfahrtszeit (erforderlich)
+Perfil «Casa»|Perfil «Casa»|«Home» profile|Profil « Domicile »|Profil „Zuhause“
+Separador de carregamento (raio)|Pestaña de carga (rayo)|Charging tab (lightning)|Onglet recharge (éclair)|Reiter Laden (Blitz)
+Local «Casa»|Ubicación «Casa»|«Home» location|Lieu « Domicile »|Ort „Zuhause“
+Horário fora de hora de ponta|Horario fuera de horas punta|Off-peak schedule|Horaire hors heures de pointe|Zeitplan außerhalb der Spitzenzeit
+Separador Painel|Pestaña Panel|Dashboard tab|Onglet Tableau de bord|Reiter Dashboard
+Opções de carregamento: não há hora de início|Opciones de carga: no hay hora de inicio|Charging options: no start time|Options de recharge : pas d'heure de début|Ladeoptionen: keine Startzeit
+App da wallbox: horário do vazio|App de la wallbox: horario valle|Wallbox app: off-peak schedule|App de la wallbox : horaire heures creuses|Wallbox-App: Niedertarif-Zeitplan
+Carregamento › Partida|Carga › Salida|Charging › Departure|Recharge › Départ|Laden › Abfahrt
+Plano de partida|Plan de salida|Departure plan|Plan de départ|Abfahrtsplan
+Cartão Bateria aberto|Tarjeta Batería abierta|Battery card open|Carte Batterie ouverte|Batteriekarte geöffnet
+Agendar carregamento|Programar la carga|Schedule charging|Programmer la recharge|Laden planen
+Ecrã «O meu dispositivo» da app|Pantalla «Mi dispositivo» de la app|App «My device» screen|Écran « Mon appareil » de l'app|App-Bildschirm „Mein Gerät“
+Painel de carregamento|Panel de carga|Charging panel|Panneau de recharge|Ladebereich
+Local de carregamento «Casa»|Ubicación de carga «Casa»|«Home» charging location|Lieu de recharge « Domicile »|Ladeort „Zuhause“
+Vista de carregamento|Vista de carga|Charging view|Vue de recharge|Ladeansicht
+Início⁠|Inicio|Home|Accueil|Start
+Início|Inicio|Start|Début|Beginn

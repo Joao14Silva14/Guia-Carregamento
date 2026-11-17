@@ -1,0 +1,152 @@
+180:Dar prioridad|Prioritise|Prioriser|Priorisieren
+181:Cerrado - hace # min.|Locked - # min ago|Verrouillé - il y a # min|Verriegelt - vor # Min.
+183:Carga fuera de horas punta|Off-peak charging|Recharge en heures creuses|Laden im Niedertarif
+184:km estimados|estimated km|km estimés|geschätzte km
+185:Bueno|Good|Bon|Gut
+186:Estado del vehículo|Vehicle status|État du véhicule|Fahrzeugstatus
+187:Buscar carga|Find charging|Trouver une borne|Laden finden
+188:Lisboa|Lisbon|Lisbonne|Lissabon
+189:Puertas cerradas|Doors locked|Portes verrouillées|Türen verriegelt
+190:Centro de carga|Charging centre|Centre de recharge|Ladezentrum
+191:Temperatura interior # °C|Inside temperature # °C|Température intérieure # °C|Innentemperatur # °C
+192:Centro personal|Personal centre|Espace personnel|Persönlicher Bereich
+193:Corriente|Current|Courant|Strom
+194:Tensión|Voltage|Tension|Spannung
+195:Límite superior de carga|Upper charge limit|Limite supérieure de charge|Oberes Ladelimit
+196:Plan de carga|Charging plan|Plan de recharge|Ladeplan
+197:Se repite todos los días. Solo funciona en carga lenta (AC).|Repeats every day. Only works with slow (AC) charging.|Se répète chaque jour. Ne fonctionne qu'en recharge lente (AC).|Wiederholt sich täglich. Nur beim langsamen Laden (AC).
+198:Mi garaje|My garage|Mon garage|Meine Garage
+199:Ayer a las #|Yesterday at #|Hier à #|Gestern um #
+200:Ver estado|View status|Voir l'état|Status ansehen
+201:CONEXIÓN REMOTA|REMOTE CONNECTION|CONNEXION À DISTANCE|FERNVERBINDUNG
+202:Horario|Schedule|Horaire|Zeitplan
+203:Estado del coche ›|Car status ›|État de la voiture ›|Fahrzeugstatus ›
+204:Ajustes de energía|Energy settings|Réglages de l'énergie|Energieeinstellungen
+205:Gestionar conductor|Manage driver|Gérer le conducteur|Fahrer verwalten
+206:Más|More|Plus|Mehr
+207:· Apagada|· Off|· Désactivée|· Aus
+208:Diario|Daily|Quotidien|Täglich
+209:Viaje|Trip|Trajet|Fahrt
+211:Compartir|Share|Partager|Teilen
+212:Prestar|Lend|Prêter|Verleihen
+213:Preferencias|Preferences|Préférences|Einstellungen
+214:km · autonomía|km · range|km · autonomie|km · Reichweite
+215:AVISOS|ALERTS|ALERTES|HINWEISE
+216:Aviso de mantenimiento|Service alert|Alerte d'entretien|Wartungshinweis
+217:Detalle|Details|Détail|Details
+218:Menú|Menu|Menu|Menü
+219:Temporizador de carga|Charge timer|Minuterie de recharge|Ladetimer
+220:# km · Cerrado|# km · Locked|# km · Verrouillé|# km · Verriegelt
+221:Actualizado hoy a las #|Updated today at #|Mis à jour aujourd'hui à #|Heute um # aktualisiert
+222:Mandos a distancia|Remote controls|Commandes à distance|Fernsteuerung
+223:Personalizar|Customise|Personnaliser|Anpassen
+224:Cerradas|Closed|Fermées|Geschlossen
+225:Cerrado|Closed|Fermé|Geschlossen
+226:Opciones de carga|Charging options|Options de recharge|Ladeoptionen
+227:Estándar|Standard|Standard|Standard
+228:Nivel máximo de carga|Maximum charge level|Niveau de charge maximal|Maximaler Ladestand
+229:Mi coche|My car|Ma voiture|Mein Auto
+230:Autonomía total|Total range|Autonomie totale|Gesamtreichweite
+231:Techo|Roof|Toit|Dach
+232:Arranque sin llave|Keyless start|Démarrage sans clé|Schlüsselloser Start
+233:Mensajes|Messages|Messages|Nachrichten
+234:Gestión de carga|Charge management|Gestion de la recharge|Lademanagement
+235:Nivel de carga objetivo|Target charge level|Niveau de charge cible|Zielladestand
+236:Actualizado desde el vehículo · #|Updated from vehicle · #|Mis à jour depuis le véhicule · #|Vom Fahrzeug aktualisiert · #
+237:Comprobar estado|Check status|Vérifier l'état|Status prüfen
+238:Localizar vehículo|Locate vehicle|Localiser le véhicule|Fahrzeug orten
+239:Historial remoto|Remote history|Historique à distance|Fernverlauf
+240:Electromovilidad|Electromobility|Électromobilité|Elektromobilität
+241:Definir modo de carga y hora de salida|Set charging mode and departure time|Régler le mode de recharge et l'heure de départ|Lademodus und Abfahrtszeit festlegen
+242:Buscar punto de carga|Find charging point|Trouver une borne|Ladepunkt finden
+243:Estadísticas|Statistics|Statistiques|Statistiken
+244:Historial de carga|Charging history|Historique de recharge|Ladeverlauf
+245:Autonomía estimada:|Estimated range:|Autonomie estimée :|Geschätzte Reichweite:
+246:Sin problemas|No issues|Aucun problème|Keine Probleme
+247:Supervisión|Monitoring|Surveillance|Überwachung
+248:Alerta de velocidad activa|Speed alert on|Alerte de vitesse active|Tempowarnung aktiv
+249:Nivel de batería|Battery level|Niveau de batterie|Batteriestand
+250:Autonomía máx. estimada|Est. max. range|Autonomie max. estimée|Geschätzte max. Reichweite
+251:Cable conectado · esperando el temporizador|Plugged in · waiting for timer|Câble branché · en attente de la minuterie|Eingesteckt · wartet auf Timer
+252:Última actualización|Last update|Dernière mise à jour|Letzte Aktualisierung
+253:Temporizadores de carga|Charge timers|Minuteries de recharge|Ladetimer
+254:Consumo medio /# días|Average consumption /# days|Consommation moyenne /# jours|Durchschnittsverbrauch /# Tage
+255:Km total|Total km|Km total|Km gesamt
+256:NOVEDADES MYOPEL|MYOPEL NEWS|ACTUALITÉS MYOPEL|MYOPEL NEWS
+257:Última actualización: hoy, a las #|Last update: today, #|Dernière mise à jour : aujourd'hui, #|Letzte Aktualisierung: heute, #
+258:Consumo medio /#D|Average consumption /#D|Consommation moyenne /#J|Durchschnittsverbrauch /#T
+259:UNIVERSO PEUGEOT|PEUGEOT UNIVERSE|UNIVERS PEUGEOT|PEUGEOT-WELT
+260:En espera|Waiting|En attente|Wartet
+261:Exterior|Exterior|Extérieur|Außen
+262:Límite #%|Limit #%|Limite #%|Limit #%
+263:Horario · #–#|Schedule · #–#|Horaire · #–#|Zeitplan · #–#
+264:Datos del vehículo de las #|Vehicle data from #|Données du véhicule de #|Fahrzeugdaten von #
+265:Detalles del vehículo|Vehicle details|Détails du véhicule|Fahrzeugdetails
+266:Salida: mañana, #|Departure: tomorrow, #|Départ : demain, #|Abfahrt: morgen, #
+267:Resumen|Overview|Vue d'ensemble|Übersicht
+268:Salida|Departure|Départ|Abfahrt
+269:Mañana · Perfil: General|Tomorrow · Profile: General|Demain · Profil : Général|Morgen · Profil: Allgemein
+270:Perfil de carga|Charging profile|Profil de recharge|Ladeprofil
+271:General|General|Général|Allgemein
+272:Carga mínima|Minimum charge|Charge minimale|Mindestladung
+273:Carga máxima|Maximum charge|Charge maximale|Maximale Ladung
+274:Actualizado por el coche hace # minutos|Updated by the car # minutes ago|Mis à jour par la voiture il y a # minutes|Vor # Minuten vom Auto aktualisiert
+275:Online|Online|En ligne|Online
+276:# % | Cable conectado|# % | Plugged in|# % | Câble branché|# % | Eingesteckt
+277:Inspeccionar|Inspect|Inspecter|Prüfen
+278:Autonomía # km|Range # km|Autonomie # km|Reichweite # km
+279:Tiempo|Weather|Météo|Wetter
+280:Planes de salida|Departure plans|Plans de départ|Abfahrtspläne
+281:Plan # · #|Plan # · #|Plan # · #|Plan # · #
+282:Plan #|Plan #|Plan #|Plan #
+283:Aparcado · Visto a las #|Parked · Seen at #|Stationné · Vu à #|Geparkt · Gesehen um #
+284:Llaves digitales|Digital keys|Clés numériques|Digitale Schlüssel
+285:Gestionar|Manage|Gérer|Verwalten
+286:Temperatura del aire|Air temperature|Température de l'air|Lufttemperatur
+287:Interior # °C|Inside # °C|Intérieur # °C|Innen # °C
+288:Apagada · Interior # °C|Off · Inside # °C|Désactivée · Intérieur # °C|Aus · Innen # °C
+289:Conectado · # %|Plugged in · # %|Branché · # %|Eingesteckt · # %
+290:Programar|Schedule|Programmer|Zeitplan
+291:Sin programaciones|No schedules|Aucune programmation|Keine Zeitpläne
+292:Empezar a las|Start Time|Début à|Beginn
+293:Terminar a las|End Time|Fin à|Ende
+296:AUTONOMÍA|RANGE|AUTONOMIE|REICHWEITE
+297:Rutas|Routes|Itinéraires|Routen
+298:Cartera|Wallet|Portefeuille|Wallet
+299:Información|Information|Informations|Informationen
+300:Llave digital|Digital key|Clé numérique|Digitaler Schlüssel
+301:Hoy a las #|Today at #|Aujourd'hui à #|Heute um #
+302:Tiempo hasta carga completa|Time to full charge|Temps jusqu'à charge complète|Zeit bis voll geladen
+303:# h # min|# h # min|# h # min|# Std. # Min.
+304:Sin horarios|No schedules|Aucun horaire|Keine Zeitpläne
+305:Nuevo horario|New schedule|Nouvel horaire|Neuer Zeitplan
+306:Puertas|Doors|Portes|Türen
+307:Capó|Bonnet|Capot|Motorhaube
+308:Control remoto|Remote control|Commande à distance|Fernsteuerung
+309:Presión de los neumáticos|Tyre pressure|Pression des pneus|Reifendruck
+310:Navegación|Navigation|Navigation|Navigation
+311:Autonomía prevista|Predicted range|Autonomie prévue|Prognostizierte Reichweite
+312:Objetivo de carga|Charge target|Objectif de charge|Ladeziel
+314:Horas de salida|Departure times|Heures de départ|Abfahrtszeiten
+315:Informe de estado del vehículo|Vehicle status report|Rapport d'état du véhicule|Fahrzeugzustandsbericht
+316:Datos de conducción|Driving data|Données de conduite|Fahrdaten
+317:Ubicaciones de carga|Charging locations|Lieux de recharge|Ladeorte
+318:Horas de carga preferentes|Preferred charging times|Heures de recharge préférées|Bevorzugte Ladezeiten
+319:Reducir corriente de carga AC|Reduce AC charging current|Réduire le courant de charge AC|AC-Ladestrom reduzieren
+329:My ID. Buzz Cargo (comercial)|My ID. Buzz Cargo (commercial)|My ID. Buzz Cargo (utilitaire)|My ID. Buzz Cargo (Nutzfahrzeug)
+330:My e-Crafter (comercial)|My e-Crafter (commercial)|My e-Crafter (utilitaire)|My e-Crafter (Nutzfahrzeug)
+331:No conectada|Not plugged in|Non branchée|Nicht eingesteckt
+332:Conectar|Connect|Connecter|Verbinden
+333:Aparcar|Park|Stationner|Parken
+334:Encontrar vehículo|Find vehicle|Trouver le véhicule|Fahrzeug finden
+335:Reserva de carga|Charging reservation|Réservation de recharge|Ladereservierung
+336:Reserva|Reservation|Réservation|Reservierung
+337:# km · Aparcado|# km · Parked|# km · Stationné|# km · Geparkt
+338:Coche aparcado|Car parked|Voiture stationnée|Auto geparkt
+339:Cerca de casa · # m|Near home · # m|Près du domicile · # m|Nahe Zuhause · # m
+340:Control de energía|Energy control|Contrôle de l'énergie|Energiesteuerung
+341:Encendido|On|Activé|Ein
+342:Límite de carga: #%|Charge limit: #%|Limite de charge : #%|Ladelimit: #%
+343:Defina el límite entre #% y #%|Set the limit between #% and #%|Réglez la limite entre #% et #%|Limit zwischen #% und #% festlegen
+344:Reservar viaje|Book trip|Réserver un trajet|Fahrt reservieren
+345:El coche|The car|La voiture|Das Auto

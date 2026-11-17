@@ -1,0 +1,175 @@
+0:# % · # km · Cable conectado|# % · # km · Plugged in|# % · # km · Câble branché|# % · # km · Kabel eingesteckt
+1:Carga|Charging|Recharge|Laden
+2:Climatización|Climate|Climatisation|Klima
+3:Trayectos|Trips|Trajets|Fahrten
+4:Mantenimiento|Service|Entretien|Wartung
+5:Inicio|Home|Accueil|Start
+6:Mapa|Map|Carte|Karte
+7:Cargar|Charge|Charger|Laden
+8:Servicios|Services|Services|Dienste
+9:Cable conectado · esperando el horario|Plugged in · waiting for schedule|Câble branché · en attente de l'horaire|Eingesteckt · wartet auf Zeitplan
+10:Carga diferida|Delayed charging|Recharge différée|Verzögertes Laden
+11:Hora de inicio|Start time|Heure de début|Startzeit
+12:En algunas versiones también se puede elegir la hora de fin.|Some versions also let you choose the end time.|Certaines versions permettent aussi de choisir l'heure de fin.|In manchen Versionen lässt sich auch die Endzeit wählen.
+13:Guardar|Save|Enregistrer|Speichern
+14:Cerrado|Locked|Verrouillé|Verriegelt
+15:Batería|Battery|Batterie|Batterie
+16:Autonomía|Range|Autonomie|Reichweite
+17:Cerrar|Lock|Verrouiller|Verriegeln
+18:Clima|Climate|Clim|Klima
+19:Luces|Lights|Feux|Licht
+20:Localizar|Locate|Localiser|Orten
+21:# % · Cable conectado|# % · Plugged in|# % · Câble branché|# % · Eingesteckt
+22:Ubicación|Location|Lieu|Ort
+23:Coche|Car|Voiture|Auto
+24:Tienda|Shop|Boutique|Shop
+25:Yo|Me|Moi|Ich
+26:Carga programada|Scheduled charging|Recharge programmée|Geplantes Laden
+27:Programación|Schedule|Programmation|Zeitplan
+28:Fin|End|Fin|Ende
+29:Horario de carga|Charging schedule|Horaire de recharge|Ladezeitplan
+30:Cargar solo en este horario|Charge only in this window|Charger uniquement sur cette plage|Nur in diesem Zeitraum laden
+31:Claxon|Horn|Klaxon|Hupe
+32:Encender luces|Flash lights|Allumer les feux|Licht an
+33:Carga y climatización|Charging and climate|Recharge et climatisation|Laden und Klima
+34:Programas|Programs|Programmes|Programme
+35:Vehículo|Vehicle|Véhicule|Fahrzeug
+36:Mapas|Maps|Cartes|Karten
+37:Ayuda|Help|Aide|Hilfe
+38:Cuenta|Account|Compte|Konto
+39:Vehículo listo a las #|Vehicle ready at #|Véhicule prêt à #|Fahrzeug bereit um #
+40:Ajustes de los programas|Program settings|Réglages des programmes|Programm­einstellungen
+41:Comunes a todos los programas|Shared by all programs|Communs à tous les programmes|Für alle Programme
+42:Horas valle|Off-peak hours|Heures creuses|Niedertarifzeiten
+43:Valen para todos los programas.|Apply to all programs.|Valables pour tous les programmes.|Gelten für alle Programme.
+44:Ahora mismo|Just now|À l'instant|Gerade eben
+45:Cable conectado|Plugged in|Câble branché|Eingesteckt
+46:Abierto|Unlocked|Déverrouillé|Entriegelt
+47:Navegar|Navigate|Naviguer|Navigation
+48:Audio|Audio|Audio|Audio
+49:Internet|Internet|Internet|Internet
+50:Nivel de carga|Charge level|Niveau de charge|Ladestand
+51:Temporizadores|Timers|Minuteries|Timer
+52:Temporizador # · #|Timer # · #|Minuterie # · #|Timer # · #
+53:Temporizador #|Timer #|Minuterie #|Timer #
+54:Horario de carga preferente|Preferred charging times|Heures de recharge préférées|Bevorzugte Ladezeiten
+55:Hora de salida|Departure time|Heure de départ|Abfahrtszeit
+56:PANEL|DASHBOARD|TABLEAU DE BORD|DASHBOARD
+57:Buenas noches|Good evening|Bonsoir|Guten Abend
+58:Última conexión: hoy a las #|Last connected: today at #|Dernière connexion : aujourd'hui à #|Zuletzt verbunden: heute um #
+59:El Bentley está cerrado|The Bentley is locked|La Bentley est verrouillée|Der Bentley ist verriegelt
+60:Kilometraje|Mileage|Kilométrage|Kilometerstand
+61:Apagadas|Off|Éteintes|Aus
+62:Funciones|Features|Fonctions|Funktionen
+63:Notificaciones|Notifications|Notifications|Mitteilungen
+64:Perfil|Profile|Profil|Profil
+65:Autonomía estimada|Estimated range|Autonomie estimée|Geschätzte Reichweite
+66:Límite de carga|Charge limit|Limite de charge|Ladelimit
+67:Temporizadores de carga|Charging timers|Minuteries de recharge|Ladetimer
+68:Apagado|Off|Désactivé|Aus
+69:TODO|ALL|TOUT|ALLE
+70:Estado|Status|État|Status
+71:Todo OK|All OK|Tout est OK|Alles OK
+72:Estado de carga|Charging status|État de charge|Ladestatus
+73:Apagada|Off|Désactivée|Aus
+74:Mandos|Controls|Commandes|Steuerung
+75:Acceso remoto|Remote access|Accès à distance|Fernzugriff
+76:Ideas|Ideas|Idées|Ideen
+77:Compras|Shopping|Achats|Einkäufe
+78:Límite de carga: # %|Charge limit: # %|Limite de charge : # %|Ladelimit: # %
+79:Ajustes|Settings|Réglages|Einstellungen
+80:Cargar hasta|Charge to|Charger jusqu'à|Laden bis
+81:Temporizador de carga y climatización|Charging and climate timer|Minuterie recharge et climatisation|Lade- und Klimatimer
+82:Modo de carga · Salidas|Charging mode · Departures|Mode de recharge · Départs|Lademodus · Abfahrten
+83:Modo de carga|Charging mode|Mode de recharge|Lademodus
+84:Cargar inmediatamente|Charge immediately|Charger immédiatement|Sofort laden
+85:Cargar en un intervalo de tiempo|Charge in time window|Charger dans une plage horaire|Laden im Zeitfenster
+86:Salida #|Departure #|Départ #|Abfahrt #
+87:Sin una salida activa, el intervalo no se aplica.|Without an active departure, the time window is not applied.|Sans départ actif, la plage horaire n'est pas appliquée.|Ohne aktive Abfahrt gilt das Zeitfenster nicht.
+88:Parado|Parked|À l'arrêt|Geparkt
+89:Actualizado: #|Updated: #|Mis à jour : #|Aktualisiert: #
+90:Puertas y ventanillas|Doors and windows|Portes et fenêtres|Türen und Fenster
+91:Normal|Normal|Normal|Normal
+92:Mi vehículo|My vehicle|Mon véhicule|Mein Fahrzeug
+93:Mi cuenta|My account|Mon compte|Mein Konto
+95:El vehículo está cerrado|The vehicle is locked|Le véhicule est verrouillé|Das Fahrzeug ist verriegelt
+96:Inmediata|Immediate|Immédiate|Sofort
+97:Estado a las #|Status at #|État à #|Status um #
+98:En espera|Waiting|En attente|Wartet
+99:Velocidad|Speed|Vitesse|Geschwindigkeit
+100:Tiempo restante|Time remaining|Temps restant|Restzeit
+101:Diferida|Delayed|Différée|Verzögert
+102:Programación de la carga diferida|Delayed charging schedule|Programmation de la recharge différée|Verzögertes Laden planen
+103:Actualizado ahora|Updated now|Mis à jour maintenant|Gerade aktualisiert
+104:Climatización remota|Remote climate|Climatisation à distance|Fernklimatisierung
+105:Temperatura|Temperature|Température|Temperatur
+107:Batería y carga|Battery and charging|Batterie et recharge|Batterie und Laden
+108:Máx. # %|Max. # %|Max. # %|Max. # %
+109:Potencia|Power|Puissance|Leistung
+110:Energía|Energy|Énergie|Energie
+111:Esperando el horario|Waiting for schedule|En attente de l'horaire|Wartet auf Zeitplan
+112:Recomendado|Recommended|Recommandé|Empfohlen
+113:Autonomía máxima|Maximum range|Autonomie maximale|Maximale Reichweite
+114:Ajustes de carga|Charging settings|Réglages de recharge|Ladeeinstellungen
+115:Perfiles de carga|Charging profiles|Profils de recharge|Ladeprofile
+116:Casa|Home|Domicile|Zuhause
+117:Corriente de carga AC|AC charging current|Courant de charge AC|AC-Ladestrom
+118:Máxima|Maximum|Maximal|Maximal
+119:Nivel mínimo de carga|Minimum charge level|Niveau de charge minimal|Mindestladestand
+120:Limitación de carga al # %|Charge limit at # %|Limitation de charge à # %|Ladebegrenzung auf # %
+121:Km|Km|Km|Km
+122:Autonomía · Batería|Range · Battery|Autonomie · Batterie|Reichweite · Batterie
+123:Buscar carga|Find charging|Trouver une borne|Laden finden
+124:Abrir|Unlock|Déverrouiller|Entriegeln
+125:Programación de carga|Charging schedule|Programmation de la recharge|Ladeplanung
+126:Programación|Scheduling|Programmation|Planung
+127:Horario #|Schedule #|Horaire #|Zeitplan #
+128:Maletero|Boot|Coffre|Kofferraum
+129:Puntos de carga cerca de usted|Charging stations near you|Bornes de recharge à proximité|Ladestationen in der Nähe
+130:Explorar|Explore|Explorer|Entdecken
+131:Aparcado|Parked|Stationné|Geparkt
+132:Próxima salida|Next departure|Prochain départ|Nächste Abfahrt
+133:Lun #|Mon #|Lun #|Mo #
+134:Controles|Controls|Commandes|Steuerung
+135:Horarios|Schedules|Horaires|Zeitpläne
+136:Iniciar carga|Start charging|Démarrer la recharge|Laden starten
+137:Buscar carga pública|Find public charging|Trouver une borne publique|Öffentliches Laden finden
+138:Configuración de carga|Charge settings|Paramètres de recharge|Ladeeinstellungen
+139:Lugares guardados|Saved locations|Lieux enregistrés|Gespeicherte Orte
+140:Ubicación de carga|Charging location|Lieu de recharge|Ladeort
+141:Horarios de carga preferidos|Preferred charge times|Heures de recharge préférées|Bevorzugte Ladezeiten
+142:Carga programada|Scheduled charging|Recharge programmée|Geplantes Laden
+143:Priorizadas|Prioritised|Prioritaires|Priorisiert
+144:Solo fuera de punta|Off-peak only|Hors pointe uniquement|Nur Nebenzeit
+145:km de autonomía|km of range|km d'autonomie|km Reichweite
+146:Programa de carga ›|Charging programme ›|Programme de recharge ›|Ladeprogramm ›
+147:Control rápido|Quick controls|Contrôle rapide|Schnellsteuerung
+148:Ventanillas|Windows|Fenêtres|Fenster
+149:Maletero|Boot|Coffre|Kofferraum
+150:Aire acondicionado|Air conditioning|Climatisation|Klimaanlage
+151:Asientos|Seats|Sièges|Sitze
+152:Apagados|Off|Désactivés|Aus
+153:Programa de carga|Charging programme|Programme de recharge|Ladeprogramm
+154:No se aplica a la carga rápida (DC).|Does not apply to rapid charging (DC).|Ne s'applique pas à la recharge rapide (DC).|Gilt nicht für Schnellladen (DC).
+156:Actualizado hace # min · Lisboa|Updated # min ago · Lisbon|Mis à jour il y a # min · Lisbonne|Vor # Min. aktualisiert · Lissabon
+157:km restantes|km left|km restants|km übrig
+158:Interior|Interior|Intérieur|Innenraum
+159:Cargando|Charging|En charge|Lädt
+160:Descubrir|Discover|Découvrir|Entdecken
+161:Viajes|Trips|Voyages|Reisen
+162:Seguridad|Security|Sécurité|Sicherheit
+163:Panel|Dashboard|Tableau de bord|Dashboard
+164:Estado de la carga|Charging status|État de la recharge|Ladestatus
+165:Seguridad del vehículo|Vehicle security|Sécurité du véhicule|Fahrzeugsicherheit
+166:Todo cerrado|All closed|Tout est fermé|Alles geschlossen
+167:Ajustes de climatización|Climate settings|Réglages de climatisation|Klimaeinstellungen
+168:Velocidad de carga|Charging speed|Vitesse de charge|Ladegeschwindigkeit
+171:Bloquear|Lock|Verrouiller|Sperren
+172:Ventanilla|Window|Fenêtre|Fenster
+173:Carga|Charging|Recharge|Laden
+174:Búsqueda|Search|Recherche|Suche
+175:Nublado · Lisboa|Cloudy · Lisbon|Nuageux · Lisbonne|Bewölkt · Lissabon
+176:Control|Control|Contrôle|Steuerung
+177:Carga programada|Scheduled charging|Recharge programmée|Geplantes Laden
+178:Límite de carga (CA)|Charge limit (AC)|Limite de charge (CA)|Ladelimit (AC)
+179:Horario fuera de horas punta|Off-peak schedule|Horaire hors heures de pointe|Zeitplan außerhalb der Spitzenzeit
