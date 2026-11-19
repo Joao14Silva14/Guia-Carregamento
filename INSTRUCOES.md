@@ -3,9 +3,11 @@
 Repositório: github.com/Joao14Silva14/Guia-Carregamento (ramo `main`)
 Site: https://guia-carregamento.vercel.app/
 
-## O que mudou nesta versão — «UX/UI: alinhar mockups e modernizar seletores»
+## O que mudou nesta versão — «Ecrãs distintos por passo e alinhamento mobile»
 
 Inclui também os últimos ajustes:
+- Cada passo do guia mostra agora um ecrã diferente. Quando dois passos usavam o mesmo ecrã, o segundo passa a mostrar o estado seguinte: seletor de hora aberto, botão Guardar em destaque com «Horário guardado», «Cabo ligado · início às …», «A carregar desde as …» ou a app da wallbox quando o passo o indica. Verificado em todas as marcas, modelos e nos 5 idiomas, sem nenhum par de ecrãs igual.
+- No telemóvel, os botões das marcas, dos modelos e das lojas de apps ficam numa grelha de 2 colunas, com a mesma largura e alinhados. «Ver todas as marcas» ocupa a linha inteira.
 - Corrigidos os ecrãs Volvo e BMW: a imagem do Volvo fica centrada numa zona reservada; a imagem do BMW deixa de se sobrepor ao texto.
 - Atualizados os botões de marca para cartões compactos modernos com logótipos mantidos; nomes dos modelos alinhados ao centro.
 - Saiu o bloco «Não tem agendamento na app ou prefere automatizar pela wallbox?». O contacto de apoio (800 501 070) continua no cartão do tarifário.
@@ -33,7 +35,7 @@ Em `public/img/` ficam apenas `electric-love-casa.webp` e `logo-goldenergy.webp`
    - os ficheiros `index.html`, `tailwind.config.js`, `vite.config.js` e `package.json` (podem ir sempre, mesmo sem alterações)
    - o ficheiro `INSTRUCOES.md` (opcional)
    Arrastem as pastas inteiras, não o conteúdo solto, para manter os caminhos `src/…` e `public/…`.
-4. Em baixo, escrevam a mensagem, por exemplo «UX/UI: alinhar mockups e modernizar seletores», escolham **Commit directly to the main branch** e carreguem em **Commit changes**.
+4. Em baixo, escrevam a mensagem, por exemplo «Ecrãs distintos por passo e alinhamento mobile», escolham **Commit directly to the main branch** e carreguem em **Commit changes**.
 5. Se existirem no repositório, apaguem em `public/img/` os ficheiros antigos `casinha-solar.webp`, `casinhas-tarifario.webp`, `casinha-carregar-noite.webp` e `logo-goldenergy-branco.webp`: abram cada ficheiro, depois **…** › **Delete file** › **Commit changes**. Não apaguem `electric-love-casa.webp` nem `logo-goldenergy.webp`.
 6. Confirmem que na raiz do repositório estão `package.json`, `index.html`, `src/` e `public/` (e não uma pasta `guia-carregamento-programado/` lá dentro).
 
@@ -65,3 +67,6 @@ Façam o teste em **2 aparelhos reais**: um computador (janela larga, ~1440 px) 
 | 13 | Selecionar Volvo e avançar pelos ecrãs | Carro centrado; não tapa os indicadores nem o estado de carregamento | | |
 | 14 | Selecionar BMW iX2 e avançar pelos ecrãs | «TUDO OK» e restante texto continuam legíveis, sem sobreposição da imagem | | |
 | 15 | Escolher uma marca e vários modelos | Logótipos mantidos; rótulos dos modelos visualmente centrados | | |
+| 16 | Avançar por todos os passos de Peugeot, Tesla e Volkswagen | Nenhum passo repete o ecrã anterior (seletor de hora, «Horário guardado» ou «Cabo ligado») | | |
+| 17 | Abrir no telemóvel (375 px) a escolha da marca | Marcas em 2 colunas iguais, alinhadas; nomes longos (Mercedes-Benz) partem em 2 linhas sem cortar | — | |
+| 18 | No telemóvel, ver os botões Google Play / App Store e os modelos | Botões com a mesma largura, lado a lado, sem desalinhamento | — | |

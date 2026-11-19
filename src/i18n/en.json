@@ -786,6 +786,10 @@
 "Painel de carregamento": "Charging panel",
 "Local de carregamento «Casa»": "«Home» charging location",
 "Vista de carregamento": "Charging view",
-"Início⁠": "Home"
+"Início⁠": "Home",
+"Horário guardado": "Schedule saved",
+"Cabo ligado · início às #": "Plugged in · starts at #",
+"Carregamento agendado · #–#": "Charging scheduled · #–#",
+"A carregar desde as #": "Charging since #"
 }
 }

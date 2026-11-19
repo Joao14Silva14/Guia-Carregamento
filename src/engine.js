@@ -2114,6 +2114,74 @@ Object.keys(GUIDES).forEach(k=>{
   g.screens=[home,sched]; g.map=g.steps.map((s,i)=>i===0?0:1);
 });
 
+/* Cada passo tem um ecrã com uma diferença visível: quando dois passos usam o mesmo ecrã,
+   o segundo recebe um estado próprio (seletor de hora, "guardado", cabo ligado, a carregar…) */
+(function(){
+  const nz=x=>String(x).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  const clean=x=>nz(String(x).replace(/<[^>]+>/g," ").replace(/\{\w+\}/g," ").replace(/\s+/g," "));
+  const WB={t:"Horário de carregamento",cap:"Horário de carregamento",k:"wb",th:"wb",rows:[["tog","Carregar só neste horário",1],["time","Início","S"],["time","Fim","E"],["days"]],btn:"Guardar",hl:[1,2]};
+  const TOAST={saved:["check","Horário guardado"],plug:["plug","Cabo ligado · início às {inicio}"],done:["clock","Carregamento agendado · {inicio}–{fim}"],charging:["bolt","A carregar desde as {inicio}"]};
+  function hitsFor(base,txt){
+    const h=[]; let tog=-1;
+    base.rows.forEach((r,j)=>{
+      if(r[0]==="tog"&&tog<0) tog=j;
+      if(r[0]==="days"){ if(/\bdias\b/.test(txt)) h.push(j); return; }
+      if(r[0]==="seg"&&Array.isArray(r[1])){ if(r[1].some(o=>{const w=clean(o).split(/\W+/).filter(x=>x.length>3); return w.length&&w.every(x=>txt.includes(x));})) h.push(j); return; }
+      if(typeof r[1]!=="string"||!/^(link|tog|time|val|slider|radio)$/.test(r[0])) return;
+      const c=clean(r[1]).replace(/[·:\s]+$/,"").trim();
+      if(c.length>3&&txt.includes(c)) h.push(j);
+    });
+    if(tog>=0&&/\bativ/.test(txt)&&!h.some(j=>base.rows[j][0]==="tog")) h.unshift(tog);
+    return h;
+  }
+  function make(state,base,txt,hits){
+    const same=hits.length&&JSON.stringify(hits)===JSON.stringify(base.hl||[]);
+    const nh=same?[]:hits;
+    const v=Object.assign({},base,{hl:nh.slice()});
+    delete v.toast; delete v.sheet; delete v.hlBtn;
+    if(state==="wb") return Object.assign({},WB);
+    if(state==="hl"){ if(!nh.length) return null; return v; }
+    if(state==="maxsoc"){
+      const at=base.rows.length&&base.rows[base.rows.length-1][0]==="note"?base.rows.length-1:base.rows.length;
+      v.rows=base.rows.slice(0,at).concat([["slider","Nível máximo de carga",80]],base.rows.slice(at)); v.hl=[at]; return v;
+    }
+    if(state==="pick"){
+      const isT=r=>r[0]==="time"||(r[0]==="val"&&/^\d{1,2}:\d{2}$/.test(String(r[2])));
+      const tr=base.rows.map((r,j)=>isT(r)?j:-1).filter(j=>j>=0); if(!tr.length) return null;
+      const wantE=/\bfim\b|termin/.test(txt)&&!/\binicio\b|comec/.test(txt);
+      const j=tr.find(j=>hits.includes(j))??tr.find(j=>base.rows[j][2]===(wantE?"E":"S"))??tr[0];
+      v.hl=[j]; v.sheet={l:base.rows[j][1],v:base.rows[j][2]}; return v;
+    }
+    if(state==="saved"){ if(!base.btn) return null; v.hlBtn=1; }
+    v.toast=TOAST[state]; return v;
+  }
+  Object.keys(GUIDES).forEach(k=>{
+    const g=GUIDES[k]; if(!g.map||!g.screens) return;
+    g.nb=g.screens.length;
+    const used=new Set(), seen=new Set();
+    g.map=g.map.map((m,i)=>{
+      const base=g.screens[m]; if(!base) return m;
+      if(!seen.has(m)){ seen.add(m); used.add(JSON.stringify(base)); return m; }
+      const txt=clean(g.steps[i]||""), hits=hitsFor(base,txt), c=[];
+      if(/wallbox/.test(txt)&&(base.k||g.k)!=="wb") c.push("wb");
+      if(/nivel de carga maximo|carga maxima|limite de carga/.test(txt)&&!hits.some(j=>/slider|val/.test(base.rows[j][0]))&&!base.rows.some(r=>r[0]==="slider")) c.push("maxsoc");
+      if(/lapis|defina a hora|toque na hora/.test(txt)) c.push("pick");
+      if(/primeira noite|comecou/.test(txt)) c.push("charging");
+      if(/\bguard[ea]\b|\bok\b|\benvie\b/.test(txt)) c.push("saved");
+      if(/ligue o cabo|ligar o cabo|cabo ligado|o carro espera|espera pel/.test(txt)) c.push("plug");
+      if(/confirme|mensagem|fica ativ|aparece/.test(txt)) c.push("saved","done");
+      if(/\bdefina\b|escolha|selecione/.test(txt)) c.push("hl","pick");
+      c.push("hl","done","saved","plug","charging","pick");
+      for(const st of c){
+        const v=make(st,base,txt,hits); if(!v) continue;
+        const sig=JSON.stringify(v); if(used.has(sig)) continue;
+        used.add(sig); v.st=st; g.screens.push(v); return g.screens.length-1;
+      }
+      return m;
+    });
+  });
+})();
+
 
 const TOP=["Tesla","BYD","Peugeot","BMW","Renault","Citroën","Mercedes-Benz","Volvo","Volkswagen","Kia","MG","XPENG"];
 const ALIAS={"KGM":"SsangYong","Changan":"Deepal","GWM":"ORA Great Wall","Lynk&Co":"Lynk & Co","Mercedes-Benz":"Mercedes","Volkswagen":"VW","DS Automobiles":"DS","Smart":"Hello smart","Forthing":"Dongfeng"};
@@ -2414,6 +2482,24 @@ const DEVICE_CSS = `.gm svg,.gm img{display:inline-block;vertical-align:middle;m
 .gm .bt-full .m-btn{margin:0;border-radius:0;padding:14px 12px 30px}
 .gm .up .m-btn{text-transform:uppercase;letter-spacing:.08em;font-size:12px}
 .gm .m-warn{display:flex;gap:8px;align-items:flex-start;background:rgba(255,176,0,.14);color:#7A4B00;border-radius:var(--rs);padding:10px;font-size:11px;line-height:1.4}
+.gm .m-toast{flex:none;display:flex;align-items:center;gap:9px;margin:0 var(--px) 10px;padding:10px 12px;border-radius:12px;background:#24222B;color:#fff;font-size:11.5px;font-weight:600;line-height:1.3;box-shadow:0 6px 16px rgba(0,0,0,.22)}
+.gm .dark .m-toast{background:#F4F4F6;color:#141218}
+.gm .m-toast.end{margin-bottom:24px}
+.gm .m-tic{flex:none;width:22px;height:22px;border-radius:50%;background:#40DDA6;color:#0B3D2C;display:flex;align-items:center;justify-content:center}
+.gm .m-tic svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.6}
+.gm .m-btn.hl{outline:3px solid var(--hlc);outline-offset:2px;background-image:none}
+.gm .bt-full .m-btn.hl{outline-offset:-3px}
+.gm .m-sheet{position:absolute;inset:0;z-index:5;background:rgba(10,10,14,.42);display:flex;align-items:flex-end}
+.gm .m-sh{width:100%;background:var(--card);color:var(--fg);border-radius:18px 18px 0 0;padding:8px 16px 26px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.gm .light .m-sh{background:#fff}
+.gm .m-grab{width:36px;height:4px;border-radius:2px;background:var(--line)}
+.gm .m-sht{font-size:13px;font-weight:700;align-self:stretch;text-align:center}
+.gm .m-wheel{position:relative;align-self:stretch;display:flex;flex-direction:column;align-items:center;font-variant-numeric:tabular-nums}
+.gm .m-wheel span{height:26px;line-height:26px;font-size:15px;color:var(--mut);opacity:.6}
+.gm .m-wheel span:first-child,.gm .m-wheel span:last-child{opacity:.3;font-size:13px}
+.gm .m-wheel .on{align-self:stretch;text-align:center;font-size:19px;font-weight:700;color:var(--fg);opacity:1;border-radius:10px;outline:2px solid var(--hlc);outline-offset:-2px;background:rgba(64,221,166,.16)}
+.gm .m-shb{align-self:stretch;margin-top:4px;padding:11px;text-align:center;border-radius:var(--br);background:var(--acc);color:var(--on);font-weight:700;font-size:13px}
+.gm .has-sheet .m-hi{z-index:6}
 .gm .dark .m-warn{color:#FFD27A}
 .gm .m-warn svg{width:15px;height:15px;margin-top:1px}
 .gm .m-hi{position:absolute;bottom:7px;left:50%;width:92px;height:4px;margin-left:-46px;border-radius:2px;background:var(--fg);opacity:.85}
@@ -3737,7 +3823,7 @@ const DEVICE_CSS = `.gm svg,.gm img{display:inline-block;vertical-align:middle;m
 `;
 
 let MS={screen:0,family:null,photo:null};
-const IC={home:'<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+const IC={plug:'<path d="M9 2v5M15 2v5"/><path d="M6 7h12v4a6 6 0 0 1-12 0z"/><path d="M12 17v5"/>',home:'<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
   grid:'<rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/>',
   bolt:'<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',fan:'<circle cx="12" cy="12" r="2"/><path d="M12 10c0-4 1-7 4-7s3 4-4 7M14 12c4 0 7 1 7 4s-4 3-7-4M12 14c0 4-1 7-4 7s-3-4 4-7M10 12c-4 0-7-1-7-4s4-3 7 4"/>',
   nav:'<path d="m3 11 18-8-8 18-2-8z"/>',music:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
@@ -4192,8 +4278,15 @@ function deviceHTML(g,b,p){
   const top='<div class="m-top">'+sb+(home&&K.home==="band"?heroHTML(K,name):nav)+'</div>';
   const labels=K.tabsL||TAB_DEF;
   const tabs=showTabs?'<div class="m-tabs'+(K.tabsL&&!K.tabsNoL?"":" nol")+'">'+labels.slice(0,K.tabs).map((l,j)=>'<span class="'+(j===tabOn?"on":"")+(j===s.hlTab?" hl":"")+'"><i>'+svg(TAB_IC[l.replace(/\u2060/g,"")]||"grid")+'</i><em>'+esc(l)+'</em></span>').join("")+'</div>':"";
-  const btn=s.btn?'<div class="m-btn"><span>'+esc(s.btn)+'</span></div>':"";
-  return '<div class="'+cls+'" style="'+vars+'"><div class="scr">'+top+'<div class="m-body">'+bodyHTML(s,K,p,name)+'</div>'+btn+tabs+'<span class="m-hi"></span></div></div>';
+  const btn=s.btn?'<div class="m-btn'+(s.hlBtn?" hl":"")+'"><span>'+esc(s.btn)+'</span></div>':"";
+  const toast=s.toast?'<div class="m-toast'+(!btn&&!tabs?" end":"")+'"><span class="m-tic">'+svg(s.toast[0])+'</span><span>'+esc(fillT(s.toast[1],p))+'</span></div>':"";
+  let sheet="";
+  if(s.sheet){
+    const v=s.sheet.v==="E"?p.e:s.sheet.v==="S"?p.s:String(s.sheet.v), hh=parseInt(v,10)||0, mm=(v.split(":")[1]||"00");
+    const hr=d=>String((hh+d+24)%24).padStart(2,"0")+":"+mm;
+    sheet='<div class="m-sheet"><div class="m-sh"><span class="m-grab"></span><b class="m-sht">'+esc(s.sheet.l)+'</b><div class="m-wheel"><span>'+hr(-2)+'</span><span>'+hr(-1)+'</span><span class="on">'+esc(v)+'</span><span>'+hr(1)+'</span><span>'+hr(2)+'</span></div><div class="m-shb"><span>OK</span></div></div></div>';
+  }
+  return '<div class="'+cls+(s.hlBtn||s.toast?" spot":"")+(s.sheet?" has-sheet":"")+'" style="'+vars+'"><div class="scr">'+top+'<div class="m-body">'+bodyHTML(s,K,p,name)+'</div>'+toast+btn+tabs+sheet+'<span class="m-hi"></span></div></div>';
 }
 const slug=s=>norm(s).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 function shotFor(gk,b,i){

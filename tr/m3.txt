@@ -20,3 +20,7 @@ Local de carregamento «Casa»|Ubicación de carga «Casa»|«Home» charging lo
 Vista de carregamento|Vista de carga|Charging view|Vue de recharge|Ladeansicht
 Início⁠|Inicio|Home|Accueil|Start
 Início|Inicio|Start|Début|Beginn
+Horário guardado|Horario guardado|Schedule saved|Horaire enregistré|Zeitplan gespeichert
+Cabo ligado · início às #|Cable conectado · inicio a las #|Plugged in · starts at #|Câble branché · début à #|Kabel eingesteckt · Start um #
+Carregamento agendado · #–#|Carga programada · #–#|Charging scheduled · #–#|Recharge programmée · #–#|Laden geplant · #–#
+A carregar desde as #|Cargando desde las #|Charging since #|En charge depuis #|Lädt seit #
