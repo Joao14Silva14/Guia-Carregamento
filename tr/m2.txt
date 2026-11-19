@@ -14,7 +14,7 @@
 194:Tensión|Voltage|Tension|Spannung
 195:Límite superior de carga|Upper charge limit|Limite supérieure de charge|Oberes Ladelimit
 196:Plan de carga|Charging plan|Plan de recharge|Ladeplan
-197:Se repite todos los días. Solo funciona en carga lenta (AC).|Repeats every day. Only works with slow (AC) charging.|Se répète chaque jour. Ne fonctionne qu'en recharge lente (AC).|Wiederholt sich täglich. Nur beim langsamen Laden (AC).
+197:Se repite todos los días. Solo funciona en carga en corriente alterna (CA).|Repeats every day. Only works with slow (AC) charging.|Se répète chaque jour. Ne fonctionne qu'en recharge lente (AC).|Wiederholt sich täglich. Nur beim langsamen Laden (AC).
 198:Mi garaje|My garage|Mon garage|Meine Garage
 199:Ayer a las #|Yesterday at #|Hier à #|Gestern um #
 200:Ver estado|View status|Voir l'état|Status ansehen
@@ -132,7 +132,7 @@
 316:Datos de conducción|Driving data|Données de conduite|Fahrdaten
 317:Ubicaciones de carga|Charging locations|Lieux de recharge|Ladeorte
 318:Horas de carga preferentes|Preferred charging times|Heures de recharge préférées|Bevorzugte Ladezeiten
-319:Reducir corriente de carga AC|Reduce AC charging current|Réduire le courant de charge AC|AC-Ladestrom reduzieren
+319:Reducir corriente de carga CA|Reduce AC charging current|Réduire le courant de charge AC|AC-Ladestrom reduzieren
 329:My ID. Buzz Cargo (comercial)|My ID. Buzz Cargo (commercial)|My ID. Buzz Cargo (utilitaire)|My ID. Buzz Cargo (Nutzfahrzeug)
 330:My e-Crafter (comercial)|My e-Crafter (commercial)|My e-Crafter (utilitaire)|My e-Crafter (Nutzfahrzeug)
 331:No conectada|Not plugged in|Non branchée|Nicht eingesteckt

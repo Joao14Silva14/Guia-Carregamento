@@ -155,6 +155,8 @@ UI = {
 "app.officialOf": "official {brand} app",
 "say.chosen": "{car} selected. Guide with {n} steps.",
 "say.brand": "{brand} selected. Now choose the model.",
+"say.cleared": "Selection cleared. Choose the car brand.",
+"pick.clear": "Tap again to clear the selection",
 "say.other": "General guide selected.",
 "wb.hours": "Free call from Portugal · Weekdays, 9 am to 9 pm (in Portuguese)",
 "offer.name": "Carregar em Casa tariff",

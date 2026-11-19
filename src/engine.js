@@ -1224,29 +1224,29 @@ const THEMES={
   lancia:{bg:"#F2F3F5",card:"#FFFFFF",fg:"#0B1220",mut:"#6B7280",line:"#E3E5E9",acc:"#0B1220",on:"#FFFFFF",hd:"#0B1220",hdfg:"#FFFFFF"},
   citroen:{bg:"#FFFFFF",card:"#F4F5F7",fg:"#1D1D1B",mut:"#6F6F6E",line:"#E3E3E3",acc:"#DA291C",on:"#FFFFFF",name:"MyCitroën"},
   opel:{bg:"#FFFFFF",card:"#F3F3F3",fg:"#000000",mut:"#666666",line:"#E0E0E0",acc:"#F7E400",on:"#000000",name:"MyOpel"},
-  ds:{dark:1,bg:"#1A1615",card:"#262120",fg:"#F3EFE7",mut:"#A39E94",line:"#3A3330",acc:"#B5004A",on:"#FFFFFF",name:"MyDS"},
-  fiat:{bg:"#F1F1F2",card:"#FFFFFF",fg:"#1F1F1F",mut:"#6E6E73",line:"#E2E2E5",acc:"#0097B2",on:"#FFFFFF",hd:"#2A2A2C",hdfg:"#FFFFFF",name:"FIAT"},
+  ds:{dark:1,bg:"#181818",card:"#211F20",fg:"#F3EFE7",mut:"#A39E94",line:"#2F2627",acc:"#B5004A",on:"#FFFFFF",name:"MyDS"},
+  fiat:{bg:"#F1F1F2",card:"#FFFFFF",fg:"#1F1F1F",mut:"#6E6E73",line:"#E2E2E5",acc:"#00BFD1",on:"#FFFFFF",hd:"#2A2A2C",hdfg:"#FFFFFF",name:"FIAT"},
   jeep:{bg:"#F2F2F2",card:"#FFFFFF",fg:"#1A1A1A",mut:"#6B6B6B",line:"#E0E0E0",acc:"#F2C200",on:"#1A1A1A",hd:"#2B2B2B",hdfg:"#FFFFFF",name:"Jeep"},
   alfa:{dark:1,bg:"#0E0E0E",card:"#1A1A1A",fg:"#FFFFFF",mut:"#A3A3A3",line:"#2A2A2A",acc:"#B5132F",on:"#FFFFFF"},
-  renault:{dark:1,bg:"#0B0B0C",card:"#1B1B1D",fg:"#FFFFFF",mut:"#A0A0A6",line:"#2A2A2E",acc:"#EFDF00",on:"#000000",name:"My Renault"},
-  dacia:{dark:1,bg:"#101210",card:"#1C1F1B",fg:"#FFFFFF",mut:"#A2A69B",line:"#2A2E28",acc:"#7C8564",on:"#FFFFFF",name:"My Dacia"},
-  alpine:{dark:1,bg:"#0D1015",card:"#1A1E26",fg:"#FFFFFF",mut:"#9AA3AF",line:"#272C35",acc:"#2D7BFF",on:"#FFFFFF",name:"My Alpine"},
+  renault:{swc:"#74C367",dark:1,bg:"#161616",card:"#292929",fg:"#FFFFFF",mut:"#9E9E9E",line:"#333333",acc:"#EFDF00",on:"#000000",name:"My Renault"},
+  dacia:{swc:"#74C367",dark:1,bg:"#181818",card:"#292929",fg:"#FFFFFF",mut:"#A2A69B",line:"#333333",acc:"#7C8564",on:"#FFFFFF",name:"My Dacia"},
+  alpine:{swc:"#74C367",dark:1,bg:"#0D1015",card:"#1A1E26",fg:"#FFFFFF",mut:"#9AA3AF",line:"#272C35",acc:"#2D7BFF",on:"#FFFFFF",name:"My Alpine"},
   bentley:{bg:"#FFFFFF",card:"#F4F4F1",fg:"#1A1A1A",mut:"#76766F",line:"#E6E6E0",acc:"#2F5D4B",on:"#FFFFFF",name:"My Bentley"},
   gwm:{bg:"#EEF6F4",card:"#FFFFFF",fg:"#1A1A1A",mut:"#6F7A78",line:"#E1EAE7",acc:"#16B08F",on:"#FFFFFF",name:"My GWM"},
   vw:{bg:"#EEF2F7",card:"#FFFFFF",fg:"#001E50",mut:"#5B6B85",line:"#DCE3EE",acc:"#001E50",on:"#FFFFFF"},
   volkswagen:{bg:"#F4F2EE",card:"#FFFFFF",fg:"#0F1B33",mut:"#6A7385",line:"#E4E1DB",acc:"#0F1B33",on:"#FFFFFF",name:"Volkswagen"},
-  zeekr:{bg:"#F6F3EF",card:"#FFFFFF",fg:"#1E2228",mut:"#7B7F86",line:"#ECE7E0",acc:"#3DBE5A",on:"#FFFFFF",name:"ZEEKR"},
-  audi:{dark:1,bg:"#1B1F27",card:"#2A2F38",fg:"#FFFFFF",mut:"#9AA1AC",line:"#353B45",acc:"#FFFFFF",on:"#000000",name:"myAudi"},
+  zeekr:{bg:"#F4F1EC",card:"#FFFFFF",fg:"#222326",mut:"#797B7E",line:"#E6E1DA",acc:"#63B96B",on:"#FFFFFF",name:"ZEEKR"},
+  audi:{dark:1,bg:"#171D24",card:"#242D36",fg:"#FFFFFF",mut:"#A4AFB8",line:"#35414C",acc:"#36A9D6",on:"#101820",name:"myAudi"},
   seat:{bg:"#F5F5F5",card:"#FFFFFF",fg:"#1A1A1A",mut:"#6B6B6B",line:"#E6E6E6",acc:"#138C82",on:"#FFFFFF",name:"My SEAT"},
   skoda:{dark:1,bg:"#17191B",card:"#24272A",fg:"#FFFFFF",mut:"#A7ABAE",line:"#2E3236",acc:"#78FAAE",on:"#0E1A14",name:"MyŠkoda"},
   cupra:{dark:1,bg:"#1E1F24",card:"#2A2C33",fg:"#FFFFFF",mut:"#A4A7AE",line:"#3A3D45",acc:"#00C1C1",on:"#0F1013"},
-  hyundai:{bg:"#EEF3F9",card:"#FFFFFF",fg:"#0B1F3A",mut:"#6B7A90",line:"#DDE5EF",acc:"#002C5F",on:"#FFFFFF",name:"myHyundai"},
+  hyundai:{bg:"#F0F4F8",card:"#FFFFFF",fg:"#112B49",mut:"#718096",line:"#DFE6EE",acc:"#003B70",on:"#FFFFFF",name:"myHyundai"},
   kia:{dark:1,bg:"#05141F",card:"#132633",fg:"#FFFFFF",mut:"#9FB0BC",line:"#203645",acc:"#FFFFFF",on:"#05141F",name:"Kia"},
   genesis:{dark:1,bg:"#0B0B0B",card:"#191919",fg:"#FFFFFF",mut:"#A3A3A3",line:"#2A2A2A",acc:"#C59E77",on:"#0B0B0B"},
   mercedes:{bg:"#F3F4F6",card:"#FFFFFF",fg:"#1A1A1A",mut:"#6B6B6B",line:"#E2E4E8",acc:"#0078D6",on:"#FFFFFF",hd:"#000000",hdfg:"#FFFFFF",name:"Mercedes-Benz"},
-  volvo:{dark:1,bg:"#161716",card:"#252826",fg:"#FFFFFF",mut:"#A3A8A5",line:"#2F3330",acc:"#4C7DFF",on:"#FFFFFF",name:"Volvo Cars"},
+  volvo:{bg:"#EDEEEB",card:"#FFFFFF",fg:"#222722",mut:"#717873",line:"#D9DDD8",acc:"#176B4B",on:"#FFFFFF",name:"Volvo Cars"},
   polestar:{dark:1,bg:"#101010",card:"#1E1E1E",fg:"#FFFFFF",mut:"#9C9C9C",line:"#2A2A2A",acc:"#FF7500",on:"#101010",name:"Polestar"},
-  mg:{bg:"#F2F6FB",card:"#FFFFFF",fg:"#1A1A1A",mut:"#6B7280",line:"#E3E8EF",acc:"#1F6FE5",on:"#FFFFFF",name:"MG iSMART"},
+  mg:{bg:"#EEF4FA",card:"#FFFFFF",fg:"#171B20",mut:"#6B7280",line:"#DFE7EF",acc:"#1F6FE5",on:"#FFFFFF",name:"MG iSMART"},
   ford:{dark:1,bg:"#1C1C1E",card:"#2C2C2E",fg:"#FFFFFF",mut:"#A1A1A6",line:"#3A3A3C",acc:"#2E7BF6",on:"#FFFFFF",name:"Ford"},
   toyota:{bg:"#FFFFFF",card:"#FFFFFF",fg:"#1A1A1A",mut:"#6B6B6B",line:"#E6E6E6",acc:"#EB0A1E",on:"#FFFFFF",name:"MyToyota"},
   lexus:{bg:"#FFFFFF",card:"#FFFFFF",fg:"#1A1A1A",mut:"#767676",line:"#E6E6E6",acc:"#1A1A1A",on:"#FFFFFF",name:"Lexus Link+"},
@@ -1285,14 +1285,14 @@ const SKIN={
   lancia:{home:"band",band:1,list:"sep",hd:"c",sw:"md",time:"field",day:"square",btn:"sq",batt:"bar",seg:"line",r:"6px",br:"4px",tabs:4,tabsL:["Início\u2060","Mapa","Serviços","Perfil"],ind:"bar",homeLinks:"tiles",ff:FONT.pop,tw:600,up:1},
   citroen:{short:1,home:"x-citroen",list:"sep",hd:"L",sw:"md",time:"chip",day:"circle",btn:"fill",batt:"stl",seg:"line",r:"8px",br:"999px",tabs:0,ind:"plain",ff:FONT.rob,tw:700,licon:1},
   opel:{short:1,home:"x-opel",list:"sep",hd:"L",sw:"md",time:"chip",day:"square",btn:"sq",batt:"stl",seg:"pill",r:"2px",br:"2px",tabs:0,ind:"plain",ff:FONT.rob,tw:700,licon:1},
-  ds:{short:1,home:"x-ds",list:"sep",hd:"L",sw:"md",time:"chip",day:"text",btn:"fill",batt:"stl",seg:"line",r:"2px",br:"2px",tabs:0,ind:"bar",ff:FONT.src,hf:FONT.serif,tw:400,licon:1},
+  ds:{short:1,home:"x-ds",list:"sep",hd:"L",sw:"md",time:"chip",day:"text",btn:"fill",batt:"stl",seg:"line",r:"2px",br:"2px",tabs:0,ind:"bar",ff:FONT.src,hf:FONT.src,tw:400,licon:1},
   fiat:{home:"x-fiat",band:1,list:"sep",hd:"l",sw:"md",time:"field",day:"circle",btn:"fill",batt:"bar",seg:"line",r:"8px",br:"6px",tabs:0,ind:"plain",ff:FONT.mont,tw:600,licon:1},
   jeep:{home:"x-jeep",band:1,list:"sep",hd:"l",sw:"md",time:"field",day:"square",btn:"sq",batt:"bar",seg:"line",r:"4px",br:"3px",tabs:0,ind:"bar",ff:FONT.rob,tw:500,licon:1},
   alfa:{home:"min",list:"flat",hd:"c",sw:"sq",time:"plain",day:"square",btn:"sq",batt:"cell",seg:"line",r:"4px",br:"2px",tabs:4,ind:"bar",ff:FONT.inter,tw:500,up:1,licon:1},
-  renault:{full:1,home:"x-alp",list:"card",hd:"L",sw:"ios",time:"chip",day:"circle",btn:"fill",batt:"bar",seg:"line",r:"6px",br:"4px",tabs:5,tabsL:["Veículo","Mapas","Ajuda","Loja","Conta"],ind:"plain",ff:FONT.mont,tw:700,up:1,licon:1},
-  dacia:{home:"x-alp",list:"card",hd:"L",sw:"ios",time:"chip",day:"circle",btn:"fill",batt:"bar",seg:"line",r:"8px",br:"6px",tabs:5,tabsL:["Veículo","Mapas","Ajuda","Loja","Conta"],ind:"plain",ff:FONT.mont,tw:700,licon:1},
+  renault:{hf:FONT.mont,full:1,home:"x-alp",list:"card",hd:"L",sw:"ios",time:"chip",day:"circle",btn:"fill",batt:"bar",seg:"line",r:"6px",br:"4px",tabs:5,tabsL:["Veículo","Mapas","Ajuda","Loja","Conta"],ind:"plain",ff:FONT.inter,tw:700,up:1,licon:1},
+  dacia:{hf:FONT.mont,home:"x-alp",list:"card",hd:"L",sw:"ios",time:"chip",day:"circle",btn:"fill",batt:"bar",seg:"line",r:"8px",br:"6px",tabs:5,tabsL:["Veículo","Mapas","Ajuda","Loja","Conta"],ind:"plain",ff:FONT.inter,tw:700,licon:1},
   alpine:{home:"x-alp",list:"card",hd:"L",sw:"ios",time:"chip",day:"circle",btn:"fill",batt:"bar",seg:"line",r:"8px",br:"6px",tabs:5,tabsL:["Veículo","Mapas","Ajuda","Loja","Conta"],ind:"plain",ff:FONT.inter,tw:600,licon:1},
-  bentley:{home:"x-bent",list:"sep",hd:"c",sw:"ios",time:"chip",day:"circle",btn:"sq",batt:"ring",ringc:"#2F5D4B",seg:"line",r:"2px",br:"2px",tabs:5,tabsL:["Início\u2060","Funcionalidades","Navegar","Notificações","Perfil"],tabsNoL:1,ind:"plain",ff:FONT.mont,tw:300,up:1,licon:1},
+  bentley:{hf:FONT.mont,home:"x-bent",list:"sep",hd:"c",sw:"ios",time:"chip",day:"circle",btn:"sq",batt:"ring",ringc:"#2F5D4B",seg:"line",r:"2px",br:"2px",tabs:5,tabsL:["Início\u2060","Funcionalidades","Navegar","Notificações","Perfil"],tabsNoL:1,ind:"plain",ff:FONT.mont,tw:300,up:1,licon:1},
   gwm:{home:"x-gwm",list:"card",hd:"c",sw:"ios",time:"chip",day:"circle",btn:"fill",batt:"gwm",ringc:"#16B08F",seg:"pill",r:"14px",br:"999px",tabs:2,tabsL:["Veículo","Eu"],tabsNoL:1,ind:"plain",ff:FONT.inter,tw:600,licon:1},
   vw:{short:1,ringc:"#2F7DE1",home:"ring",list:"card",hd:"c",sw:"ios",time:"plain",day:"pill",btn:"fill",batt:"ring",seg:"pill",r:"14px",br:"999px",tabs:4,tabsL:["Carro","Mapa","Carregar","Perfil"],ind:"plain",ff:FONT.dm,tw:700,licon:1},
   volkswagen:{short:1,home:"x-vw",list:"card",hd:"c",sw:"ios",time:"plain",day:"pill",btn:"fill",batt:"vwarc",seg:"line",r:"6px",br:"999px",tabs:0,ind:"plain",ff:FONT.inter,tw:600,licon:1},
@@ -1300,12 +1300,12 @@ const SKIN={
   audi:{home:"x-audi",list:"card",hd:"L",sw:"ios",time:"chip",day:"square",btn:"fill",batt:"audi",seg:"line",r:"6px",br:"6px",tabs:5,tabsL:["Veículo","Navegar","Áudio","Internet","Loja"],tabsNoL:1,ind:"pill",ff:FONT.inter,tw:400,licon:1},
   seat:{short:1,home:"x-seat",list:"card",hd:"c",sw:"ios",time:"chip",day:"circle",btn:"fill",batt:"seat",seg:"line",r:"12px",br:"999px",tabs:4,tabsL:["Veículo","Mapas","Serviços","Perfil"],ind:"pill",ff:FONT.inter,tw:700,licon:1},
   skoda:{short:1,home:"x-skoda",list:"card",hd:"L",sw:"md",time:"chip",day:"circle",btn:"fill",batt:"skoda",seg:"pill",r:"14px",br:"999px",tabs:5,tabsL:["Carro","Mapas","Inspecionar","Descobrir","Perfil"],ind:"plain",ff:FONT.mont,tw:800,licon:1},
-  cupra:{home:"x-cupra",list:"card",hd:"c",sw:"ios",time:"chip",day:"circle",btn:"fill",batt:"cupra",seg:"line",r:"12px",br:"999px",tabs:5,tabsL:["Veículo","Mapas","Tribe","Serviços","Perfil"],ind:"plain",ff:FONT.dm,tw:500,up:1},
-  hyundai:{home:"x-hyundai",list:"card",hd:"c",sw:"ios",time:"pair",day:"circle",btn:"fill",batt:"ring",ringc:"#002C5F",seg:"pill",r:"14px",br:"999px",tabs:5,tabsL:["Início\u2060","Controlo","Mapa","Descobrir","Veículo"],ind:"plain",ff:FONT.inter,tw:600,licon:1},
+  cupra:{home:"x-cupra",list:"card",hd:"c",sw:"ios",time:"chip",day:"circle",btn:"fill",batt:"cupra",seg:"line",r:"12px",br:"999px",tabs:5,tabsL:["Veículo","Mapas","Tribe","Serviços","Perfil"],ind:"plain",ff:FONT.dm,tw:400,up:1},
+  hyundai:{home:"x-hyundai",list:"card",hd:"c",sw:"ios",time:"pair",day:"circle",btn:"fill",batt:"ring",ringc:"#003B70",seg:"pill",r:"14px",br:"999px",tabs:5,tabsL:["Início\u2060","Controlo","Mapa","Descobrir","Veículo"],ind:"plain",ff:FONT.rob,tw:500,licon:1},
   kia:{home:"x-kia",list:"sep",hd:"l",sw:"md",time:"field",day:"pill",btn:"fill",batt:"bar",seg:"pill",r:"12px",br:"999px",tabs:0,ind:"pill",ff:FONT.inter,tw:600,licon:1},
-  genesis:{home:"min",list:"flat",hd:"c",sw:"sq",time:"plain",day:"square",btn:"outline",batt:"cell",seg:"line",r:"2px",br:"2px",tabs:0,ff:FONT.src,hf:FONT.serif,tw:400,up:1,licon:1},
-  mercedes:{home:"x-merc",band:1,list:"card",hd:"c",sw:"ios",time:"chip",day:"circle",btn:"fill",batt:"merc",seg:"pill",r:"10px",br:"10px",tabs:4,tabsL:["Início\u2060","Funcionalidades","Navegar","Compras"],tabsNoL:1,ind:"plain",ff:FONT.inter,tw:400,licon:1},
-  volvo:{short:1,home:"x-volvo",list:"flat",hd:"L",sw:"ios",time:"plain",day:"text",btn:"fill",batt:"volvo",seg:"line",r:"8px",br:"999px",tabs:5,tabsL:["Início\u2060","Mapa","Carro","Mensagens","Perfil"],tabsNoL:1,ind:"plain",ff:FONT.inter,tw:300,licon:1},
+  genesis:{home:"min",list:"flat",hd:"c",sw:"sq",time:"plain",day:"square",btn:"outline",batt:"cell",seg:"line",r:"2px",br:"2px",tabs:0,ff:FONT.src,hf:FONT.src,tw:400,up:1,licon:1},
+  mercedes:{hf:FONT.serif,home:"x-merc",band:1,list:"card",hd:"c",sw:"ios",time:"chip",day:"circle",btn:"fill",batt:"merc",seg:"pill",r:"10px",br:"10px",tabs:4,tabsL:["Início\u2060","Funcionalidades","Navegar","Compras"],tabsNoL:1,ind:"plain",ff:FONT.rob,tw:400,licon:1},
+  volvo:{short:1,home:"x-volvo",list:"flat",hd:"L",sw:"ios",time:"plain",day:"text",btn:"fill",batt:"volvo",seg:"line",r:"8px",br:"999px",tabs:5,tabsL:["Início\u2060","Mapa","Carro","Mensagens","Perfil"],tabsNoL:1,ind:"plain",ff:FONT.src,tw:400,licon:1},
   polestar:{short:1,home:"x-polestar",list:"flat",hd:"L",sw:"sq",time:"pair",day:"square",btn:"full",batt:"polestar",seg:"line",r:"0",br:"0",tabs:5,tabsL:["Início\u2060","Carro","Funcionalidades","Ajuda","Conta"],tabsNoL:1,ind:"bar",ff:FONT.inter,tw:300,licon:1},
   mg:{home:"x-mg",list:"card",hd:"c",sw:"ios",time:"field",day:"circle",btn:"fill",batt:"ring",ringc:"#2BB673",seg:"pill",r:"12px",br:"999px",tabs:5,tabsL:["Carro","Segurança","Mapa","Mensagens","Perfil"],tabsNoL:1,ind:"plain",ff:FONT.rob,tw:600,licon:1},
   ford:{home:"x-ford",list:"sep",hd:"L",sw:"md",time:"field",day:"square",btn:"fill",batt:"ford",seg:"line",r:"4px",br:"4px",tabs:3,tabsL:["Veículo","Carregar","Serviços"],tabsNoL:1,ind:"plain",ff:FONT.rob,tw:500},
@@ -1313,7 +1313,7 @@ const SKIN={
   lexus:{home:"x-lexus",list:"flat",hd:"c",sw:"sq",time:"plain",day:"text",btn:"sq",batt:"cell",seg:"line",r:"0",br:"0",tabs:5,tabsL:["Veículo","Mapa","Notificações","Perfil","Ajuda"],tabsNoL:1,ind:"plain",ff:FONT.src,tw:400,licon:1},
   nissan:{short:1,home:"x-nissan",list:"card",hd:"L",sw:"md",time:"chip",day:"circle",btn:"fill",batt:"nissan",seg:"line",r:"6px",br:"999px",tabs:0,ind:"plain",ff:FONT.dm,tw:500,licon:1},
   porsche:{short:1,home:"x-porsche",list:"card",hd:"c",sw:"ios",time:"chip",day:"square",btn:"fill",batt:"porsche",seg:"line",r:"6px",br:"6px",tabs:4,tabsL:["Veículo","Mapa","Descobrir","Conta"],ind:"plain",ff:FONT.inter,tw:600,licon:1},
-  honda:{home:"x-honda",list:"flat",hd:"c",sw:"md",time:"field",day:"square",btn:"sq",batt:"ring",ringc:"#7ED957",seg:"line",r:"2px",br:"2px",tabs:4,tabsL:["Descobrir","Viagens","Segurança","Painel"],ind:"plain",ff:FONT.mont,tw:500,licon:1},
+  honda:{home:"x-honda",list:"flat",hd:"c",sw:"md",time:"field",day:"square",btn:"sq",batt:"ring",ringc:"#7ED957",seg:"line",r:"2px",br:"2px",tabs:4,tabsL:["Descobrir","Viagens","Segurança","Painel"],ind:"plain",ff:FONT.rob,tw:500,licon:1},
   mazda:{short:1,home:"x-mazda",list:"sep",hd:"c",sw:"md",time:"chip",day:"square",btn:"fill",batt:"bar",seg:"line",r:"0",br:"0",tabs:5,tabsL:["Início\u2060","Veículo","Serviços","Ajuda","Menu"],ind:"bar",ff:FONT.inter,tw:300,licon:1},
   jlr:{home:"x-jag",list:"sep",hd:"c",sw:"ios",time:"chip",day:"circle",btn:"fill",batt:"bar",seg:"line",r:"10px",br:"10px",tabs:0,ind:"plain",ff:FONT.src,tw:600,licon:1},
   landrover:{short:1,home:"x-jag",list:"card",hd:"c",sw:"ios",time:"chip",day:"circle",btn:"fill",batt:"bar",seg:"line",r:"12px",br:"10px",tabs:0,ind:"plain",ff:FONT.src,tw:600,licon:1},
@@ -1324,8 +1324,8 @@ const SKIN={
   maserati:{home:"x-mas",band:1,list:"sep",hd:"l",sw:"md",time:"field",day:"square",btn:"sq",batt:"bar",seg:"line",r:"2px",br:"2px",tabs:0,ind:"bar",ff:FONT.src,tw:400,licon:1},
   leap:{home:"x-leap",list:"card",hd:"c",sw:"ios",time:"chip",day:"circle",btn:"fill",batt:"leap",seg:"pill",r:"12px",br:"8px",tabs:2,tabsL:["O meu veículo","Centro pessoal"],ind:"plain",ff:FONT.inter,tw:600,licon:1},
   lotus:{home:"x-lotus",list:"card",hd:"l",sw:"md",time:"field",day:"square",btn:"fill",batt:"bar",seg:"line",r:"4px",br:"4px",tabs:0,ind:"bar",ff:FONT.inter,tw:500,licon:1},
-  lucid:{home:"x-lucid",list:"card",hd:"c",sw:"ios",time:"chip",day:"circle",btn:"outline",batt:"bar",seg:"line",r:"12px",br:"999px",tabs:0,ind:"plain",ff:FONT.src,tw:400,up:1,licon:1},
-  lynk:{home:"x-lynk",list:"card",hd:"c",sw:"ios",time:"chip",day:"circle",btn:"fill",batt:"lynk",seg:"pill",r:"10px",br:"999px",tabs:4,tabsL:["Início\u2060","Partilhar","Emprestar","Perfil"],ind:"plain",ff:FONT.inter,tw:500,licon:1},
+  lucid:{hf:FONT.serif,home:"x-lucid",list:"card",hd:"c",sw:"ios",time:"chip",day:"circle",btn:"outline",batt:"bar",seg:"line",r:"12px",br:"999px",tabs:0,ind:"plain",ff:FONT.src,tw:400,up:1,licon:1},
+  lynk:{home:"x-lynk",list:"card",hd:"c",sw:"ios",time:"chip",day:"circle",btn:"fill",batt:"lynk",seg:"pill",r:"10px",br:"999px",tabs:4,tabsL:["Início\u2060","Partilhar","Emprestar","Perfil"],ind:"plain",ff:FONT.inter,tw:400,licon:1},
   cn:{home:"dash",list:"sep",hd:"c",sw:"md",time:"field",day:"circle",btn:"fill",batt:"ring",seg:"pill",r:"14px",br:"999px",tabs:4,tabsL:["Carro","Serviços","Loja","Eu"],ind:"pill",quick:"lab",ff:FONT.rob,tw:700},
   wb:{list:"card",hd:"l",sw:"ios",time:"pair",day:"circle",btn:"fill",batt:"bar",seg:"pill",r:"14px",br:"999px",tabs:0,ff:FONT.inter,tw:700},
   generic:{home:"dash",list:"card",hd:"l",sw:"ios",time:"chip",day:"circle",btn:"fill",batt:"bar",seg:"pill",r:"14px",br:"999px",tabs:4,ind:"plain",quick:"round",ff:FONT.inter,tw:700,licon:1}
@@ -2287,7 +2287,7 @@ function evUrl(b,v){return "https://ev-database.org/car/"+v.id+"/"+(b.name+" "+v
 /* ===================== 2. Ilustrações do telemóvel ===================== */
 const DEVICE_CSS = `.gm svg,.gm img{display:inline-block;vertical-align:middle;max-width:none}
 .gm img{height:auto}
-.gm .dev{--hlc:#40DDA6;--px:12px;font-family:var(--ff);text-align:left;margin:0 auto;-webkit-font-smoothing:antialiased}
+.gm .dev{--hlc:var(--acct);--hlbg:var(--pill);--px:12px;font-family:var(--ff);text-align:left;margin:0 auto;-webkit-font-smoothing:antialiased}
 .gm .dev *{box-sizing:border-box}
 .gm .dev svg{flex:none}
 .gm .dev.phone{width:272px;max-width:100%;background:#0A0A0A;border-radius:42px;padding:8px;box-shadow:0 18px 40px rgba(23,20,36,.22)}
@@ -2337,18 +2337,18 @@ const DEVICE_CSS = `.gm svg,.gm img{display:inline-block;vertical-align:middle;m
 .gm .m-note{color:var(--mut);font-size:11px;line-height:1.4}
 .gm .m-nt{min-height:0}
 .gm .m-sect{font-size:10.5px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.07em;padding:4px 2px 0;margin-bottom:-4px}
-.gm .dev .hl{outline:2px solid var(--hlc);outline-offset:-2px;background-image:linear-gradient(rgba(64,221,166,.16),rgba(64,221,166,.16))}
+.gm .dev .hl{outline:2px solid var(--hlc);outline-offset:-2px;background-image:linear-gradient(var(--hlbg),var(--hlbg))}
 .gm .l-flat .m-row.hl{border-radius:6px}
 .gm .dev.spot .m-grp>:not(.hl),.gm .dev.spot .m-pair>:not(.hl),.gm .dev.spot .m-tl>:not(.hl){opacity:.42}
 .gm .m-sw{flex:none;position:relative;width:38px;height:23px;border-radius:999px;background:var(--line)}
 .gm .m-sw i{position:absolute;top:2px;left:2px;width:19px;height:19px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3)}
-.gm .m-sw.on{background:var(--acc)}
+.gm .m-sw.on{background:var(--swc,var(--acc))}
 .gm .m-sw.on i{left:17px;background:var(--on)}
 .gm .sw-ios .m-sw.on i{background:#fff}
 .gm .sw-ios.sk-mini .m-sw.on i,.gm .sw-ios.sk-smart .m-sw.on i{background:#000}
 .gm .sw-md .m-sw{width:40px;height:24px;background:transparent;border:2px solid var(--mut)}
 .gm .sw-md .m-sw i{top:4px;left:4px;width:12px;height:12px;background:var(--mut);box-shadow:none}
-.gm .sw-md .m-sw.on{background:var(--acc);border-color:var(--acc)}
+.gm .sw-md .m-sw.on{background:var(--swc,var(--acc));border-color:var(--swc,var(--acc))}
 .gm .sw-md .m-sw.on i{top:2px;left:18px;width:16px;height:16px;background:var(--on)}
 .gm .sw-sq .m-sw{width:40px;height:22px;border-radius:3px}
 .gm .sw-sq .m-sw i{width:18px;height:18px;border-radius:2px;box-shadow:none}
@@ -2497,7 +2497,7 @@ const DEVICE_CSS = `.gm svg,.gm img{display:inline-block;vertical-align:middle;m
 .gm .m-wheel{position:relative;align-self:stretch;display:flex;flex-direction:column;align-items:center;font-variant-numeric:tabular-nums}
 .gm .m-wheel span{height:26px;line-height:26px;font-size:15px;color:var(--mut);opacity:.6}
 .gm .m-wheel span:first-child,.gm .m-wheel span:last-child{opacity:.3;font-size:13px}
-.gm .m-wheel .on{align-self:stretch;text-align:center;font-size:19px;font-weight:700;color:var(--fg);opacity:1;border-radius:10px;outline:2px solid var(--hlc);outline-offset:-2px;background:rgba(64,221,166,.16)}
+.gm .m-wheel .on{align-self:stretch;text-align:center;font-size:19px;font-weight:700;color:var(--fg);opacity:1;border-radius:10px;outline:2px solid var(--hlc);outline-offset:-2px;background:var(--hlbg)}
 .gm .m-shb{align-self:stretch;margin-top:4px;padding:11px;text-align:center;border-radius:var(--br);background:var(--acc);color:var(--on);font-weight:700;font-size:13px}
 .gm .has-sheet .m-hi{z-index:6}
 .gm .dark .m-warn{color:#FFD27A}
@@ -3324,9 +3324,9 @@ const DEVICE_CSS = `.gm svg,.gm img{display:inline-block;vertical-align:middle;m
 .gm .bq-bars{flex:1;display:flex;align-items:flex-end;gap:3px;height:52px}
 .gm .bq-bars i{flex:1;height:100%;border-radius:2px;background:var(--line)}
 .gm .bq-bars i.on{background:#12A4B4}
-.gm .sk-ds .bq-k b,.gm .sk-ds .bq-m>b:first-child{color:#3FD0D4}
-.gm .sk-ds .bq-bars i.on{background:linear-gradient(180deg,#7DF0F2,#18A9B0);box-shadow:0 0 6px rgba(63,208,212,.6)}
-.gm .sk-ds .bq-bars i{background:#3A3330}
+.gm .sk-ds .bq-k b,.gm .sk-ds .bq-m>b:first-child{color:var(--acct)}
+.gm .sk-ds .bq-bars i.on{background:linear-gradient(180deg,var(--acct),var(--acc));box-shadow:0 0 6px var(--hls,rgba(63,208,212,.6))}
+.gm .sk-ds .bq-bars i{background:var(--line)}
 /* Citroën */
 .gm .xci{margin:-6px calc(-1*var(--px)) 0;flex:none;background:#fff}
 .gm .xci-hd{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:2px 12px 6px}
@@ -3373,7 +3373,7 @@ const DEVICE_CSS = `.gm svg,.gm img{display:inline-block;vertical-align:middle;m
 .gm .xds-r span{flex:1;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
 .gm .xds-r small{display:block;font-size:9.5px;letter-spacing:0;text-transform:none;color:#A39E94;margin-top:1px}
 .gm .xds-r>svg:last-child{width:13px;height:13px;color:#A39E94}
-.gm .sk-ds .m-btn{background:#F3EFE7;color:#121212;border:0;text-transform:uppercase;letter-spacing:.06em}
+.gm .sk-ds .m-btn{background:var(--acct);color:var(--on);border:0;text-transform:uppercase;letter-spacing:.06em}
 /* Hyundai */
 .gm .xhy{margin:-6px calc(-1*var(--px)) 0;padding:0 12px 10px;flex:none;background:linear-gradient(180deg,#CFE0F2 0,#E6EEF7 70%,var(--bg) 100%)}
 .gm .xhy-hd{display:flex;align-items:center;justify-content:space-between;height:28px}
@@ -4270,7 +4270,7 @@ function deviceHTML(g,b,p){
   const rs=Math.min(parseFloat(K.r)||0,8)+"px";
   const vars="--bg:"+T.bg+";--card:"+T.card+";--fg:"+T.fg+";--mut:"+T.mut+";--line:"+T.line+";--acc:"+T.acc+";--on:"+T.on+";--acct:"+acct+
     ";--hd:"+(T.hd||T.bg)+";--hdfg:"+(T.hdfg||T.fg)+";--r:"+K.r+";--rs:"+rs+";--br:"+K.br+";--tw:"+K.tw+";--ff:"+K.ff+";--hf:"+(K.hf||K.ff)+
-    ";--chip:"+rgba(T.fg,T.dark?.1:.06)+";--pill:"+rgba(acct,.16)+";--ringc:"+(K.ringc||"#34C759");
+    ";--chip:"+rgba(T.fg,T.dark?.1:.06)+";--pill:"+rgba(acct,.16)+";--ringc:"+(K.ringc||"#34C759")+(T.swc?";--swc:"+T.swc:"");
   const showTabs=k==="app"&&!!K.tabs&&(home||s.tab!=null), tabOn=s.tab!=null?s.tab:0;
   const cls="dev phone sk-"+key+(T.dark?" dark":" light")+" l-"+K.list+" hd-"+K.hd+" sw-"+K.sw+" tm-"+K.time+" dy-"+K.day+" bt-"+K.btn+" sg-"+K.seg+" ind-"+K.ind+(K.up?" up":"")+(band?" band":"")+(s.btn?" has-btn":"")+(s.rows.length&&s.rows[0][0]==="batt"?" top-batt":"")+((s.hl||[]).length?" spot":"")+(showTabs?" has-tabs":"")+(home?" is-home h-"+K.home:"")+(s.tab!=null?" is-tab":"");
   const sb='<div class="m-sb"><span>21:58</span><span class="isl"></span>'+SB_ICONS+'</div>';

@@ -113,7 +113,7 @@
 114:Ajustes de carga|Charging settings|Réglages de recharge|Ladeeinstellungen
 115:Perfiles de carga|Charging profiles|Profils de recharge|Ladeprofile
 116:Casa|Home|Domicile|Zuhause
-117:Corriente de carga AC|AC charging current|Courant de charge AC|AC-Ladestrom
+117:Corriente de carga CA|AC charging current|Courant de charge AC|AC-Ladestrom
 118:Máxima|Maximum|Maximal|Maximal
 119:Nivel mínimo de carga|Minimum charge level|Niveau de charge minimal|Mindestladestand
 120:Limitación de carga al # %|Charge limit at # %|Limitation de charge à # %|Ladebegrenzung auf # %
@@ -150,7 +150,7 @@
 151:Asientos|Seats|Sièges|Sitze
 152:Apagados|Off|Désactivés|Aus
 153:Programa de carga|Charging programme|Programme de recharge|Ladeprogramm
-154:No se aplica a la carga rápida (DC).|Does not apply to rapid charging (DC).|Ne s'applique pas à la recharge rapide (DC).|Gilt nicht für Schnellladen (DC).
+154:No se aplica a la carga rápida en corriente continua (CC).|Does not apply to rapid charging (DC).|Ne s'applique pas à la recharge rapide (DC).|Gilt nicht für Schnellladen (DC).
 156:Actualizado hace # min · Lisboa|Updated # min ago · Lisbon|Mis à jour il y a # min · Lisbonne|Vor # Min. aktualisiert · Lissabon
 157:km restantes|km left|km restants|km übrig
 158:Interior|Interior|Intérieur|Innenraum

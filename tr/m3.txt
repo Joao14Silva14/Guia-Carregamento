@@ -9,7 +9,7 @@ Local «Casa»|Ubicación «Casa»|«Home» location|Lieu « Domicile »|Ort „
 Horário fora de hora de ponta|Horario fuera de horas punta|Off-peak schedule|Horaire hors heures de pointe|Zeitplan außerhalb der Spitzenzeit
 Separador Painel|Pestaña Panel|Dashboard tab|Onglet Tableau de bord|Reiter Dashboard
 Opções de carregamento: não há hora de início|Opciones de carga: no hay hora de inicio|Charging options: no start time|Options de recharge : pas d'heure de début|Ladeoptionen: keine Startzeit
-App da wallbox: horário do vazio|App de la wallbox: horario valle|Wallbox app: off-peak schedule|App de la wallbox : horaire heures creuses|Wallbox-App: Niedertarif-Zeitplan
+App da wallbox: horário do vazio|App del punto de recarga: horario valle|Wallbox app: off-peak schedule|App de la wallbox : horaire heures creuses|Wallbox-App: Niedertarif-Zeitplan
 Carregamento › Partida|Carga › Salida|Charging › Departure|Recharge › Départ|Laden › Abfahrt
 Plano de partida|Plan de salida|Departure plan|Plan de départ|Abfahrtsplan
 Cartão Bateria aberto|Tarjeta Batería abierta|Battery card open|Carte Batterie ouverte|Batteriekarte geöffnet
@@ -24,3 +24,5 @@ Horário guardado|Horario guardado|Schedule saved|Horaire enregistré|Zeitplan g
 Cabo ligado · início às #|Cable conectado · inicio a las #|Plugged in · starts at #|Câble branché · début à #|Kabel eingesteckt · Start um #
 Carregamento agendado · #–#|Carga programada · #–#|Charging scheduled · #–#|Recharge programmée · #–#|Laden geplant · #–#
 A carregar desde as #|Cargando desde las #|Charging since #|En charge depuis #|Lädt seit #
+App da wallbox|App del punto de recarga|Wallbox app|App de la borne de recharge|Wallbox-App
+App da marca|App de la marca|Brand app|App de la marque|App der Marke

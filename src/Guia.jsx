@@ -47,7 +47,7 @@ function guideFor(b, f) { if (!b) return null; const gk = (f && f.guide) || b.gu
 /* Lua (vazio) e sol (fora de vazio) junto aos termos de cada idioma */
 const VZ = {
   pt: { re: /(fora d[oe] vazio|\bvazio\b)/gi, sun: s => /^fora/i.test(s) },
-  es: { re: /(fuera de(?:l| las horas)? valle|\bvalle\b)/gi, sun: s => /^fuera/i.test(s) },
+  es: { re: /(fuera de(?:l| las horas)? valle|(?:\b(?:horas|periodo|horario) )?\bvalle\b)/gi, sun: s => /^fuera/i.test(s) },
   en: { re: /(\boff-peak\b|\bpeak\b)/gi, sun: s => /^peak/i.test(s) },
   fr: { re: /(heures? pleines?|heures? creuses?)/gi, sun: s => /pleine/i.test(s) },
   de: { re: /(Hochtarif\w*|Niedertarif\w*)/g, sun: s => /^Hoch/.test(s) },
@@ -402,7 +402,7 @@ function CarSearch({ onPick, onOther, inputRef, say }) {
   const choose = i => {
     setOpen(false); setAct(-1);
     if (i >= hits.length) { setQ(""); onOther(); return; }
-    const h = hits[i]; setQ(h.b.name + " " + h.f.name); onPick(h.b.name, h.fi);
+    const h = hits[i]; setQ(h.b.name + " " + h.f.name); onPick(h.b.name, h.fi, true);
   };
   const onKey = e => {
     if (!show) { if (e.key === "ArrowDown" && q.trim().length >= 2) { setOpen(true); e.preventDefault(); } return; }
@@ -506,8 +506,9 @@ function BrandPicker({ b, f, onBrand, onModel, onOther }) {
   const [all, setAll] = useState(false);
   const top = TOP.map(n => BRANDS.find(x => x.name === n)).filter(Boolean).slice(0, 10);
   const chip = (x, on, onClick, label, key) => (
-    <button key={key || x.name} type="button" aria-pressed={on} onClick={onClick} className="ge-brand-chip ge-focus">
+    <button key={key || x.name} type="button" aria-pressed={on} aria-label={on ? x.name + ". " + L.t("pick.clear") : x.name} onClick={onClick} title={on ? L.t("pick.clear") : undefined} className="ge-brand-chip ge-focus">
       <BrandLogo b={x} size="xs" /><span className="ge-brand-chip-l">{label || x.name}</span>
+      {on && <span className="ge-chip-x" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M3 3l6 6M9 3l-6 6" /></svg></span>}
     </button>
   );
   return (
@@ -527,7 +528,7 @@ function BrandPicker({ b, f, onBrand, onModel, onOther }) {
                 className={cx("ge-brand-list-item ge-focus", b && b.name === x.name && "is-selected")}>
                 <BrandLogo b={x} size="xs" /><span className="truncate">{x.name}</span></button></li>
             ))}
-            <li><button type="button" onClick={() => { onOther(); setAll(false); }} className="ge-brand-list-item ge-focus"><BrandLogo b={OTHER} size="xs" /><span className="truncate">{L.t("other.short")}</span></button></li>
+            <li><button type="button" onClick={() => { onOther(true); setAll(false); }} aria-pressed={!!b && !!b.other} className={cx("ge-brand-list-item ge-focus", b && b.other && "is-selected")}><BrandLogo b={OTHER} size="xs" /><span className="truncate">{L.t("other.short")}</span></button></li>
           </ul>
         </div>
       )}
@@ -543,7 +544,7 @@ function BrandPicker({ b, f, onBrand, onModel, onOther }) {
           </div>
         </div>
       )}
-      <button type="button" onClick={onOther} className="ge-link ge-focus mt-4 inline-flex min-h-[44px] items-center text-[0.98rem]">{L.t("pick.notListed")}</button>
+      <button type="button" onClick={() => onOther(true)} className="ge-link ge-focus mt-4 inline-flex min-h-[44px] items-center text-[0.98rem]">{L.t("pick.notListed")}</button>
     </div>
   );
 }
@@ -963,6 +964,11 @@ transition:border-color var(--dur-2) var(--ease),background-color var(--dur-2) v
 .ge-brand-chip .brand-logo img{mix-blend-mode:multiply}
 .ge-brand-chip:hover{transform:translateY(-2px);border-color:#B9B2C8;box-shadow:var(--sh-2)}
 .ge-brand-chip:active{transform:translateY(0);box-shadow:var(--sh-1)}
+.ge-brand-chip{position:relative}
+.ge-chip-x{position:absolute;top:4px;right:4px;display:flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--ge-ink);color:#fff;box-shadow:0 0 0 2px #fff;pointer-events:none}
+.ge-brand-chip[aria-pressed=true]{padding-right:1.85rem}
+.ge-chip-x svg{width:9px;height:9px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+@media (hover:hover){.ge-brand-chip[aria-pressed=true]:hover .ge-chip-x{background:var(--ge-blue)}}
 .ge-brand-chip[aria-pressed=true]{border-color:var(--ge-success);background:var(--ge-mint);box-shadow:inset 0 0 0 1px var(--ge-success),var(--sh-1)}
 .ge-model-chip{display:inline-flex;align-items:center;justify-content:center;gap:.35rem;min-width:76px;min-height:48px;max-width:100%;padding:.55rem .95rem;border-radius:14px;border:1px solid var(--ge-line);background:#fff;color:var(--ge-ink);font-weight:650;font-size:.98rem;line-height:1.2;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform var(--dur-1) var(--ease),border-color var(--dur-2) var(--ease),background-color var(--dur-2) var(--ease),box-shadow var(--dur-2) var(--ease)}
 .ge-model-chip .model-chip-label{min-width:0;text-align:center}
@@ -1043,15 +1049,24 @@ export default function GuiaCarregamento({ initialLang = "pt", initialDict = nul
   }, 80);
 
   const resetGuide = () => { setStep(0); setFinished(false); };
-  function pickBrand(name, fi) {
+  function clearCar() {
+    setBrandName(""); setFamIdx(-1); setVerIdx(-1); resetGuide(); say(L.t("say.cleared"));
+    try { history.replaceState(history.state, "", location.pathname + location.search); } catch (e) { }
+  }
+  function pickBrand(name, fi, toggle) {
     const nb = BRANDS.find(x => x.name === name); if (!nb) return;
+    if (toggle && brandName === name && (fi == null || famIdx === fi)) { clearCar(); return; }
     const idx = fi != null ? fi : nb.families.length === 1 ? 0 : -1;
     setBrandName(name); setFamIdx(idx); setVerIdx(-1); resetGuide();
     if (idx > -1) { say(L.t("say.chosen", { car: nb.name + " " + nb.families[idx].name, n: guideFor(nb, nb.families[idx]).g.steps.length })); openGuide(); }
     else say(L.t("say.brand", { brand: nb.name }));
   }
-  function pickModel(i) { setFamIdx(i); setVerIdx(-1); resetGuide(); say(L.t("say.chosen", { car: b.name + " " + b.families[i].name, n: guideFor(b, b.families[i]).g.steps.length })); openGuide(); }
-  function pickOther() { setBrandName("__other"); setFamIdx(-1); setVerIdx(-1); resetGuide(); say(L.t("say.other")); openGuide(); }
+  function pickModel(i) {
+    if (famIdx === i && b && b.families.length > 1) { setFamIdx(-1); setVerIdx(-1); resetGuide(); say(L.t("say.brand", { brand: b.name })); try { history.replaceState(history.state, "", location.pathname + location.search); } catch (e) { } return; }
+    setFamIdx(i); setVerIdx(-1); resetGuide(); say(L.t("say.chosen", { car: b.name + " " + b.families[i].name, n: guideFor(b, b.families[i]).g.steps.length })); openGuide(); }
+  function pickOther(toggle) {
+    if (toggle === true && brandName === "__other") { clearCar(); return; }
+    setBrandName("__other"); setFamIdx(-1); setVerIdx(-1); resetGuide(); say(L.t("say.other")); openGuide(); }
   function changeCar() {
     track("alterar_carro");
     scrollToEl(pickRef.current, "start");
@@ -1164,8 +1179,8 @@ export default function GuiaCarregamento({ initialLang = "pt", initialDict = nul
               <h1 id="th1" className="mt-2 text-[length:var(--fs-display)] font-black leading-[1.04] text-[color:var(--ge-ink)]"><Tx k="hero.title" vars={{ vz: <span className="whitespace-nowrap text-[color:var(--ge-blue)]"><Moon className="mr-[0.12em] inline-block h-[0.82em] w-[0.82em] align-[-0.05em]" />{L.t("hero.titleVz")}</span> }} plain /></h1>
               <p className="mt-3 max-w-xl text-[1.1rem] leading-relaxed text-[color:var(--ge-ink)]">{L.t("hero.sub")}</p>
               <div ref={pickRef} className="mt-6 scroll-mt-[calc(var(--hdr)+12px)] rounded-[var(--r-l)] bg-white p-4 shadow-[var(--sh-3)] sm:p-6">
-                <CarSearch inputRef={inputRef} onPick={pickBrand} onOther={pickOther} say={say} />
-                <BrandPicker b={b} f={f} onBrand={n0 => pickBrand(n0)} onModel={pickModel} onOther={pickOther} />
+                <CarSearch key={brandName + ":" + famIdx} inputRef={inputRef} onPick={(name, fi) => pickBrand(name, fi, true)} onOther={pickOther} say={say} />
+                <BrandPicker b={b} f={f} onBrand={n0 => pickBrand(n0, undefined, true)} onModel={pickModel} onOther={pickOther} />
               </div>
               <div className="mt-5"><Cost100 /></div>
             </div>

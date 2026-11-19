@@ -156,6 +156,8 @@
 "app.officialOf": "oficial da {brand}",
 "say.chosen": "{car} escolhido. Guia com {n} passos.",
 "say.brand": "{brand} escolhida. Agora escolha o modelo.",
+"say.cleared": "Seleção limpa. Escolha a marca do carro.",
+"pick.clear": "Tocar de novo para limpar a seleção",
 "say.other": "Guia geral escolhido.",
 "wb.hours": "Chamada gratuita · Dias úteis, das 9h às 21h",
 "offer.name": "Tarifário Carregar em Casa",
