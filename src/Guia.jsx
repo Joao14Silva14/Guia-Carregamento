@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { BRANDS, GUIDES, ALIAS, TOP, norm, initials, logoUrl, photoFor, evUrl, STORE, deviceHTML, DEVICE_CSS, themeFor, appLabel, SKIN, shotFor, CAR_SVG, LOGO, setMS, setDays, storeLinks } from "./engine.js";
+import { BRANDS, GUIDES, ALIAS, TOP, norm, initials, logoUrl, photoFor, STORE, deviceHTML, DEVICE_CSS, themeFor, appLabel, SKIN, shotFor, CAR_SVG, LOGO, setMS, setDays, storeLinks } from "./engine.js";
 import { LANGS, langInfo, persistLang, fill, trHTML } from "./i18n/index.js";
 /*
  * Goldenergy · Guia para programar o carregamento do carro elétrico nas horas de vazio — INTERFACE
  * React 18 + Tailwind CSS. Textos em src/i18n/*.json (PT é a fonte). Dados e maquetas em src/engine.js.
  * Estrutura: cabeçalho fixo (idioma + carro) → topo com pesquisa → guia em 2 colunas (passos | telemóvel)
- *            → tarifário e solar → fontes e notas legais.
+ *            → tarifário e solar.
  */
 
 /* ===================== Oferta comercial (editar aqui) =====================
@@ -112,6 +112,7 @@ const IC = {
   chevL: <path d="m15 18-6-6 6-6" />,
   chevR: <path d="m9 6 6 6-6 6" />,
   chevD: <path d="m6 9 6 6 6-6" />,
+  chevU: <path d="m6 15 6-6 6 6" />,
   x: <path d="M6 6l12 12M18 6 6 18" />,
   link: <><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7" /><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7" /></>,
   plug: <><path d="M9 2v6M15 2v6" /><path d="M6 8h12v4a6 6 0 0 1-12 0z" /><path d="M12 18v4" /></>,
@@ -193,7 +194,7 @@ function CarPhoto({ photo, alt, className }) {
   );
 }
 /* Fontes das maquetas (Google Fonts): só a família da app mostrada, uma vez */
-const GFONTS = { "Inter": "Inter:wght@300;400;500;600;700", "Montserrat": "Montserrat:wght@500;600;700", "DM Sans": "DM+Sans:wght@400;500;700", "Poppins": "Poppins:wght@400;500;600", "Roboto": "Roboto:wght@400;500;700", "Source Sans 3": "Source+Sans+3:wght@300;400;600" };
+const GFONTS = { "Roboto": "Roboto:wght@300;400;500;600;700" };
 const fontsLoaded = new Set();
 function loadMockFont(ff) {
   const m = /'([^']+)'/.exec(ff || ""), fam = m && m[1];
@@ -508,7 +509,6 @@ function BrandPicker({ b, f, onBrand, onModel, onOther }) {
   const chip = (x, on, onClick, label, key) => (
     <button key={key || x.name} type="button" aria-pressed={on} aria-label={on ? x.name + ". " + L.t("pick.clear") : x.name} onClick={onClick} title={on ? L.t("pick.clear") : undefined} className="ge-brand-chip ge-focus">
       <BrandLogo b={x} size="xs" /><span className="ge-brand-chip-l">{label || x.name}</span>
-      {on && <span className="ge-chip-x" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M3 3l6 6M9 3l-6 6" /></svg></span>}
     </button>
   );
   return (
@@ -568,7 +568,7 @@ function VazioPanel({ cyc, setCyc, p }) {
           <h3 id="tvz" className="text-sm font-bold uppercase tracking-[.08em] text-[color:var(--ge-success)]">{L.t("vz.title")}</h3>
           <p className="mt-1 flex flex-wrap items-baseline gap-x-2 text-[1.6rem] font-black leading-tight tabular-nums text-[color:var(--ge-ink)]" aria-live="polite">
             <span className="whitespace-nowrap"><Moon className="mr-1.5 inline-block h-6 w-6 align-[-0.12em]" />{p.s} → {p.e}</span>
-            <span className="text-base font-semibold text-[color:var(--ge-muted)]">{L.t("vz.every")}</span>
+            <span className="text-base font-semibold text-[color:var(--ge-muted)]">{L.t(cyc === "semanal" ? "vz.weekdays" : "vz.every")}</span>
           </p>
         </div>
         <div role="radiogroup" aria-label={L.t("vz.cycleLabel")} onKeyDown={onKey} className="grid grid-cols-2 rounded-full bg-white p-1 shadow-[var(--sh-1)] lg:w-[340px]">
@@ -613,7 +613,7 @@ function VazioPanel({ cyc, setCyc, p }) {
 }
 
 /* ===================== Guia: passos + telemóvel ===================== */
-function Guide({ G, b, f, v, setVer, p, cyc, setCyc, cur, n, screen, photo, finished, go, finish, desk, share }) {
+function Guide({ G, b, f, p, cyc, setCyc, cur, n, screen, photo, finished, go, finish, desk, share }) {
   const L = useL();
   const { gk, g } = G;
   const last = cur === n - 1;
@@ -642,7 +642,7 @@ function Guide({ G, b, f, v, setVer, p, cyc, setCyc, cur, n, screen, photo, fini
   };
   return (
     <div>
-      {/* Cabeçalho do guia: carro, versão e app */}
+      {/* Cabeçalho do guia: modelo do carro e app */}
       <div className="ge-card flex flex-col gap-5 p-4 sm:p-6 md:flex-row md:items-center">
         <div className="flex min-w-0 flex-1 items-center gap-4">
           {f && !b.other
@@ -655,24 +655,10 @@ function Guide({ G, b, f, v, setVer, p, cyc, setCyc, cur, n, screen, photo, fini
           </div>
         </div>
         <div className="flex flex-col gap-3 md:items-end">
-          {f && f.versions.length > 1 && (
-            <label className="flex min-w-0 items-center gap-2 text-sm font-bold">
-              <span className="flex-none">{L.t("guide.version")}</span>
-              <span className="relative min-w-0 flex-1 md:w-64 md:flex-none">
-                <select value={v ? f.versions.indexOf(v) : -1} onChange={e => setVer(+e.target.value)}
-                  className="ge-focus h-11 w-full cursor-pointer appearance-none truncate rounded-xl border-2 border-[color:var(--ge-line)] bg-white pl-3 pr-9 text-[0.95rem] font-semibold hover:border-[#B9B3C6]">
-                  <option value={-1}>{L.t("guide.versionAny")}</option>
-                  {f.versions.map((x, i) => <option key={x.name + i} value={i}>{x.name}{x.note ? " · " + L.tg(x.note) : ""}</option>)}
-                </select>
-                <Icon n="chevD" className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2" />
-              </span>
-            </label>
-          )}
           {b.app && <div className="flex flex-col gap-1.5 md:items-end">
             <p className="text-sm text-[color:var(--ge-muted)]"><Tx k="guide.appIs" vars={{ app: <b className="font-bold text-[color:var(--ge-ink)]">{b.app}</b> }} /></p>
             <StoreButtons app={b.app} size="sm" />
           </div>}
-          {v && v.id && <A href={evUrl(b, v)} className="text-sm">{L.t("guide.specs")}</A>}
         </div>
       </div>
 
@@ -823,6 +809,23 @@ function Feedback({ gk, b, f }) {
   );
 }
 
+function GuideReturn({ show, car, cur, n, onClick }) {
+  const L = useL();
+  if (!show) return null;
+  return (
+    <div className="ge-return-guide fixed inset-x-3 z-50 mx-auto max-w-xl print:hidden md:inset-x-auto md:right-6 md:max-w-[360px]">
+      <button type="button" onClick={onClick} className="ge-focus flex min-h-[58px] w-full items-center gap-3 rounded-2xl border border-[color:var(--ge-line-soft)] bg-white px-4 py-2.5 text-left shadow-[var(--sh-3)]">
+        <span className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-[color:var(--ge-mint)] text-[color:var(--ge-blue)]"><Icon n="chevU" /></span>
+        <span className="min-w-0 flex-1">
+          <span className="block font-bold leading-tight">{L.t("guide.return")}</span>
+          <span className="block truncate text-sm text-[color:var(--ge-muted)]">{car} · {L.t("step.of", { i: cur + 1, n })}</span>
+        </span>
+        <Icon n="chevU" className="h-4 w-4 flex-none text-[color:var(--ge-muted)]" />
+      </button>
+    </div>
+  );
+}
+
 /* ===================== Barra fixa de passos (telemóvel) ===================== */
 function StepBar({ show, cur, n, go, finish }) {
   const L = useL();
@@ -889,38 +892,6 @@ function Promo() {
     </section>
   );
 }
-function Sources() {
-  const L = useL();
-  const v = L.eur(OFFER.consumo100 * OFFER.precoNum * (1 + OFFER.iva));
-  const items = [
-    <Tx k="src.mock" />,
-    <Tx k="src.manuals" vars={{
-      tesla: <A href="https://www.tesla.com/ownersmanual/modely/en_us/GUID-76995CEC-6402-4BFF-99FA-CEFA36E64A19.html">Tesla</A>,
-      renault: <A href="https://www.user-manual.renault.com/pt/content/openr-link/veiculo/veiculo-eletrico">Renault</A>,
-      bmw: <A href="https://faq.bmwusa.com/s/article/My-BMW-App-Charging-Charge-Climate-Timer-Charging-mode-Charge-in-time-frame-rlLVj?language=en_US">My BMW</A>,
-      kia: <A href="http://webmanual.kia.com/DA_GEN2_V/AV/EUR/Portuguese/002_Features_electricvehicle.html">Kia</A>,
-      vw: <A href="https://www.volkswagen.pt/conectividade-e-mobilidade/vw-connect-id/conforto">Volkswagen</A>,
-      peugeot: <A href="https://www.peugeot.pt/conselhos-sugestoes/eletrificacao/carregamento/como-encontrar-pontos-de-carregamento-publicos-para-um-carro-eletrico.html">Peugeot</A>,
-    }} />,
-    <Tx k="src.models" vars={{ ev: <A href="https://ev-database.org/">EV Database</A> }} />,
-    <Tx k="src.logos" vars={{ ds: <A href="https://github.com/filippofilip95/car-logos-dataset">car-logos-dataset</A> }} />,
-    <Tx k="src.offer" vars={{ site: <A href={OFFER.pagina}>goldenergy.pt</A> }} />,
-    <>{L.t("src.illus")}</>,
-    <>{L.t("cost.howTitle")}: {L.t("cost.calc", { kwh: OFFER.consumo100, price: L.num4(OFFER.precoNum) + " €/kWh", vat: Math.round(OFFER.iva * 100), v })}. {L.t("cost.note", { kwh: OFFER.consumo100 })}</>,
-    <Tx k="src.cycles" vars={{ erse: <A href={ERSE_2027}>ERSE</A> }} />,
-  ];
-  return (
-    <details className="group ge-card [contain-intrinsic-size:auto_64px] [content-visibility:auto] print:hidden">
-      <summary className="ge-focus flex min-h-[56px] cursor-pointer list-none items-center gap-3 rounded-[var(--r-l)] px-5 font-bold sm:px-7 [&::-webkit-details-marker]:hidden">
-        <span className="flex-1">{L.t("src.title")}</span><Icon n="chevD" className="h-5 w-5 motion-safe:transition-transform group-open:rotate-180" />
-      </summary>
-      <ul className="list-disc space-y-2 px-5 pb-6 pl-10 text-sm leading-relaxed text-[color:var(--ge-muted)] sm:px-7 sm:pl-12">
-        {items.map((x, i) => <li key={i}>{x}</li>)}
-      </ul>
-    </details>
-  );
-}
-
 /* ===================== Estilos: tokens de design + componentes ===================== */
 const PAGE_CSS = `
 .gm{overflow-wrap:break-word;-webkit-hyphens:auto;hyphens:auto}
@@ -965,21 +936,21 @@ transition:border-color var(--dur-2) var(--ease),background-color var(--dur-2) v
 .ge-brand-chip:hover{transform:translateY(-2px);border-color:#B9B2C8;box-shadow:var(--sh-2)}
 .ge-brand-chip:active{transform:translateY(0);box-shadow:var(--sh-1)}
 .ge-brand-chip{position:relative}
-.ge-chip-x{position:absolute;top:4px;right:4px;display:flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--ge-ink);color:#fff;box-shadow:0 0 0 2px #fff;pointer-events:none}
-.ge-brand-chip[aria-pressed=true]{padding-right:1.85rem}
-.ge-chip-x svg{width:9px;height:9px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
-@media (hover:hover){.ge-brand-chip[aria-pressed=true]:hover .ge-chip-x{background:var(--ge-blue)}}
 .ge-brand-chip[aria-pressed=true]{border-color:var(--ge-success);background:var(--ge-mint);box-shadow:inset 0 0 0 1px var(--ge-success),var(--sh-1)}
 .ge-model-chip{display:inline-flex;align-items:center;justify-content:center;gap:.35rem;min-width:76px;min-height:48px;max-width:100%;padding:.55rem .95rem;border-radius:14px;border:1px solid var(--ge-line);background:#fff;color:var(--ge-ink);font-weight:650;font-size:.98rem;line-height:1.2;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform var(--dur-1) var(--ease),border-color var(--dur-2) var(--ease),background-color var(--dur-2) var(--ease),box-shadow var(--dur-2) var(--ease)}
 .ge-model-chip .model-chip-label{min-width:0;text-align:center}
 .ge-brand-chip-l{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ge-chip-grid{display:flex;flex-wrap:wrap;gap:.5rem}
+.ge-chip-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;gap:.625rem}
+.ge-return-guide{bottom:max(.75rem,env(safe-area-inset-bottom))}
+@media (min-width:768px){.ge-return-guide{bottom:1.5rem}}
+.ge-chip-grid>*{width:100%;min-width:0;max-width:none;margin:0}
+.ge-chip-grid .ge-brand-chip{justify-content:flex-start;min-height:56px}
+.ge-chip-grid .ge-brand-chip-l{white-space:normal;line-height:1.15;text-align:left;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}
 .ge-store-row{display:flex;flex-wrap:wrap;gap:.5rem}
 @media (max-width:639px){
   .ge-chip-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem}
   .ge-chip-grid>*{width:100%;max-width:none;margin:0}
   .ge-chip-grid .ge-brand-chip{justify-content:flex-start;min-height:56px;padding:.4rem .6rem .4rem .45rem;gap:.55rem;font-size:.95rem}
-  .ge-chip-grid .ge-brand-chip-l{white-space:normal;line-height:1.15;text-align:left;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}
   .ge-chip-grid .ge-chip--all{grid-column:1/-1;justify-content:center;min-height:48px;padding:.25rem .875rem}
   .ge-chip-grid--models .ge-model-chip{min-width:0;flex-wrap:wrap;padding:.55rem .6rem}
   .ge-store-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -1018,7 +989,6 @@ export default function GuiaCarregamento({ initialLang = "pt", initialDict = nul
   /* Seleção */
   const [brandName, setBrandName] = useState("");
   const [famIdx, setFamIdx] = useState(-1);
-  const [verIdx, setVerIdx] = useState(-1);
   const [cyc, setCyc] = useState("diario");
   const [step, setStep] = useState(0);
   const [finished, setFinished] = useState(false);
@@ -1026,12 +996,12 @@ export default function GuiaCarregamento({ initialLang = "pt", initialDict = nul
   const [msg, setMsg] = useState("");
   const [hdrHidden, setHdrHidden] = useState(false);
   const [guideIn, setGuideIn] = useState(false);
+  const [guideSeen, setGuideSeen] = useState(false);
   const inputRef = useRef(null), guideRef = useRef(null), pickRef = useRef(null);
   const desk = useMedia("(min-width: 768px)") !== false;
 
   const b = brandName === "__other" ? OTHER : BRANDS.find(x => x.name === brandName) || null;
   const f = b && !b.other && famIdx > -1 ? b.families[famIdx] : null;
-  const v = f ? (verIdx > -1 ? f.versions[verIdx] : null) : null;
   const ready = !!(b && (b.other || f));
   const photo = REMOTE && b && f && !b.other ? photoFor(b, f) : null;
   const p = useMemo(() => ({ s: CYC[cyc][0], e: CYC[cyc][1], days: [1, 1, 1, 1, 1, 1, 1] }), [cyc]);
@@ -1050,23 +1020,23 @@ export default function GuiaCarregamento({ initialLang = "pt", initialDict = nul
 
   const resetGuide = () => { setStep(0); setFinished(false); };
   function clearCar() {
-    setBrandName(""); setFamIdx(-1); setVerIdx(-1); resetGuide(); say(L.t("say.cleared"));
+    setBrandName(""); setFamIdx(-1); setGuideSeen(false); resetGuide(); say(L.t("say.cleared"));
     try { history.replaceState(history.state, "", location.pathname + location.search); } catch (e) { }
   }
   function pickBrand(name, fi, toggle) {
     const nb = BRANDS.find(x => x.name === name); if (!nb) return;
     if (toggle && brandName === name && (fi == null || famIdx === fi)) { clearCar(); return; }
     const idx = fi != null ? fi : nb.families.length === 1 ? 0 : -1;
-    setBrandName(name); setFamIdx(idx); setVerIdx(-1); resetGuide();
+    setBrandName(name); setFamIdx(idx); setGuideSeen(false); resetGuide();
     if (idx > -1) { say(L.t("say.chosen", { car: nb.name + " " + nb.families[idx].name, n: guideFor(nb, nb.families[idx]).g.steps.length })); openGuide(); }
     else say(L.t("say.brand", { brand: nb.name }));
   }
   function pickModel(i) {
-    if (famIdx === i && b && b.families.length > 1) { setFamIdx(-1); setVerIdx(-1); resetGuide(); say(L.t("say.brand", { brand: b.name })); try { history.replaceState(history.state, "", location.pathname + location.search); } catch (e) { } return; }
-    setFamIdx(i); setVerIdx(-1); resetGuide(); say(L.t("say.chosen", { car: b.name + " " + b.families[i].name, n: guideFor(b, b.families[i]).g.steps.length })); openGuide(); }
+    if (famIdx === i && b && b.families.length > 1) { setFamIdx(-1); setGuideSeen(false); resetGuide(); say(L.t("say.brand", { brand: b.name })); try { history.replaceState(history.state, "", location.pathname + location.search); } catch (e) { } return; }
+    setFamIdx(i); setGuideSeen(false); resetGuide(); say(L.t("say.chosen", { car: b.name + " " + b.families[i].name, n: guideFor(b, b.families[i]).g.steps.length })); openGuide(); }
   function pickOther(toggle) {
     if (toggle === true && brandName === "__other") { clearCar(); return; }
-    setBrandName("__other"); setFamIdx(-1); setVerIdx(-1); resetGuide(); say(L.t("say.other")); openGuide(); }
+    setBrandName("__other"); setFamIdx(-1); setGuideSeen(false); resetGuide(); say(L.t("say.other")); openGuide(); }
   function changeCar() {
     track("alterar_carro");
     scrollToEl(pickRef.current, "start");
@@ -1100,8 +1070,12 @@ export default function GuiaCarregamento({ initialLang = "pt", initialDict = nul
   }, []);
   /* O guia está no ecrã? (barra de passos no telemóvel e atalhos de teclado) */
   useEffect(() => {
-    const el = guideRef.current; if (!el || typeof IntersectionObserver === "undefined") { setGuideIn(!!ready); return; }
-    const io = new IntersectionObserver(([en]) => setGuideIn(en.isIntersecting), { rootMargin: "-30% 0px -30% 0px" });
+    const el = guideRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") { setGuideIn(!!ready); if (ready) setGuideSeen(true); return; }
+    const io = new IntersectionObserver(([entry]) => {
+      setGuideIn(entry.isIntersecting);
+      if (entry.isIntersecting) setGuideSeen(true);
+    }, { rootMargin: "-30% 0px -30% 0px" });
     io.observe(el); return () => io.disconnect();
   }, [ready]);
   /* Cabeçalho: no telemóvel esconde ao descer e volta ao subir */
@@ -1113,14 +1087,14 @@ export default function GuiaCarregamento({ initialLang = "pt", initialDict = nul
     return () => { window.removeEventListener("scroll", on); raf && cancelAnimationFrame(raf); };
   }, [desk]);
 
-  /* Ligação partilhável: ?lang=xx#marca=…&modelo=…&versao=…&ciclo=… */
+  /* Ligação partilhável: ?lang=xx#marca=…&modelo=…&ciclo=… */
   const hashStr = () => {
     if (!b) return "";
     const u = new URLSearchParams();
-    if (b.other) u.set("marca", "outra"); else { u.set("marca", b.name); if (f) u.set("modelo", f.name); if (v && f.versions.length > 1) u.set("versao", v.name); }
+    if (b.other) u.set("marca", "outra"); else { u.set("marca", b.name); if (f) u.set("modelo", f.name); }
     u.set("ciclo", cyc); return u.toString();
   };
-  useEffect(() => { if (ready) { try { history.replaceState(history.state, "", location.pathname + location.search + "#" + hashStr()); } catch (e) { } } }, [ready, brandName, famIdx, verIdx, cyc]);
+  useEffect(() => { if (ready) { try { history.replaceState(history.state, "", location.pathname + location.search + "#" + hashStr()); } catch (e) { } } }, [ready, brandName, famIdx, cyc]);
   useEffect(() => {
     let u; try { u = new URLSearchParams((location.hash || "").slice(1)); } catch (e) { return; }
     const m = u.get("marca"); if (!m) return;
@@ -1130,7 +1104,7 @@ export default function GuiaCarregamento({ initialLang = "pt", initialDict = nul
     const fi = nb.families.findIndex(x => x.name === u.get("modelo"));
     const idx = fi > -1 ? fi : nb.families.length === 1 ? 0 : -1;
     setBrandName(nb.name); setFamIdx(idx);
-    if (idx > -1) { const vi = nb.families[idx].versions.findIndex(x => x.name === u.get("versao")); if (vi > -1) setVerIdx(vi); setTimeout(() => scrollToEl(guideRef.current), 300); }
+    if (idx > -1) setTimeout(() => scrollToEl(guideRef.current), 300);
   }, []);
   const linkUrl = () => { let base = ""; try { base = location.href.split("#")[0]; } catch (e) { } return base + "#" + hashStr(); };
   function copyLink() {
@@ -1143,6 +1117,11 @@ export default function GuiaCarregamento({ initialLang = "pt", initialDict = nul
     try { navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(url).then(ok, fb) : fb(); } catch (e) { fb(); }
   }
   const showBar = !desk && ready && guideIn && !finished;
+  const showReturn = ready && guideSeen && !guideIn;
+  const returnToGuide = () => {
+    const active = !desk && document.getElementById("stepNow");
+    scrollToEl(active || guideRef.current, active ? "center" : "start");
+  };
 
   return (
     <I18n.Provider value={L}>
@@ -1193,10 +1172,10 @@ export default function GuiaCarregamento({ initialLang = "pt", initialDict = nul
           </div>
         </section>
 
-        <main id="guia" tabIndex={-1} className={cx("focus:outline-none", showBar && "pb-24")}>
+        <main id="guia" tabIndex={-1} className={cx("focus:outline-none", (showBar || showReturn) && "pb-24")}>
           <section ref={guideRef} aria-label={L.t("guide.region")} className="mx-auto max-w-[1240px] scroll-mt-[var(--hdr)] px-4 py-10 sm:px-8 md:py-16 lg:px-10">
             {G ? (
-              <Guide key={(b.other ? "o" : b.name) + famIdx} {...{ G, b, f, v, setVer: setVerIdx, p, cyc, setCyc, cur, n, screen, photo, finished, go, finish, desk }}
+              <Guide key={(b.other ? "o" : b.name) + famIdx} {...{ G, b, f, p, cyc, setCyc, cur, n, screen, photo, finished, go, finish, desk }}
                 share={{ linkUrl, carTitle, copyLink, copied }} />
             ) : (
               <div className="ge-card flex flex-col items-center gap-3 p-8 text-center sm:p-12">
@@ -1209,22 +1188,13 @@ export default function GuiaCarregamento({ initialLang = "pt", initialDict = nul
           </section>
           <div className="mx-auto flex max-w-[1240px] flex-col gap-6 px-4 pb-14 sm:px-8 lg:px-10">
             <Promo />
-            <Sources />
           </div>
         </main>
 
-        <footer className="border-t border-[color:var(--ge-line-soft)] bg-white">
-          <div className="mx-auto max-w-[1240px] space-y-2 px-4 py-8 text-sm leading-relaxed text-[color:var(--ge-muted)] sm:px-8 lg:px-10">
-            <p className="font-bold text-[color:var(--ge-ink)]">{L.t("offer.name")}</p>
-            <p><Tx k="foot.conditions" vars={{ site: <A href={OFFER.pagina}>goldenergy.pt</A>, pdf: <A href={OFFER.precosPdf}>{L.t("offer.prices")}</A> }} /></p>
-            <p>*{L.t("offer.notePrice")}</p>
-            <p>**{L.t("offer.noteDiscount")}</p>
-            <p>{L.t("foot.disclaimer")}</p>
-            {lang !== "pt" && <p>{L.t("foot.translation")}</p>}
-          </div>
-        </footer>
+
 
         {G && <StepBar show={showBar} cur={cur} n={n} go={go} finish={finish} />}
+        {G && <GuideReturn show={showReturn} car={carTitle} cur={cur} n={n} onClick={returnToGuide} />}
         <div role="status" aria-live="polite" className="sr-only">{msg}</div>
       </div>
     </I18n.Provider>

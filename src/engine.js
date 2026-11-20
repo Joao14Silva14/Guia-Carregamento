@@ -1276,7 +1276,8 @@ const THEMES={
    day: circle | pill | square | text | ring    btn: fill | sq | outline | full (barra inferior) | nav (no cabeçalho)
    batt: bar | ring | cell      seg: pill | line      tabs: n.º de separadores, tabsL: nomes, ind: plain | pill | bar
    quick: round | lab | sq      band: cabeçalho colorido (usa hd/hdfg)      ff/hf: letra do texto/títulos      up: títulos em maiúsculas */
-const FONT={inter:"'Inter',system-ui,sans-serif",mont:"'Montserrat',system-ui,sans-serif",dm:"'DM Sans',system-ui,sans-serif",pop:"'Poppins',system-ui,sans-serif",rob:"'Roboto',system-ui,sans-serif",src:"'Source Sans 3','Helvetica Neue',sans-serif",serif:"Georgia,'Times New Roman',serif"};
+const APP_FONT="'Roboto',system-ui,-apple-system,'Segoe UI',Arial,sans-serif";
+const FONT={inter:APP_FONT,mont:APP_FONT,dm:APP_FONT,pop:APP_FONT,rob:APP_FONT,src:APP_FONT,serif:APP_FONT};
 const SKIN={
   tesla:{short:1,home:"x-tesla",list:"flat",hd:"c",sw:"ios",time:"pair",day:"text",btn:"fill",batt:"cell",seg:"line",r:"10px",br:"6px",tabs:0,ind:"plain",ff:FONT.inter,tw:600,licon:1},
   bmw:{short:1,home:"x-bmw",list:"card",hd:"c",sw:"ios",time:"chip",day:"circle",btn:"sq",batt:"bmw",seg:"pill",r:"6px",br:"2px",tabs:5,tabsL:["Veículo","Mapa","Ideias","Compras","Perfil"],tabsNoL:1,ind:"bar",ff:FONT.inter,tw:600,licon:1},
@@ -2294,7 +2295,7 @@ const DEVICE_CSS = `.gm svg,.gm img{display:inline-block;vertical-align:middle;m
 .gm .dev .scr{position:relative;background:var(--bg);color:var(--fg);border-radius:34px;overflow:hidden;height:540px;display:flex;flex-direction:column;font-size:12.5px;line-height:1.3}
 .gm .m-top{flex:none;color:var(--fg)}
 .gm .band .m-top{background:var(--hd);color:var(--hdfg)}
-.gm .m-sb{display:flex;justify-content:space-between;align-items:center;height:34px;padding:0 20px 0 26px;font:600 11px/1 -apple-system,"SF Pro Text",Inter,Roboto,Arial,sans-serif}
+.gm .m-sb{display:flex;justify-content:space-between;align-items:center;height:34px;padding:0 20px 0 26px;font:600 11px/1 var(--ff)}
 .gm .m-sb>span:first-child,.gm .m-ic{width:54px}
 .gm .m-ic{display:flex;justify-content:flex-end;gap:4px;align-items:center}
 .gm .m-ic svg{height:9px;width:auto;fill:currentColor}
@@ -2557,7 +2558,7 @@ const DEVICE_CSS = `.gm svg,.gm img{display:inline-block;vertical-align:middle;m
 .gm .xd-st em{width:1px;height:10px;background:rgba(255,255,255,.45)}
 .gm .xd-st span{color:rgba(255,255,255,.75)}
 .gm .xd-rg{display:flex;align-items:flex-end;gap:10px;padding:0 2px;margin-top:4px}
-.gm .xd-rg>b{font-family:Inter,system-ui,sans-serif;font-size:56px;font-weight:300;line-height:.9;letter-spacing:-.03em;color:rgba(255,255,255,.9)}
+.gm .xd-rg>b{font-family:var(--hf);font-size:56px;font-weight:300;line-height:.9;letter-spacing:-.03em;color:rgba(255,255,255,.9)}
 .gm .xd-rg>div{display:flex;flex-direction:column;gap:3px;padding-bottom:2px}
 .gm .xd-rg span{display:flex;align-items:center;gap:4px;font-size:13px}
 .gm .xd-rg span svg{width:14px;height:14px}
@@ -2957,13 +2958,13 @@ const DEVICE_CSS = `.gm svg,.gm img{display:inline-block;vertical-align:middle;m
 /* Mercedes-Benz */
 .gm .sk-mercedes.is-home .m-top{background:#000;color:#fff}
 .gm .sk-mercedes.is-home .m-body,.gm .sk-mini.is-home .m-body{padding-top:6px}
-.gm .sk-mercedes .m-nav b{font-family:Georgia,'Times New Roman',serif;font-weight:400}
+.gm .sk-mercedes .m-nav b{font-family:var(--hf);font-weight:400}
 .gm .xmb{margin:-6px calc(-1*var(--px)) 0;flex:none}
 .gm .xmb-hd{background:#000;color:#fff;display:flex;align-items:center;justify-content:space-between;height:30px;padding:0 12px}
-.gm .xmb-hd b{font:400 14px/1 Georgia,'Times New Roman',serif;letter-spacing:.01em}
+.gm .xmb-hd b{font:400 14px/1 var(--hf);letter-spacing:.01em}
 .gm .xmb-hd svg{width:17px;height:17px}
 .gm .xmb-hero{background:linear-gradient(180deg,#0B2A6B 0,#2E5FB8 55%,#C9D6EA 100%);color:#fff;text-align:center;padding:10px 12px 8px}
-.gm .xmb-hero>b{display:block;font:400 17px/1.15 Georgia,'Times New Roman',serif}
+.gm .xmb-hero>b{display:block;font:400 17px/1.15 var(--hf)}
 .gm .xmb-hero small{display:flex;align-items:center;justify-content:center;gap:4px;font-size:10px;opacity:.9;margin-top:3px}
 .gm .xmb-hero small svg{width:11px;height:11px}
 .gm .xmb-hero .xmb-up{font-size:9px;opacity:.75}
@@ -3015,13 +3016,13 @@ const DEVICE_CSS = `.gm svg,.gm img{display:inline-block;vertical-align:middle;m
 .gm .sk-mini.is-home .m-top{background:#C4561F;color:#fff}
 .gm .sk-mini:not(.is-home) .m-top{position:relative;background:#C4561F;padding-bottom:16px}
 .gm .sk-mini:not(.is-home) .m-top::after{content:"";position:absolute;left:0;right:0;bottom:4px;height:22px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 22' preserveAspectRatio='none'%3E%3Cpath d='M0 20 C120 20 170 19 200 10 S240 2 256 2' fill='none' stroke='%23F4C430' stroke-width='2'/%3E%3C/svg%3E") no-repeat;background-size:100% 100%}
-.gm .sk-mini .m-nav b{font-family:Georgia,'Times New Roman',serif;font-weight:400}
+.gm .sk-mini .m-nav b{font-family:var(--hf);font-weight:400}
 .gm .sk-mini .m-sect{text-transform:uppercase;letter-spacing:.06em}
 .gm .xn{margin:-6px calc(-1*var(--px)) 0;background-color:#C4561F;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.06) 0 2px,transparent 2px 14px);color:#fff;padding:0 12px;flex:none;position:relative}
 .gm .xn-hd{display:flex;align-items:center;justify-content:space-between;height:26px}
 .gm .xn-hd b{font-size:11px;font-weight:600}
 .gm .xn-hd svg{width:16px;height:16px}
-.gm .xn-ok{display:block;font:400 28px/1 Georgia,'Times New Roman',serif;margin-top:6px}
+.gm .xn-ok{display:block;font:400 28px/1 var(--hf);margin-top:6px}
 .gm .xn-up{display:block;font-size:8.5px;opacity:.85;margin-top:5px}
 .gm .xn-cs{display:inline-block;background:#fff;color:#1A1A1A;border-radius:999px;font-size:9.5px;font-weight:600;padding:4px 10px;margin-top:6px}
 .gm .xn-row{display:flex;align-items:flex-end;justify-content:space-between;margin-top:8px}
@@ -3356,7 +3357,7 @@ const DEVICE_CSS = `.gm svg,.gm img{display:inline-block;vertical-align:middle;m
 /* DS */
 .gm .xds{margin:-6px calc(-1*var(--px)) 0;flex:none;background:linear-gradient(180deg,#2E2724 0,var(--bg) 100%)}
 .gm .xds-hd{display:flex;align-items:center;justify-content:space-between;padding:2px 12px 6px}
-.gm .xds-hd b{display:flex;align-items:center;gap:3px;white-space:nowrap;min-width:0;font:400 15px/1.1 Georgia,'Times New Roman',serif}
+.gm .xds-hd b{display:flex;align-items:center;gap:3px;white-space:nowrap;min-width:0;font:400 15px/1.1 var(--hf)}
 .gm .xds-hd b svg{width:11px;height:11px;transform:rotate(90deg)}
 .gm .xds-hd>svg{width:16px;height:16px}
 .gm .xds-tb{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid #3A3330}
@@ -3619,7 +3620,7 @@ const DEVICE_CSS = `.gm svg,.gm img{display:inline-block;vertical-align:middle;m
 .gm .xsm{margin:-6px calc(-1*var(--px)) 0;flex:none}
 .gm .xsm-hero{padding:4px 12px 10px;background:linear-gradient(180deg,#3A3229 0,#2B2620 100%);border-radius:0 0 18px 18px}
 .gm .xsm-hd{display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
-.gm .xsm-hd b{display:block;font-family:Georgia,"Times New Roman",serif;font-size:17px;font-weight:400;white-space:nowrap}
+.gm .xsm-hd b{display:block;font-family:var(--hf);font-size:17px;font-weight:400;white-space:nowrap}
 .gm .xsm-hd small{display:flex;align-items:center;gap:3px;font-size:8.5px;color:#BDB5A8;margin-top:2px;white-space:nowrap}
 .gm .xsm-hd small svg{width:10px;height:10px}
 .gm .xsm-av{width:26px;height:26px;border-radius:50%;background:#D7E600;color:#2B2620;display:flex;align-items:center;justify-content:center;flex:none}
@@ -4257,7 +4258,7 @@ function themeFor(g,s,b){
   return {k,T:THEMES[key]||THEMES.generic,key:THEMES[key]?key:"generic"};
 }
 const SB_ICONS='<span class="m-ic"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="8" width="3" height="4" rx=".6"/><rect x="5" y="5" width="3" height="7" rx=".6"/><rect x="10" y="2.5" width="3" height="9.5" rx=".6"/><rect x="15" y="0" width="3" height="12" rx=".6"/></svg><svg viewBox="0 0 26 12" aria-hidden="true"><rect x=".5" y=".5" width="22" height="11" rx="3" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="14" height="8" rx="1.6"/><rect x="23.5" y="4" width="1.8" height="4" rx=".8" opacity=".5"/></svg></span>';
-const SKIN_DEF={home:"dash",list:"card",hd:"l",sw:"ios",time:"chip",day:"circle",btn:"fill",batt:"bar",seg:"pill",r:"14px",br:"999px",tabs:4,ind:"plain",quick:"",tw:700,ff:"-apple-system,'SF Pro Text',Inter,Roboto,Arial,sans-serif"};
+const SKIN_DEF={home:"dash",list:"card",hd:"l",sw:"ios",time:"chip",day:"circle",btn:"fill",batt:"bar",seg:"pill",r:"14px",br:"999px",tabs:4,ind:"plain",quick:"",tw:700,ff:FONT.rob,hf:FONT.rob};
 function appLabel(k,T,b){return k==="wb"?"App da wallbox":(b.app||T.name||"App da marca");}
 function deviceHTML(g,b,p){
   const s=g.screens[MS.screen], {k,T,key}=themeFor(g,s,b); MS.p=p;
