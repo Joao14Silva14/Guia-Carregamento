@@ -681,7 +681,7 @@ function Guide({ G, b, f, p, cyc, cur, n, screen, photo, go, editSchedule, title
         </p>
         <div className="mt-3 flex flex-wrap items-baseline gap-x-2 text-sm font-bold text-[color:var(--ge-muted)] sm:mt-4">
           <span><Moon />{L.t(cyc === "semanal" ? "flow.weeklyExampleShort" : "flow.dailyHours")}:</span><Time>{p.s} → {p.e}</Time>
-          <button className="ge-link ge-focus inline-flex min-h-[44px] items-center" type="button" onClick={editSchedule}>{L.t("flow.changeSchedule")}</button>
+          <button className="ge-link ge-on-green ge-focus inline-flex min-h-[44px] items-center" type="button" onClick={editSchedule}>{L.t("flow.changeSchedule")}</button>
         </div>
         <ol className="mt-3 flex flex-wrap gap-2 sm:mt-4" aria-label={L.t("step.nav")}>
           {g.steps.map((_, i) => <li key={i}><button type="button" className="ge-step-index ge-focus" aria-current={i === cur ? "step" : undefined} aria-label={L.t("step.of", { i: i + 1, n })} onClick={() => go(i)}>{i + 1}</button></li>)}
@@ -827,7 +827,7 @@ function Promo() {
     <section aria-labelledby="tpromo" className="print:hidden">
       <h2 id="tpromo" className="sr-only">{L.t("promo.title")}</h2>
       <div className="grid gap-5 md:grid-cols-2">
-        <article className="flex flex-col rounded-[var(--r-l)] bg-[color:var(--ge-green)] p-6 sm:p-8">
+        <article className="flex flex-col rounded-[var(--r-l)] bg-[color:var(--ge-mint)] p-6 sm:p-8">
           <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-white"><Moon className="h-6 w-6" /></span>
           <p className="text-sm font-bold uppercase tracking-[.08em] text-[color:var(--ge-blue)]">{L.t("offer.name")}</p>
           <h3 className="mt-1 text-[length:var(--fs-h2)] font-black leading-tight">{L.t("promo.tTitle")}</h3>
@@ -928,12 +928,11 @@ transition:border-color var(--dur-2) var(--ease),background-color var(--dur-2) v
 .ge-skel{background:linear-gradient(90deg,#EEEBF2 0,#F8F7FA 45%,#EEEBF2 90%);background-size:200% 100%;animation:geSk 1.2s linear infinite}
 @keyframes geSk{to{background-position:-200% 0}}
 @media (max-width:767px){.ge-phone{zoom:.9}}
-.ge-flow-shell{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
+.ge-flow-shell{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;background:var(--ge-green)}
 .ge-flow-width{width:min(100%,1240px);margin-inline:auto;padding-inline:clamp(1rem,3.1vw,2.5rem)}
 .ge-flow-main{flex:1;min-width:0}
 .ge-flow-main .ge-btn{white-space:normal;overflow-wrap:anywhere;text-align:center}
 .ge-flow-main .ge-btn svg{flex:none}
-.ge-flow-main--vehicle{background:linear-gradient(var(--ge-mint) 0 12rem,var(--ge-soft) 12rem)}
 .ge-vehicle-layout,.ge-flow-content{padding-block:clamp(1rem,3vw,2.5rem)}
 .ge-vehicle-layout{display:grid;gap:clamp(.85rem,3vw,2.5rem)}
 .ge-screen-heading{font-size:var(--fs-h2);font-weight:900;line-height:1.12;overflow-wrap:anywhere}
@@ -945,6 +944,7 @@ transition:border-color var(--dur-2) var(--ease),background-color var(--dur-2) v
 .ge-flow-segment.is-past{border-color:var(--ge-success)}
 .ge-flow-segment.is-active{border-color:var(--ge-green);color:var(--ge-blue);font-weight:900}
 .ge-guide-layout{display:grid;gap:.85rem}
+.ge-on-green.ge-link{text-decoration-color:currentColor}
 .ge-step-progress{height:6px;border-radius:var(--r-pill);overflow:hidden;background:var(--ge-line)}
 .ge-step-progress span{display:block;height:100%;border-radius:inherit;background:var(--ge-success);transition:width var(--dur-2) var(--ease)}
 .ge-step-index{width:44px;height:44px;border:1px solid var(--ge-line);border-radius:.85rem;background:#fff;color:var(--ge-blue);font-weight:800;font-variant-numeric:tabular-nums}
@@ -969,7 +969,7 @@ html{scroll-padding-bottom:calc(112px + env(safe-area-inset-bottom));overflow-an
 }
 @media (min-width:1024px) and (min-height:850px){.ge-guide-preview{position:sticky;top:calc(var(--hdr) + 1rem)}}
 @media (max-height:480px) and (orientation:landscape){.ge-flow-header,.ge-flow-actions{position:static}}
-@media print{.ge-flow-actions,.ge-flow-progress{display:none!important}}
+@media print{.ge-flow-shell{background:#fff}.ge-flow-actions,.ge-flow-progress{display:none!important}}
 
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}.ge *,.ge *::before,.ge *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 @media print{.ge header,.ge nav{position:static!important}}`;
@@ -1103,7 +1103,7 @@ export default function GuiaCarregamento({ initialLang = "pt", initialDict = nul
 
   return (
     <I18n.Provider value={L}>
-      <div className="ge ge-flow-shell bg-[color:var(--ge-soft)]" lang={L.info.html}>
+      <div className="ge ge-flow-shell" lang={L.info.html}>
         <style>{DEVICE_CSS + PAGE_CSS}</style>
         <a href="#active-title" onClick={e => { e.preventDefault(); titleRef.current?.focus(); }} className="sr-only z-[60] rounded-full bg-white px-4 py-2 font-bold text-[color:var(--ge-blue)] focus:not-sr-only focus:fixed focus:left-3 focus:top-3">{L.t("a11y.skip")}</a>
 
@@ -1123,7 +1123,7 @@ export default function GuiaCarregamento({ initialLang = "pt", initialDict = nul
 
         <FlowProgress view={view} />
 
-        <main id="guia" className={cx("ge-flow-main", selecting && "ge-flow-main--vehicle")} onKeyDown={guideKeys}>
+        <main id="guia" className="ge-flow-main" onKeyDown={guideKeys}>
           {selecting ? (
             <section className="ge-flow-width ge-vehicle-layout" aria-labelledby="active-title">
               <div className="ge-vehicle-intro min-w-0">

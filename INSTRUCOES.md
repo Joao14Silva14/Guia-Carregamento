@@ -1,5 +1,7 @@
 # Guia Goldenergy — percurso por ecrãs
 
+O fundo usa o verde Goldenergy `#40DDA6`, o mesmo tom predominante no fundo da ilustração da casinha. O cabeçalho, a navegação e os cartões mantêm superfícies claras.
+
 O guia tem quatro etapas: **Veículo → Horário → Passos na app → Conclusão**. Na primeira, os modelos aparecem depois da marca, no mesmo local da página. Cada passo mostra uma única instrução e o ecrã correspondente. As indicações adicionais e as lojas da app ficam em «Antes de começar, app e dicas». Alterar o horário conserva o modelo e o passo. As ilustrações são orientativas, não capturas integrais confirmadas para todos os veículos.
 
 O scroll serve para ler a etapa ativa quando o conteúdo não cabe. A navegação fica visível no horário e nos passos, exceto em ecrãs baixos na horizontal, onde os controlos ficam no fluxo para não taparem a leitura. A conclusão tem as opções de partilhar e repetir o guia, bem como os cartões do tarifário e dos painéis solares.
