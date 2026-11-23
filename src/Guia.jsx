@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, useLayoutEffect } from "react";
 import { BRANDS, GUIDES, ALIAS, TOP, norm, initials, logoUrl, photoFor, STORE, deviceHTML, DEVICE_CSS, themeFor, appLabel, SKIN, shotFor, CAR_SVG, LOGO, setMS, setDays, storeLinks } from "./engine.js";
 import { LANGS, langInfo, persistLang, fill, trHTML } from "./i18n/index.js";
+import { INITIAL, SECTIONS, fromHash, toHash, transition } from "./navigation.js";
 /*
  * Goldenergy · Guia para programar o carregamento do carro elétrico nas horas de vazio — INTERFACE
  * React 18 + Tailwind CSS. Textos em src/i18n/*.json (PT é a fonte). Dados e maquetas em src/engine.js.
- * Estrutura: cabeçalho fixo (idioma + carro) → topo com pesquisa → guia em 2 colunas (passos | telemóvel)
- *            → tarifário e solar.
+ * Estrutura: veículo → horário → um passo de cada vez → conclusão.
  */
 
 /* ===================== Oferta comercial (editar aqui) =====================
@@ -36,7 +36,6 @@ const REMOTE = REMOTE_IMAGES === "auto"
   : !!REMOTE_IMAGES;
 const OTHER = { name: "__other", guide: "generic", app: "", families: [], other: true };
 const cx = (...a) => a.filter(Boolean).join(" ");
-const prefersReduced = () => typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const lastSunday = (y, m) => { const d = new Date(y, m + 1, 0); d.setDate(d.getDate() - d.getDay()); return d; };
 const isSummer = (d = new Date()) => { const y = d.getFullYear(); return d >= lastSunday(y, 2) && d < lastSunday(y, 9); };
 const BRAND_HUE = n => { let h = 0; for (const c of n) h = (h * 31 + c.charCodeAt(0)) % 360; return h; };
@@ -101,7 +100,6 @@ function Rich({ text, b, p, link = false }) {
   });
   return <>{out}</>;
 }
-const plainText = (L, text, b, p) => String(L.tg(text)).replace(/<\/?b>/g, "").replace(/\{app\}/g, b.app || (b.other ? L.t("app.fromBrand") : L.t("app.officialOf", { brand: b.name }))).replace(/\{inicio\}/g, p.s).replace(/\{fim\}/g, p.e);
 const famName = (L, b, f) => famLabel(b, f).replace(/\((comercial|quadriciclo|pick-up)\)/, (m0, k) => "(" + L.t("fam." + k) + ")");
 const brandName = (L, b) => (b.other ? L.t("other.brand") : b.name);
 
@@ -203,17 +201,6 @@ function loadMockFont(ff) {
   const l = document.createElement("link");
   l.rel = "stylesheet"; l.href = "https://fonts.googleapis.com/css2?family=" + GFONTS[fam] + "&display=swap";
   document.head.appendChild(l);
-}
-function useMedia(q) {
-  const get = () => (typeof window !== "undefined" && window.matchMedia ? window.matchMedia(q).matches : null);
-  const [d, setD] = useState(get);
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return;
-    const mq = window.matchMedia(q), on = () => setD(mq.matches); on();
-    mq.addEventListener ? mq.addEventListener("change", on) : mq.addListener(on);
-    return () => { mq.removeEventListener ? mq.removeEventListener("change", on) : mq.removeListener(on); };
-  }, [q]);
-  return d;
 }
 /* Telemóvel com a ilustração do ecrã da app (traduzida), com transição suave entre ecrãs */
 function PhoneMock({ g, b, p, gk, screen, family, photo }) {
@@ -383,7 +370,7 @@ function Hl({ s, q }) {
 function CarSearch({ onPick, onOther, inputRef, say }) {
   const L = useL();
   const [q, setQ] = useState(""), [open, setOpen] = useState(false), [act, setAct] = useState(-1), [maxH, setMaxH] = useState(null);
-  const wrap = useRef(null);
+  const wrap = useRef(null), results = useRef(null);
   const hits = useMemo(() => searchCars(q), [q]);
   const show = open && norm(q.trim()).length >= 2;
   const count = hits.length + 1;
@@ -394,12 +381,20 @@ function CarSearch({ onPick, onOther, inputRef, say }) {
     const fit = () => {
       const vv = window.visualViewport, el = inputRef.current; if (!el) return;
       const h = (vv ? vv.height + vv.offsetTop : window.innerHeight) - el.getBoundingClientRect().bottom - 12;
-      setMaxH(Math.max(160, Math.min(420, h)));
+      setMaxH(Math.max(72, Math.min(420, h)));
     };
     fit(); const vv = window.visualViewport;
     vv && vv.addEventListener("resize", fit); window.addEventListener("scroll", fit, { passive: true });
     return () => { vv && vv.removeEventListener("resize", fit); window.removeEventListener("scroll", fit); };
   }, [show]);
+  useEffect(() => {
+    if (!show || act < 0) return;
+    const list = results.current, item = document.getElementById("qo" + act);
+    if (!list || !item) return;
+    const box = list.getBoundingClientRect(), row = item.getBoundingClientRect();
+    if (row.top < box.top) list.scrollTop -= box.top - row.top;
+    if (row.bottom > box.bottom) list.scrollTop += row.bottom - box.bottom;
+  }, [act, show]);
   const choose = i => {
     setOpen(false); setAct(-1);
     if (i >= hits.length) { setQ(""); onOther(); return; }
@@ -415,7 +410,8 @@ function CarSearch({ onPick, onOther, inputRef, say }) {
   const onFocus = () => {
     setOpen(true);
     if (typeof window !== "undefined" && window.innerWidth < 768 && wrap.current && wrap.current.scrollIntoView) setTimeout(() => {
-      const r = wrap.current.getBoundingClientRect(); if (r.top > 140 || r.top < 0) window.scrollBy({ top: r.top - 16, behavior: prefersReduced() ? "auto" : "smooth" });
+      const el = wrap.current;
+      if (el && document.activeElement === inputRef.current) el.scrollIntoView({ block: "start", behavior: "instant" });
     }, 250);
   };
   return (
@@ -425,7 +421,7 @@ function CarSearch({ onPick, onOther, inputRef, say }) {
         <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[color:var(--ge-muted)]"><Icon n="search" className="h-[22px] w-[22px]" /></span>
         <input id="q" ref={inputRef} type="search" value={q} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} enterKeyHint="search"
           placeholder={L.t("search.placeholder")}
-          role="combobox" aria-expanded={show} aria-controls="qres" aria-autocomplete="list" aria-describedby="qHint"
+          role="combobox" aria-expanded={show} aria-controls={show ? "qres" : undefined} aria-autocomplete="list" aria-describedby="qHint"
           aria-activedescendant={show && act > -1 ? "qo" + act : undefined}
           onChange={e => { setQ(e.target.value); setOpen(true); setAct(-1); }}
           onFocus={onFocus} onBlur={() => setTimeout(() => setOpen(false), 160)} onKeyDown={onKey}
@@ -435,7 +431,7 @@ function CarSearch({ onPick, onOther, inputRef, say }) {
       </div>
       <p id="qHint" className="sr-only">{L.t("search.hint")}</p>
       {show && (
-        <ul id="qres" role="listbox" aria-label={L.t("search.listLabel")} style={maxH ? { maxHeight: maxH } : undefined}
+        <ul ref={results} id="qres" role="listbox" aria-label={L.t("search.listLabel")} style={maxH ? { maxHeight: maxH } : undefined}
           className="ge-in absolute left-0 right-0 top-[calc(100%+8px)] z-30 max-h-[420px] overflow-y-auto overscroll-contain rounded-2xl border border-[color:var(--ge-line-soft)] bg-white p-1.5 shadow-[var(--sh-3)]">
           {hits.length === 0 && <li className="px-3 py-3 text-[0.98rem] text-[color:var(--ge-muted)]" role="presentation">{L.t("search.noneLong")}</li>}
           {hits.map((h, i) => (
@@ -506,35 +502,17 @@ function BrandPicker({ b, f, onBrand, onModel, onOther }) {
   const L = useL();
   const [all, setAll] = useState(false);
   const top = TOP.map(n => BRANDS.find(x => x.name === n)).filter(Boolean).slice(0, 10);
-  const chip = (x, on, onClick, label, key) => (
-    <button key={key || x.name} type="button" aria-pressed={on} aria-label={on ? x.name + ". " + L.t("pick.clear") : x.name} onClick={onClick} title={on ? L.t("pick.clear") : undefined} className="ge-brand-chip ge-focus">
-      <BrandLogo b={x} size="xs" /><span className="ge-brand-chip-l">{label || x.name}</span>
+  const chip = (x, on, onClick) => (
+    <button key={x.name} type="button" aria-pressed={on} aria-label={on ? x.name + ". " + L.t("pick.clear") : x.name} onClick={onClick} title={on ? L.t("pick.clear") : undefined} className="ge-brand-chip ge-focus">
+      <BrandLogo b={x} size="xs" /><span className="ge-brand-chip-l">{x.name}</span>
     </button>
   );
   return (
-    <div className="mt-5">
-      <p id="topLbl" className="mb-2 text-sm font-bold uppercase tracking-[.08em] text-[color:var(--ge-muted)]">{L.t("pick.quick")}</p>
-      <div role="group" aria-labelledby="topLbl" className="ge-chip-grid">
-        {top.map(x => chip(x, !!b && b.name === x.name, () => onBrand(x.name)))}
-        <button type="button" aria-expanded={all} aria-controls="allBrands" onClick={() => setAll(a => !a)} className="ge-chip ge-chip--all ge-focus pl-3.5">
-          <Icon n="list" className="h-5 w-5 text-[color:var(--ge-blue)]" /><span>{all ? L.t("pick.lessBrands") : L.t("pick.allBrands", { n: BRANDS.length })}</span>
-        </button>
-      </div>
-      {all && (
-        <div id="allBrands" className="ge-in mt-3 rounded-2xl border border-[color:var(--ge-line-soft)] bg-white p-2">
-          <ul className="grid max-h-[320px] grid-cols-2 gap-1 overflow-y-auto overscroll-contain sm:grid-cols-3 lg:grid-cols-4" aria-label={L.t("pick.allBrandsLabel")}>
-            {BRANDS.map(x => (
-              <li key={x.name}><button type="button" onClick={() => { onBrand(x.name); setAll(false); }} aria-pressed={!!b && b.name === x.name}
-                className={cx("ge-brand-list-item ge-focus", b && b.name === x.name && "is-selected")}>
-                <BrandLogo b={x} size="xs" /><span className="truncate">{x.name}</span></button></li>
-            ))}
-            <li><button type="button" onClick={() => { onOther(true); setAll(false); }} aria-pressed={!!b && !!b.other} className={cx("ge-brand-list-item ge-focus", b && b.other && "is-selected")}><BrandLogo b={OTHER} size="xs" /><span className="truncate">{L.t("other.short")}</span></button></li>
-          </ul>
-        </div>
-      )}
-      {b && !b.other && (
-        <div className="ge-in mt-5 rounded-2xl bg-[color:var(--ge-soft)] p-3.5 sm:p-4">
-          <p id="famLbl" className="mb-2.5 flex items-center gap-2 font-bold text-[color:var(--ge-ink)]"><BrandLogo b={b} size="xs" />{L.t("pick.model", { brand: b.name })}</p>
+    <div className="mt-4">
+      {b ? (
+        <div className="ge-in">
+          <div className="mb-3 flex flex-wrap items-center gap-3">{chip(b, true, () => onBrand(b.name))}<span className="text-sm text-[color:var(--ge-muted)]">{L.t("flow.changeBrandHint")}</span></div>
+          <p id="famLbl" className="mb-2.5 flex items-center gap-2 font-bold text-[color:var(--ge-ink)]">{L.t("pick.model", { brand: b.name })}</p>
           <div role="group" aria-labelledby="famLbl" className="ge-chip-grid ge-chip-grid--models">
             {b.families.map((x, i) => (
               <button key={x.name} type="button" aria-pressed={f === x} onClick={() => onModel(i)} className="ge-model-chip ge-focus">
@@ -543,8 +521,30 @@ function BrandPicker({ b, f, onBrand, onModel, onOther }) {
             ))}
           </div>
         </div>
+      ) : (
+        <>
+          <p id="topLbl" className="mb-2 text-sm font-bold uppercase tracking-[.08em] text-[color:var(--ge-muted)]">{L.t("pick.quick")}</p>
+          <div role="group" aria-labelledby="topLbl" className="ge-chip-grid">
+            {top.map(x => chip(x, false, () => onBrand(x.name)))}
+            <button type="button" aria-expanded={all} aria-controls={all ? "allBrands" : undefined} onClick={() => setAll(a => !a)} className="ge-chip ge-chip--all ge-focus pl-3.5">
+              <Icon n="list" className="h-5 w-5 text-[color:var(--ge-blue)]" /><span>{all ? L.t("pick.lessBrands") : L.t("pick.allBrands", { n: BRANDS.length })}</span>
+            </button>
+          </div>
+          {all && (
+            <div id="allBrands" className="ge-in mt-3 rounded-2xl border border-[color:var(--ge-line-soft)] bg-white p-2">
+              <ul className="grid max-h-[320px] grid-cols-2 gap-1 overflow-y-auto overscroll-contain sm:grid-cols-3 lg:grid-cols-4" aria-label={L.t("pick.allBrandsLabel")}>
+                {BRANDS.map(x => (
+                  <li key={x.name}><button type="button" onClick={() => { onBrand(x.name); setAll(false); }} aria-pressed={false}
+                    className="ge-brand-list-item ge-focus">
+                    <BrandLogo b={x} size="xs" /><span className="truncate">{x.name}</span></button></li>
+                ))}
+                <li><button type="button" onClick={() => { onOther(true); setAll(false); }} className="ge-brand-list-item ge-focus"><BrandLogo b={OTHER} size="xs" /><span className="truncate">{L.t("other.short")}</span></button></li>
+              </ul>
+            </div>
+          )}
+        </>
       )}
-      <button type="button" onClick={() => onOther(true)} className="ge-link ge-focus mt-4 inline-flex min-h-[44px] items-center text-[0.98rem]">{L.t("pick.notListed")}</button>
+      <button type="button" onClick={() => onOther(true)} className="ge-link ge-focus mt-2 inline-flex min-h-[44px] items-center text-[0.98rem]">{L.t("pick.notListed")}</button>
     </div>
   );
 }
@@ -553,6 +553,7 @@ function BrandPicker({ b, f, onBrand, onModel, onOther }) {
 function VazioPanel({ cyc, setCyc, p }) {
   const L = useL();
   const [more, setMore] = useState(false);
+  const radios = useRef({});
   const summer = isSummer();
   const rows = cyc === "diario"
     ? { vz: [["day.all", ["22:00 → 08:00"]]], fv: [["day.all", ["08:00 → 22:00"]]] }
@@ -560,12 +561,15 @@ function VazioPanel({ cyc, setCyc, p }) {
       vz: [["day.wk", ["00:00 → 07:00"]], ["day.sat", summer ? ["00:00–09:00", "14:00–20:00", "22:00–24:00"] : ["00:00–09:30", "13:00–18:30", "22:00–24:00"]], ["day.sun", [L.t("day.allDay")]]],
       fv: [["day.wk", ["07:00 → 24:00"]], ["day.sat", summer ? ["09:00–14:00", "20:00–22:00"] : ["09:30–13:00", "18:30–22:00"]], ["day.sun", [L.t("day.none")]]],
     };
-  const onKey = e => { if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) { e.preventDefault(); setCyc(cyc === "diario" ? "semanal" : "diario"); } };
+  const onKey = e => { if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(e.key)) {
+    e.preventDefault(); const next = e.key === "Home" ? "diario" : e.key === "End" ? "semanal" : cyc === "diario" ? "semanal" : "diario";
+    setCyc(next); radios.current[next]?.focus();
+  } };
   return (
     <section aria-labelledby="tvz" className="rounded-[var(--r-m)] border border-[#BDEBD8] bg-[color:var(--ge-mint)] p-4 sm:p-5">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="min-w-0">
-          <h3 id="tvz" className="text-sm font-bold uppercase tracking-[.08em] text-[color:var(--ge-success)]">{L.t("vz.title")}</h3>
+          <h2 id="tvz" className="text-sm font-bold uppercase tracking-[.08em] text-[color:var(--ge-success)]">{L.t("vz.title")}</h2>
           <p className="mt-1 flex flex-wrap items-baseline gap-x-2 text-[1.6rem] font-black leading-tight tabular-nums text-[color:var(--ge-ink)]" aria-live="polite">
             <span className="whitespace-nowrap"><Moon className="mr-1.5 inline-block h-6 w-6 align-[-0.12em]" />{p.s} → {p.e}</span>
             <span className="text-base font-semibold text-[color:var(--ge-muted)]">{L.t(cyc === "semanal" ? "vz.weekdays" : "vz.every")}</span>
@@ -573,13 +577,13 @@ function VazioPanel({ cyc, setCyc, p }) {
         </div>
         <div role="radiogroup" aria-label={L.t("vz.cycleLabel")} onKeyDown={onKey} className="grid grid-cols-2 rounded-full bg-white p-1 shadow-[var(--sh-1)] lg:w-[340px]">
           {[["diario", "vz.daily"], ["semanal", "vz.weekly"]].map(([val, k]) => (
-            <button key={val} type="button" role="radio" aria-checked={cyc === val} tabIndex={cyc === val ? 0 : -1} onClick={() => setCyc(val)}
+            <button key={val} ref={el => { radios.current[val] = el; }} type="button" role="radio" aria-checked={cyc === val} tabIndex={cyc === val ? 0 : -1} onClick={() => setCyc(val)}
               className={cx("ge-focus min-h-[44px] rounded-full px-3 text-[0.95rem] font-bold motion-safe:transition-colors", cyc === val ? "bg-[color:var(--ge-ink)] text-white" : "text-[color:var(--ge-ink)] hover:bg-[color:var(--ge-soft)]")}>{L.t(k)}</button>
           ))}
         </div>
       </div>
       <p className="mt-3 text-[0.98rem] text-[#3A3648]">{cyc === "semanal" ? <Tx k="vz.weeklyNote" /> : <Tx k="vz.dailyNote" />} <span className="text-[color:var(--ge-muted)]">{L.t("vz.where")}</span></p>
-      <button type="button" aria-expanded={more} aria-controls="vzMore" onClick={() => setMore(m => !m)} className="ge-link ge-focus mt-2 inline-flex min-h-[44px] items-center gap-1 text-[0.98rem]">
+      <button type="button" aria-expanded={more} aria-controls={more ? "vzMore" : undefined} onClick={() => setMore(m => !m)} className="ge-link ge-focus mt-2 inline-flex min-h-[44px] items-center gap-1 text-[0.98rem]">
         {more ? L.t("vz.less") : L.t("vz.more")}<Icon n="chevD" className={cx("h-4 w-4 motion-safe:transition-transform", more && "rotate-180")} />
       </button>
       {more && (
@@ -612,112 +616,111 @@ function VazioPanel({ cyc, setCyc, p }) {
   );
 }
 
-/* ===================== Guia: passos + telemóvel ===================== */
-function Guide({ G, b, f, p, cyc, setCyc, cur, n, screen, photo, finished, go, finish, desk, share }) {
+/* ===================== Ecrãs do percurso ===================== */
+function FlowProgress({ view }) {
+  const L = useL();
+  const i = Math.max(0, SECTIONS.indexOf(view));
+  return (
+    <div className="ge-flow-progress print:hidden">
+      <div className="ge-flow-width py-2.5 sm:py-3.5">
+        <p className="mb-1.5 text-sm font-black text-[color:var(--ge-ink)] sm:hidden" aria-hidden="true">{L.t("flow.position", { i: i + 1, n: SECTIONS.length })} · {L.t("flow." + SECTIONS[i])}</p>
+        <ol className="grid grid-cols-4 gap-2 sm:gap-4" aria-label={L.t("flow.label")}>
+          {SECTIONS.map((s, j) => (
+            <li key={s} aria-current={j === i ? "step" : undefined} className={cx("ge-flow-segment", j < i && "is-past", j === i && "is-active")}>
+              <span className="sr-only sm:not-sr-only"><span className="mr-1.5 tabular-nums">{j + 1}.</span>{L.t("flow." + s)}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  );
+}
+
+function VehicleTag({ b, f, photo }) {
+  const L = useL();
+  return (
+    <div className="flex min-w-0 items-center gap-2.5 text-sm font-bold text-[color:var(--ge-muted)]">
+      <BrandLogo b={b} size="xs" />
+      {photo && <CarPhoto photo={photo} alt="" className="h-9 w-[58px] flex-none rounded-lg object-contain" />}
+      <span className="min-w-0 break-words">{b.other ? L.t("other.title") : b.name + " " + famName(L, b, f)}</span>
+    </div>
+  );
+}
+
+function AppDetails({ label, icon, children, defaultOpen = false, className }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <details open={open} onToggle={e => setOpen(e.currentTarget.open)} className={cx("group rounded-2xl border border-[color:var(--ge-line-soft)] bg-white", className)}>
+      <summary className="ge-focus flex min-h-[48px] cursor-pointer list-none items-center gap-2.5 rounded-2xl px-3.5 py-1.5 font-bold leading-snug sm:px-4 [&::-webkit-details-marker]:hidden">
+        <Icon n={icon} className="h-5 w-5 flex-none text-[color:var(--ge-blue)]" /><span className="min-w-0 flex-1">{label}</span><Icon n="chevD" className="h-5 w-5 flex-none motion-safe:transition-transform group-open:rotate-180" />
+      </summary>
+      <div className="px-3.5 pb-3.5 sm:px-4 sm:pb-4">{children}</div>
+    </details>
+  );
+}
+
+function Guide({ G, b, f, p, cyc, cur, n, screen, photo, go, editSchedule, titleRef }) {
   const L = useL();
   const { gk, g } = G;
-  const last = cur === n - 1;
   const k0 = g.screens[(g.nb || g.screens.length) - 1].k || g.k || "app";
   const where = L.t(k0 === "car" ? "guide.whereCar" : k0 === "wb" ? "guide.whereWb" : "guide.whereApp");
   const sub = b.other ? L.t("guide.subOther") : gk === "quad" ? L.t("guide.subQuad", { where }) : gk === "legacy" ? L.t("guide.subLegacy", { where }) : L.t("guide.sub", { where });
-  const title = b.other ? L.t("other.title") : b.name + " " + famName(L, b, f);
   const oldNote = f && f.old && f.versions[0].note;
-  const mock = <PhoneMock g={g} b={b} p={p} gk={gk} screen={screen} family={f} photo={photo} />;
-  const stepBtn = (s, i, compact) => {
-    const isCur = i === cur && !finished, past = i < cur || finished;
-    return (
-      <li key={i}>
-        <button type="button" onClick={() => go(i)} aria-current={isCur ? "step" : undefined}
-          className={cx("ge-step ge-focus flex w-full items-start gap-3.5 rounded-2xl border-2 p-3.5 text-left sm:p-4", isCur ? "is-cur border-[color:var(--ge-green)] bg-[#F1FCF7] shadow-[var(--sh-2)]" : "border-transparent hover:bg-[color:var(--ge-soft)]")}>
-          <span aria-hidden="true" className={cx("mt-0.5 flex h-8 w-8 flex-none items-center justify-center rounded-full text-sm font-black motion-safe:transition-colors",
-            isCur ? "bg-[color:var(--ge-green)] text-[color:var(--ge-ink)]" : past ? "bg-[color:var(--ge-success)] text-white" : "bg-[#EEEBF2] text-[color:var(--ge-muted)]")}>
-            {past && !isCur ? <Icon n="check" className="h-4 w-4" /> : i + 1}
-          </span>
-          <span className={cx("min-w-0 flex-1 leading-relaxed", compact ? "text-[0.98rem]" : "text-[1.05rem]", isCur ? "text-[color:var(--ge-ink)]" : "text-[color:var(--ge-muted)]")}>
-            <span className="sr-only">{L.t("step.of", { i: i + 1, n })}: </span><Rich text={s} b={b} p={p} />
-          </span>
-        </button>
-      </li>
-    );
-  };
+  const progress = L.t("step.of", { i: cur + 1, n });
+  const mock = <PhoneMock key={gk + ":" + screen} g={g} b={b} p={p} gk={gk} screen={screen} family={f} photo={photo} />;
   return (
-    <div>
-      {/* Cabeçalho do guia: modelo do carro e app */}
-      <div className="ge-card flex flex-col gap-5 p-4 sm:p-6 md:flex-row md:items-center">
-        <div className="flex min-w-0 flex-1 items-center gap-4">
-          {f && !b.other
-            ? <CarPhoto photo={photo} alt={b.name + " " + f.name} className="h-[72px] w-[108px] flex-none rounded-xl sm:h-20 sm:w-[120px]" />
-            : <BrandLogo b={b} size="lg" />}
-          <div className="min-w-0">
-            <p className="flex items-center gap-2 text-sm font-semibold text-[color:var(--ge-muted)]">{!b.other && <BrandLogo b={b} size="xs" />}{b.other ? L.t("guide.general") : b.name}</p>
-            <h2 id="tguia" tabIndex={-1} className="text-[length:var(--fs-h3)] font-black leading-tight focus:outline-none">{title}</h2>
-            <p className="text-[0.98rem] text-[color:var(--ge-muted)]">{sub}</p>
-          </div>
+    <section className="ge-guide-layout" aria-labelledby="active-title">
+      <div className="min-w-0">
+        <VehicleTag {...{ b, f, photo }} />
+        <h1 ref={titleRef} id="active-title" tabIndex={-1} aria-describedby="active-instruction" className="ge-screen-heading mt-1">{progress}</h1>
+        <div className="ge-step-progress mt-3" role="progressbar" aria-label={L.t("step.progress")} aria-valuemin={1} aria-valuemax={n} aria-valuenow={cur + 1} aria-valuetext={progress}>
+          <span style={{ width: ((cur + 1) / n * 100) + "%" }} />
         </div>
-        <div className="flex flex-col gap-3 md:items-end">
-          {b.app && <div className="flex flex-col gap-1.5 md:items-end">
-            <p className="text-sm text-[color:var(--ge-muted)]"><Tx k="guide.appIs" vars={{ app: <b className="font-bold text-[color:var(--ge-ink)]">{b.app}</b> }} /></p>
-            <StoreButtons app={b.app} size="sm" />
-          </div>}
+        <p id="active-instruction" className="ge-in ge-active-instruction mt-3 rounded-2xl border-2 border-[color:var(--ge-green)] bg-[#F1FCF7] p-3.5 text-[1.08rem] leading-relaxed sm:mt-4 sm:p-5 sm:text-xl" key={cur}>
+          <Rich text={g.steps[cur]} b={b} p={p} link />
+        </p>
+        <div className="mt-3 flex flex-wrap items-baseline gap-x-2 text-sm font-bold text-[color:var(--ge-muted)] sm:mt-4">
+          <span><Moon />{L.t(cyc === "semanal" ? "flow.weeklyExampleShort" : "flow.dailyHours")}:</span><Time>{p.s} → {p.e}</Time>
+          <button className="ge-link ge-focus inline-flex min-h-[44px] items-center" type="button" onClick={editSchedule}>{L.t("flow.changeSchedule")}</button>
         </div>
+        <ol className="mt-3 flex flex-wrap gap-2 sm:mt-4" aria-label={L.t("step.nav")}>
+          {g.steps.map((_, i) => <li key={i}><button type="button" className="ge-step-index ge-focus" aria-current={i === cur ? "step" : undefined} aria-label={L.t("step.of", { i: i + 1, n })} onClick={() => go(i)}>{i + 1}</button></li>)}
+        </ol>
       </div>
-
-      <div className="mt-4"><VazioPanel cyc={cyc} setCyc={setCyc} p={p} /></div>
-
-      <div className="mt-8 grid gap-8 md:grid-cols-[minmax(0,1fr)_288px] md:gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-16">
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-end justify-between gap-2">
-            <h3 className="text-[length:var(--fs-h3)] font-black">{L.t("guide.stepsTitle", { n })}</h3>
-            <p className="text-sm font-bold tabular-nums text-[color:var(--ge-muted)]" aria-hidden="true">{finished ? L.t("step.done") : L.t("step.of", { i: cur + 1, n })}</p>
-          </div>
-          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#E7E4EC]" role="progressbar" aria-label={L.t("step.progress")} aria-valuemin={1} aria-valuemax={n} aria-valuenow={finished ? n : cur + 1} aria-valuetext={finished ? L.t("step.done") : L.t("step.of", { i: cur + 1, n })}>
-            <div className="h-full rounded-full bg-[color:var(--ge-green)] motion-safe:transition-[width] motion-safe:duration-300" style={{ width: ((finished ? n : cur + 1) / n * 100) + "%" }} />
-          </div>
+      <div className="ge-guide-preview min-w-0">
+        <AppDetails label={L.t("flow.preview")} icon="info" defaultOpen className="ge-preview-details print:hidden">{mock}</AppDetails>
+      </div>
+      <div className="ge-guide-more min-w-0">
+        <AppDetails label={L.t("flow.guideHelp")} icon="bulb">
+          <p className="text-[0.98rem] text-[color:var(--ge-muted)]">{sub}</p>
+          {b.app && <div className="mt-3 space-y-2">
+            <p className="text-sm text-[color:var(--ge-muted)]"><Tx k="guide.appIs" vars={{ app: <AppName name={b.app} /> }} /></p><StoreButtons app={b.app} size="sm" />
+          </div>}
           <Prep b={b} k0={k0} />
-
-          {desk ? (
-            <>
-              <ol className="mt-4 flex flex-col gap-1.5" aria-label={L.t("guide.stepsLabel", { n })}>{g.steps.map((s, i) => stepBtn(s, i))}</ol>
-              {!finished && <div className="mt-5 flex flex-wrap items-center gap-3">
-                <button type="button" onClick={() => go(cur - 1)} disabled={cur === 0} className="ge-btn ge-btn--ghost"><Icon n="chevL" />{L.t("step.prev")}</button>
-                {last ? <button type="button" onClick={finish} className="ge-btn ge-btn--green">{L.t("step.finish")}<Icon n="check" /></button>
-                  : <button type="button" onClick={() => go(cur + 1)} className="ge-btn ge-btn--green">{L.t("step.next")}<Icon n="chevR" /></button>}
-                <p className="ml-auto hidden items-center gap-1.5 text-sm text-[color:var(--ge-muted)] lg:flex"><Tx k="step.keys" vars={{ l: <kbd className="ge-kbd">←</kbd>, r: <kbd className="ge-kbd">→</kbd> }} /></p>
-              </div>}
-            </>
-          ) : (
-            <>
-              {/* Telemóvel: um passo de cada vez, com o ecrã logo a seguir */}
-              {!finished && <div id="stepNow" className="mt-4 scroll-mt-[calc(var(--hdr)+12px)] rounded-2xl border-2 border-[color:var(--ge-green)] bg-[#F1FCF7] p-4">
-                <p className="text-sm font-bold uppercase tracking-[.08em] text-[color:var(--ge-success)]">{L.t("step.of", { i: cur + 1, n })}</p>
-                <p key={cur} className="ge-in mt-1 text-[1.08rem] leading-relaxed"><Rich text={g.steps[cur]} b={b} p={p} /></p>
-              </div>}
-              <div className="mt-5">{mock}</div>
-              <details className="group mt-5 rounded-2xl border border-[color:var(--ge-line-soft)] bg-white">
-                <summary className="ge-focus flex min-h-[52px] cursor-pointer list-none items-center gap-3 rounded-2xl px-4 font-bold [&::-webkit-details-marker]:hidden">
-                  <Icon n="list" className="h-5 w-5 text-[color:var(--ge-blue)]" /><span className="flex-1">{L.t("guide.allSteps", { n })}</span><Icon n="chevD" className="h-5 w-5 motion-safe:transition-transform group-open:rotate-180" />
-                </summary>
-                <ol className="flex flex-col gap-1 px-2 pb-2" aria-label={L.t("guide.stepsLabel", { n })}>{g.steps.map((s, i) => stepBtn(s, i, true))}</ol>
-              </details>
-            </>
-          )}
-
-          {finished && <Done p={p} share={share} restart={() => go(0)} />}
-
-          <div className="mt-6 flex flex-col gap-3">
+          <div className="mt-3 flex flex-col gap-3">
             {g.power && <Callout tone="power" icon="bolt" title={L.t("callout.power")}>
-              <p><Rich text={g.power} b={b} p={p} /></p>
-              <p className="text-[color:var(--ge-muted)]">{L.t("callout.powerNote")}</p>
+              <p><Rich text={g.power} b={b} p={p} /></p><p className="text-[color:var(--ge-muted)]">{L.t("callout.powerNote")}</p>
             </Callout>}
             {g.tip && <Callout tone="tip" icon="bulb" title={L.t("callout.tip")}><p><Rich text={g.tip} b={b} p={p} /></p></Callout>}
             {oldNote && <Callout tone="warn" icon="info" title={L.t("callout.old")}><p>{L.t("callout.oldText", { note: L.tg(oldNote) })}</p></Callout>}
           </div>
-          <Feedback gk={gk} b={b} f={f} />
-          <p className="mt-4 text-sm text-[color:var(--ge-muted)]">{L.t("guide.reviewed", { date: L.t("guide.reviewedDate") })} {L.t("guide.menuNames")}</p>
-        </div>
-        {desk && <div className="sticky top-[calc(var(--hdr)+24px)] self-start print:hidden">{mock}</div>}
+          <p className="mt-3 text-sm text-[color:var(--ge-muted)]">{L.t("guide.reviewed", { date: L.t("guide.reviewedDate") })} {L.t("guide.menuNames")}</p>
+        </AppDetails>
       </div>
-    </div>
+    </section>
+  );
+}
+
+function FlowActions({ back, forward, onBack, onForward, status, onKeyDown }) {
+  const L = useL();
+  return (
+    <nav className="ge-flow-actions print:hidden" aria-label={L.t("flow.actions")} onKeyDown={onKeyDown}>
+      <div className="ge-flow-width ge-flow-action-grid">
+        <button type="button" className="ge-btn ge-btn--ghost ge-flow-action" onClick={onBack}><Icon n="chevL" />{back}</button>
+        <span className="ge-flow-action-status" aria-hidden="true">{status}</span>
+        <button type="button" className="ge-btn ge-btn--green ge-flow-action" onClick={onForward}>{forward}<Icon n="chevR" /></button>
+      </div>
+    </nav>
   );
 }
 
@@ -744,13 +747,11 @@ function Prep({ b, k0 }) {
 }
 
 /* Concluído: confirmar na primeira noite + guardar o guia */
-function Done({ p, share, restart }) {
+function Done({ p, share, restart, titleRef }) {
   const L = useL();
-  const ref = useRef(null);
-  useEffect(() => { const el = ref.current; if (!el) return; try { el.focus({ preventScroll: true }); } catch (e) { } el.scrollIntoView && el.scrollIntoView({ behavior: prefersReduced() ? "auto" : "smooth", block: "center" }); }, []);
   return (
-    <div ref={ref} tabIndex={-1} className="ge-in mt-5 rounded-2xl border-2 border-[color:var(--ge-green)] bg-[color:var(--ge-mint)] p-5 focus:outline-none sm:p-6">
-      <h4 className="flex items-center gap-2.5 text-xl font-black text-[color:var(--ge-success)]"><span className="flex h-8 w-8 items-center justify-center rounded-full bg-[color:var(--ge-green)] text-[color:var(--ge-ink)]"><Icon n="check" className="h-4 w-4" /></span>{L.t("done.title")}</h4>
+    <div className="ge-in mt-3 rounded-2xl border-2 border-[color:var(--ge-green)] bg-[color:var(--ge-mint)] p-4 sm:p-6">
+      <h1 ref={titleRef} id="active-title" tabIndex={-1} className="ge-screen-heading flex items-center gap-2.5 text-[color:var(--ge-success)]"><span className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-[color:var(--ge-green)] text-[color:var(--ge-ink)]"><Icon n="check" className="h-4 w-4" /></span>{L.t("done.title")}</h1>
       <p className="mt-2"><Tx k="done.check" vars={{ t: <Time>{p.s}</Time> }} /></p>
       <p className="mt-1 text-[color:var(--ge-muted)]">{L.t("done.ifNot")}</p>
       <ShareGuide {...share} />
@@ -805,42 +806,6 @@ function Feedback({ gk, b, f }) {
             </div>
           </div>
         )}
-    </div>
-  );
-}
-
-function GuideReturn({ show, car, cur, n, onClick }) {
-  const L = useL();
-  if (!show) return null;
-  return (
-    <div className="ge-return-guide fixed inset-x-3 z-50 mx-auto max-w-xl print:hidden md:inset-x-auto md:right-6 md:max-w-[360px]">
-      <button type="button" onClick={onClick} className="ge-focus flex min-h-[58px] w-full items-center gap-3 rounded-2xl border border-[color:var(--ge-line-soft)] bg-white px-4 py-2.5 text-left shadow-[var(--sh-3)]">
-        <span className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-[color:var(--ge-mint)] text-[color:var(--ge-blue)]"><Icon n="chevU" /></span>
-        <span className="min-w-0 flex-1">
-          <span className="block font-bold leading-tight">{L.t("guide.return")}</span>
-          <span className="block truncate text-sm text-[color:var(--ge-muted)]">{car} · {L.t("step.of", { i: cur + 1, n })}</span>
-        </span>
-        <Icon n="chevU" className="h-4 w-4 flex-none text-[color:var(--ge-muted)]" />
-      </button>
-    </div>
-  );
-}
-
-/* ===================== Barra fixa de passos (telemóvel) ===================== */
-function StepBar({ show, cur, n, go, finish }) {
-  const L = useL();
-  const last = cur === n - 1;
-  return (
-    <div aria-hidden={!show} className={cx("fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--ge-line-soft)] bg-white/95 px-3 pb-[max(.625rem,env(safe-area-inset-bottom))] pt-2.5 shadow-[0_-8px_24px_-12px_rgba(23,20,36,.25)] backdrop-blur md:hidden print:hidden motion-safe:transition-transform motion-safe:duration-200", show ? "translate-y-0" : "pointer-events-none translate-y-full")}>
-      <nav aria-label={L.t("step.nav")} className="mx-auto flex max-w-md items-center gap-2">
-        <button type="button" tabIndex={show ? 0 : -1} onClick={() => go(cur - 1)} disabled={cur === 0} className="ge-btn ge-btn--ghost h-12 min-w-[48px] flex-1 px-3"><Icon n="chevL" /><span>{L.t("step.prevShort")}</span></button>
-        <div className="flex w-16 flex-none flex-col items-center gap-1" aria-hidden="true">
-          <span className="text-sm font-black tabular-nums">{cur + 1}/{n}</span>
-          <span className="h-1 w-full overflow-hidden rounded-full bg-[#E7E4EC]"><span className="block h-full rounded-full bg-[color:var(--ge-green)]" style={{ width: ((cur + 1) / n * 100) + "%" }} /></span>
-        </div>
-        {last ? <button type="button" tabIndex={show ? 0 : -1} onClick={finish} className="ge-btn ge-btn--green h-12 flex-1 px-3">{L.t("step.finishShort")}<Icon n="check" /></button>
-          : <button type="button" tabIndex={show ? 0 : -1} onClick={() => go(cur + 1)} className="ge-btn ge-btn--green h-12 flex-1 px-3">{L.t("step.nextShort")}<Icon n="chevR" /></button>}
-      </nav>
     </div>
   );
 }
@@ -902,8 +867,8 @@ const PAGE_CSS = `
 --sh-1:0 1px 2px rgba(23,20,36,.06),0 1px 1px rgba(23,20,36,.04);--sh-2:0 12px 32px -18px rgba(23,20,36,.30);--sh-3:0 24px 60px -24px rgba(23,20,36,.38);
 --ease:cubic-bezier(.2,.8,.2,1);--ease-out:cubic-bezier(.22,1,.36,1);--dur-1:120ms;--dur-2:200ms;--dur-3:320ms;
 --fs-display:clamp(2.05rem,1.45rem + 2.6vw,3.5rem);--fs-h2:clamp(1.5rem,1.25rem + 1.1vw,2.25rem);--fs-h3:clamp(1.2rem,1.1rem + .45vw,1.5rem);--fs-body:clamp(1.0625rem,1.03rem + .15vw,1.125rem);
---hdr:76px}
-@media (min-width:768px){:root{--hdr:88px}}
+--hdr:68px}
+@media (min-width:768px){:root{--hdr:80px}}
 html{scroll-padding-top:calc(var(--hdr) + 16px);-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .ge{font-family:'Brandon Grotesque','Brandon Text',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:var(--fs-body);line-height:1.6;color:var(--ge-ink);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:clip}
 .ge h1,.ge h2,.ge h3,.ge h4{letter-spacing:-.005em;text-wrap:balance}
@@ -941,8 +906,6 @@ transition:border-color var(--dur-2) var(--ease),background-color var(--dur-2) v
 .ge-model-chip .model-chip-label{min-width:0;text-align:center}
 .ge-brand-chip-l{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ge-chip-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;gap:.625rem}
-.ge-return-guide{bottom:max(.75rem,env(safe-area-inset-bottom))}
-@media (min-width:768px){.ge-return-guide{bottom:1.5rem}}
 .ge-chip-grid>*{width:100%;min-width:0;max-width:none;margin:0}
 .ge-chip-grid .ge-brand-chip{justify-content:flex-start;min-height:56px}
 .ge-chip-grid .ge-brand-chip-l{white-space:normal;line-height:1.15;text-align:left;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}
@@ -960,241 +923,247 @@ transition:border-color var(--dur-2) var(--ease),background-color var(--dur-2) v
 .ge-model-chip:hover{transform:translateY(-1px);border-color:#B9B2C8;box-shadow:var(--sh-1)}
 .ge-model-chip[aria-pressed=true]{border-color:var(--ge-success);background:var(--ge-mint);box-shadow:inset 0 0 0 1px var(--ge-success)}
 
-.ge-step{transition:background-color var(--dur-2) var(--ease),border-color var(--dur-2) var(--ease),box-shadow var(--dur-2) var(--ease)}
-.ge-kbd{display:inline-flex;min-width:1.6rem;height:1.6rem;align-items:center;justify-content:center;border-radius:.4rem;border:1px solid var(--ge-line);border-bottom-width:2px;background:#fff;font:600 .8rem/1 system-ui,sans-serif;color:var(--ge-ink)}
 .ge-in{animation:geIn var(--dur-2) var(--ease-out) both}
 @keyframes geIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .ge-skel{background:linear-gradient(90deg,#EEEBF2 0,#F8F7FA 45%,#EEEBF2 90%);background-size:200% 100%;animation:geSk 1.2s linear infinite}
 @keyframes geSk{to{background-position:-200% 0}}
-@media (max-width:380px){.ge-phone{zoom:.9}}
+@media (max-width:767px){.ge-phone{zoom:.9}}
+.ge-flow-shell{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
+.ge-flow-width{width:min(100%,1240px);margin-inline:auto;padding-inline:clamp(1rem,3.1vw,2.5rem)}
+.ge-flow-main{flex:1;min-width:0}
+.ge-flow-main .ge-btn{white-space:normal;overflow-wrap:anywhere;text-align:center}
+.ge-flow-main .ge-btn svg{flex:none}
+.ge-flow-main--vehicle{background:linear-gradient(var(--ge-mint) 0 12rem,var(--ge-soft) 12rem)}
+.ge-vehicle-layout,.ge-flow-content{padding-block:clamp(1rem,3vw,2.5rem)}
+.ge-vehicle-layout{display:grid;gap:clamp(.85rem,3vw,2.5rem)}
+.ge-screen-heading{font-size:var(--fs-h2);font-weight:900;line-height:1.12;overflow-wrap:anywhere}
+.ge-screen-heading:focus{outline:none}
+.ge-flow-header .ge-flow-join{padding-inline:clamp(.55rem,2vw,1.25rem);min-width:44px;white-space:normal;text-align:center;overflow-wrap:anywhere}
+.ge-flow-header [role=listbox]{max-width:min(14rem,calc(100vw - 2rem))}
+.ge-flow-progress{background:#fff;border-bottom:1px solid var(--ge-line-soft)}
+.ge-flow-segment{border-top:4px solid var(--ge-line);border-radius:2px;color:var(--ge-muted);font-size:.92rem;font-weight:650;line-height:1.2}
+.ge-flow-segment.is-past{border-color:var(--ge-success)}
+.ge-flow-segment.is-active{border-color:var(--ge-green);color:var(--ge-blue);font-weight:900}
+.ge-guide-layout{display:grid;gap:.85rem}
+.ge-step-progress{height:6px;border-radius:var(--r-pill);overflow:hidden;background:var(--ge-line)}
+.ge-step-progress span{display:block;height:100%;border-radius:inherit;background:var(--ge-success);transition:width var(--dur-2) var(--ease)}
+.ge-step-index{width:44px;height:44px;border:1px solid var(--ge-line);border-radius:.85rem;background:#fff;color:var(--ge-blue);font-weight:800;font-variant-numeric:tabular-nums}
+.ge-step-index:hover{border-color:var(--ge-blue);background:var(--ge-soft)}
+.ge-step-index[aria-current=step]{background:var(--ge-mint);border-color:var(--ge-success);box-shadow:inset 0 0 0 1px var(--ge-success);color:var(--ge-ink)}
+.ge-flow-actions{position:sticky;bottom:0;z-index:35;border-top:1px solid var(--ge-line);background:#fff;box-shadow:0 -8px 24px -18px rgba(23,20,36,.34);padding-block:.5rem max(.5rem,env(safe-area-inset-bottom))}
+.ge-flow-action-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem}
+.ge-flow-action{min-width:0;min-height:48px;padding:.4rem .55rem;white-space:normal;overflow-wrap:anywhere;text-align:center}
+.ge-flow-action svg{flex:none;width:1rem;height:1rem}
+.ge-flow-action-status{display:none}
+html{scroll-padding-bottom:calc(112px + env(safe-area-inset-bottom));overflow-anchor:none}
+@media (min-width:640px){.ge-flow-segment{padding-top:.55rem}}
+@media (min-width:768px){
+  .ge-flow-action-grid{grid-template-columns:auto minmax(0,1fr) auto;align-items:center}
+  .ge-flow-action{padding-inline:1.35rem}
+  .ge-flow-action-status{display:block;text-align:center;font-weight:800;color:var(--ge-muted);font-size:.9rem}
+  .ge-vehicle-layout{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);align-items:start}
+  .ge-vehicle-intro .ge-screen-heading{font-size:var(--fs-display)}
+  .ge-guide-layout{grid-template-columns:minmax(0,1fr) minmax(290px,35%);grid-template-rows:auto 1fr;gap:1rem clamp(1.5rem,4vw,3.5rem)}
+  .ge-guide-preview{grid-column:2;grid-row:1/span 2;align-self:start}
+  .ge-guide-more{grid-column:1;grid-row:2;align-self:start}
+}
+@media (min-width:1024px) and (min-height:850px){.ge-guide-preview{position:sticky;top:calc(var(--hdr) + 1rem)}}
+@media (max-height:480px) and (orientation:landscape){.ge-flow-header,.ge-flow-actions{position:static}}
+@media print{.ge-flow-actions,.ge-flow-progress{display:none!important}}
+
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}.ge *,.ge *::before,.ge *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 @media print{.ge header,.ge nav{position:static!important}}`;
 
 /* ===================== Página ===================== */
 export default function GuiaCarregamento({ initialLang = "pt", initialDict = null, ptDict = null, loadDict = null }) {
-  /* Idioma */
   const [lang, setLang] = useState(initialLang);
   const [dict, setDict] = useState(initialDict || ptDict);
   const L = useMemo(() => makeI18n(lang, dict, ptDict), [lang, dict, ptDict]);
+  const langRequest = useRef(0);
   const changeLang = code => {
-    const apply = d => { setDict(d); setLang(code); persistLang(code); track("idioma", { idioma: code }); };
+    const request = ++langRequest.current;
+    const apply = d => { if (request !== langRequest.current) return; setDict(d); setLang(code); persistLang(code); track("idioma", { idioma: code }); };
     if (code === "pt" && ptDict) return apply(ptDict);
     if (loadDict) Promise.resolve(loadDict(code)).then(apply).catch(() => { });
   };
-  useEffect(() => { persistLang(lang, { url: lang !== "pt" || /[?&]lang=/.test((typeof location !== "undefined" && location.search) || ""), store: false }); }, []);
+  useEffect(() => { persistLang(initialLang, { url: initialLang !== "pt" || /[?&]lang=/.test(window.location.search), store: false }); }, [initialLang]);
   useEffect(() => {
-    try { document.title = L.t("meta.title"); const m = document.querySelector('meta[name="description"]'); m && m.setAttribute("content", L.t("meta.desc")); } catch (e) { }
+    document.title = L.t("meta.title");
+    const desc = document.querySelector('meta[name="description"]');
+    if (desc) desc.content = L.t("meta.desc");
   }, [L]);
 
-  /* Seleção */
-  const [brandName, setBrandName] = useState("");
-  const [famIdx, setFamIdx] = useState(-1);
-  const [cyc, setCyc] = useState("diario");
-  const [step, setStep] = useState(0);
-  const [finished, setFinished] = useState(false);
+  const [nav, setNav] = useState(() => {
+    if (typeof window === "undefined") return INITIAL;
+    const saved = window.history.state?.geChargingNav;
+    return saved && toHash(saved) === window.location.hash ? saved : fromHash(window.location.hash);
+  });
+  const { view, brand: brandName, family: famIdx, cycle: cyc, step: cur } = nav;
   const [copied, setCopied] = useState(false);
   const [msg, setMsg] = useState("");
-  const [hdrHidden, setHdrHidden] = useState(false);
-  const [guideIn, setGuideIn] = useState(false);
-  const [guideSeen, setGuideSeen] = useState(false);
-  const inputRef = useRef(null), guideRef = useRef(null), pickRef = useRef(null);
-  const desk = useMedia("(min-width: 768px)") !== false;
-
+  const inputRef = useRef(null), titleRef = useRef(null), focusPending = useRef(false), liveTimer = useRef(0), copyTimer = useRef(0);
   const b = brandName === "__other" ? OTHER : BRANDS.find(x => x.name === brandName) || null;
-  const f = b && !b.other && famIdx > -1 ? b.families[famIdx] : null;
-  const ready = !!(b && (b.other || f));
-  const photo = REMOTE && b && f && !b.other ? photoFor(b, f) : null;
+  const f = b && !b.other ? b.families[famIdx] : null;
+  const photo = REMOTE && b && f ? photoFor(b, f) : null;
   const p = useMemo(() => ({ s: CYC[cyc][0], e: CYC[cyc][1], days: [1, 1, 1, 1, 1, 1, 1] }), [cyc]);
-  const G = ready ? guideFor(b, f) : null;
+  const G = b && (b.other || f) ? guideFor(b, f) : null;
   const n = G ? G.g.steps.length : 0;
-  const cur = Math.min(step, Math.max(0, n - 1));
   const screen = G ? Math.min(G.g.map[cur] || 0, G.g.screens.length - 1) : 0;
   const carTitle = b ? (b.other ? L.t("other.title") : b.name + (f ? " " + famName(L, b, f) : "")) : "";
 
-  const say = t => { setMsg(""); setTimeout(() => setMsg(t), 60); };
-  const scrollToEl = (el, block = "start") => { if (el && el.scrollIntoView) el.scrollIntoView({ behavior: prefersReduced() ? "auto" : "smooth", block }); };
-  const openGuide = () => setTimeout(() => {
-    const h = document.getElementById("tguia"); scrollToEl(guideRef.current);
-    if (h) { try { h.focus({ preventScroll: true }); } catch (e) { } }
-  }, 80);
-
-  const resetGuide = () => { setStep(0); setFinished(false); };
-  function clearCar() {
-    setBrandName(""); setFamIdx(-1); setGuideSeen(false); resetGuide(); say(L.t("say.cleared"));
-    try { history.replaceState(history.state, "", location.pathname + location.search); } catch (e) { }
+  function say(text) {
+    clearTimeout(liveTimer.current); setMsg("");
+    liveTimer.current = setTimeout(() => setMsg(text), 60);
   }
-  function pickBrand(name, fi, toggle) {
-    const nb = BRANDS.find(x => x.name === name); if (!nb) return;
-    if (toggle && brandName === name && (fi == null || famIdx === fi)) { clearCar(); return; }
-    const idx = fi != null ? fi : nb.families.length === 1 ? 0 : -1;
-    setBrandName(name); setFamIdx(idx); setGuideSeen(false); resetGuide();
-    if (idx > -1) { say(L.t("say.chosen", { car: nb.name + " " + nb.families[idx].name, n: guideFor(nb, nb.families[idx]).g.steps.length })); openGuide(); }
-    else say(L.t("say.brand", { brand: nb.name }));
+  function writeNav(next, method, locale = lang) {
+    try {
+      const u = new URL(window.location.href);
+      if (locale !== "pt" || u.searchParams.has("lang")) u.searchParams.set("lang", locale);
+      u.hash = toHash(next);
+      history[method]({ ...history.state, geChargingNav: next }, "", u.pathname + u.search + u.hash);
+    } catch (e) { /* A navegação interna funciona mesmo sem acesso ao URL. */ }
   }
-  function pickModel(i) {
-    if (famIdx === i && b && b.families.length > 1) { setFamIdx(-1); setGuideSeen(false); resetGuide(); say(L.t("say.brand", { brand: b.name })); try { history.replaceState(history.state, "", location.pathname + location.search); } catch (e) { } return; }
-    setFamIdx(i); setGuideSeen(false); resetGuide(); say(L.t("say.chosen", { car: b.name + " " + b.families[i].name, n: guideFor(b, b.families[i]).g.steps.length })); openGuide(); }
-  function pickOther(toggle) {
-    if (toggle === true && brandName === "__other") { clearCar(); return; }
-    setBrandName("__other"); setFamIdx(-1); setGuideSeen(false); resetGuide(); say(L.t("say.other")); openGuide(); }
-  function changeCar() {
-    track("alterar_carro");
-    scrollToEl(pickRef.current, "start");
-    setTimeout(() => { const el = inputRef.current; if (el) { try { el.focus({ preventScroll: true }); el.select(); } catch (e) { } } }, prefersReduced() ? 0 : 350);
-  }
-  function go(i) {
-    if (!G) return;
-    const k = Math.max(0, Math.min(n - 1, i)); setStep(k); setFinished(false);
-    say(L.t("step.of", { i: k + 1, n }) + ": " + plainText(L, G.g.steps[k], b, p));
-    if (!desk) setTimeout(() => {
-      const el = document.getElementById("stepNow"); if (!el) return;
-      const r = el.getBoundingClientRect(); if (r.top < 70 || r.top > window.innerHeight * 0.45) scrollToEl(el);
-    }, 30);
-  }
-  function finish() { setFinished(true); say(L.t("done.title")); track("guia_concluido", { marca: b && b.name, guia: G && G.gk }); }
-
-  /* Teclas ← / → mudam de passo quando o guia está visível (não interfere com campos de texto) */
-  const keyState = useRef({});
-  keyState.current = { G, cur, n, guideIn, finished, go, finish };
   useEffect(() => {
-    const h = e => {
-      const s = keyState.current;
-      if (!s.G || !s.guideIn || e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
-      const t = e.target, tag = (t && t.tagName || "").toLowerCase();
-      if (["input", "select", "textarea"].includes(tag) || (t && t.isContentEditable) || (t && t.closest && t.closest("[role=radiogroup],[role=listbox]"))) return;
-      if (e.key === "ArrowRight") { e.preventDefault(); if (s.cur < s.n - 1) s.go(s.cur + 1); else if (!s.finished) s.finish(); }
-      else if (e.key === "ArrowLeft") { e.preventDefault(); if (s.cur > 0) s.go(s.cur - 1); }
+    const prevRestoration = history.scrollRestoration;
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    const onPop = e => {
+      const next = e.state?.geChargingNav || fromHash(window.location.hash);
+      focusPending.current = true; setNav({ ...next });
     };
-    window.addEventListener("keydown", h);
-    return () => window.removeEventListener("keydown", h);
+    window.addEventListener("popstate", onPop);
+    return () => {
+      window.removeEventListener("popstate", onPop);
+      if ("scrollRestoration" in history) history.scrollRestoration = prevRestoration;
+      clearTimeout(liveTimer.current); clearTimeout(copyTimer.current);
+    };
   }, []);
-  /* O guia está no ecrã? (barra de passos no telemóvel e atalhos de teclado) */
+  // A língua escolhida aplica-se mesmo quando se usa Anterior do navegador.
   useEffect(() => {
-    const el = guideRef.current;
-    if (!el || typeof IntersectionObserver === "undefined") { setGuideIn(!!ready); if (ready) setGuideSeen(true); return; }
-    const io = new IntersectionObserver(([entry]) => {
-      setGuideIn(entry.isIntersecting);
-      if (entry.isIntersecting) setGuideSeen(true);
-    }, { rootMargin: "-30% 0px -30% 0px" });
-    io.observe(el); return () => io.disconnect();
-  }, [ready]);
-  /* Cabeçalho: no telemóvel esconde ao descer e volta ao subir */
-  useEffect(() => {
-    if (desk) { setHdrHidden(false); return; }
-    let y0 = window.scrollY || 0, raf = 0;
-    const on = () => { if (raf) return; raf = requestAnimationFrame(() => { raf = 0; const y = window.scrollY || 0; if (Math.abs(y - y0) > 8) { setHdrHidden(y > y0 && y > 160); y0 = y; } }); };
-    window.addEventListener("scroll", on, { passive: true });
-    return () => { window.removeEventListener("scroll", on); raf && cancelAnimationFrame(raf); };
-  }, [desk]);
+    writeNav(nav, "replaceState");
+  }, [nav, lang]);
+  useLayoutEffect(() => {
+    if (!focusPending.current) return;
+    focusPending.current = false;
+    titleRef.current?.focus({ preventScroll: true });
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [nav]);
 
-  /* Ligação partilhável: ?lang=xx#marca=…&modelo=…&ciclo=… */
-  const hashStr = () => {
-    if (!b) return "";
-    const u = new URLSearchParams();
-    if (b.other) u.set("marca", "outra"); else { u.set("marca", b.name); if (f) u.set("modelo", f.name); }
-    u.set("ciclo", cyc); return u.toString();
+  function move(action) {
+    const next = transition(nav, action);
+    if (next === nav || (next.view === view && next.step === cur && next.brand === brandName && next.family === famIdx && next.cycle === cyc)) return;
+    if (action.type !== "cycle") {
+      clearTimeout(liveTimer.current); setMsg("");
+      focusPending.current = true;
+      writeNav(next, "pushState");
+    }
+    setNav(next);
+  }
+  const pickBrand = (brand, family) => move({ type: "brand", brand, family });
+  const pickOther = toggle => move({ type: "other", toggle });
+  const changeCar = () => { track("alterar_carro"); move({ type: "vehicle" }); };
+  const go = step => move({ type: "step", step });
+  function finish() {
+    move({ type: "done" });
+    track("guia_concluido", { marca: b && b.name, guia: G && G.gk });
+  }
+  function guideKeys(e) {
+    if (view !== "guide" || e.repeat || e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey ||
+        e.target.closest?.("input,select,textarea,a,summary,[contenteditable=true],[role=listbox],[role=radiogroup]")) return;
+    if (e.key === "ArrowLeft" && cur > 0) { e.preventDefault(); go(cur - 1); }
+    if (e.key === "ArrowRight" && cur < n - 1) { e.preventDefault(); go(cur + 1); }
+  }
+  const linkUrl = () => {
+    const u = new URL(window.location.href);
+    u.searchParams.set("lang", lang); u.hash = toHash(nav);
+    return u.href;
   };
-  useEffect(() => { if (ready) { try { history.replaceState(history.state, "", location.pathname + location.search + "#" + hashStr()); } catch (e) { } } }, [ready, brandName, famIdx, cyc]);
-  useEffect(() => {
-    let u; try { u = new URLSearchParams((location.hash || "").slice(1)); } catch (e) { return; }
-    const m = u.get("marca"); if (!m) return;
-    if (u.get("ciclo") === "semanal") setCyc("semanal");
-    if (m === "outra") { setBrandName("__other"); return; }
-    const nb = BRANDS.find(x => x.name === m); if (!nb) return;
-    const fi = nb.families.findIndex(x => x.name === u.get("modelo"));
-    const idx = fi > -1 ? fi : nb.families.length === 1 ? 0 : -1;
-    setBrandName(nb.name); setFamIdx(idx);
-    if (idx > -1) setTimeout(() => scrollToEl(guideRef.current), 300);
-  }, []);
-  const linkUrl = () => { let base = ""; try { base = location.href.split("#")[0]; } catch (e) { } return base + "#" + hashStr(); };
   function copyLink() {
     const url = linkUrl();
-    const ok = () => { setCopied(true); say(L.t("share.copied")); setTimeout(() => setCopied(false), 2500); };
-    const fb = () => {
-      try { const ta = document.createElement("textarea"); ta.value = url; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select(); const r = document.execCommand("copy"); ta.remove(); r ? ok() : say(L.t("share.fail")); }
+    const ok = () => { setCopied(true); say(L.t("share.copied")); clearTimeout(copyTimer.current); copyTimer.current = setTimeout(() => setCopied(false), 2500); };
+    const fallback = () => {
+      const active = document.activeElement, ta = document.createElement("textarea");
+      ta.value = url; ta.setAttribute("readonly", ""); ta.style.cssText = "position:fixed;left:0;top:0;opacity:0"; document.body.appendChild(ta);
+      try { ta.select(); document.execCommand("copy") ? ok() : say(L.t("share.fail")); }
       catch (e) { say(L.t("share.fail")); }
+      finally { ta.remove(); active?.focus({ preventScroll: true }); }
     };
-    try { navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(url).then(ok, fb) : fb(); } catch (e) { fb(); }
+    try { navigator.clipboard?.writeText ? navigator.clipboard.writeText(url).then(ok, fallback) : fallback(); } catch (e) { fallback(); }
   }
-  const showBar = !desk && ready && guideIn && !finished;
-  const showReturn = ready && guideSeen && !guideIn;
-  const returnToGuide = () => {
-    const active = !desk && document.getElementById("stepNow");
-    scrollToEl(active || guideRef.current, active ? "center" : "start");
-  };
+
+  const selecting = view === "vehicle" || view === "models" || !G;
+  const last = cur === n - 1;
+  const actions = view === "schedule" ? {
+    back: L.t("flow.backVehicle"), forward: L.t(cur > 0 ? "flow.resumeGuide" : "flow.openGuide"), onBack: changeCar,
+    onForward: () => move({ type: "guide" }), status: carTitle,
+  } : view === "guide" ? {
+    back: L.t(cur === 0 ? "flow.backSchedule" : "step.prevShort"), forward: L.t(last ? "step.finishShort" : "step.nextShort"),
+    onBack: () => cur === 0 ? move({ type: "schedule" }) : go(cur - 1), onForward: last ? finish : () => go(cur + 1),
+    status: L.t("step.of", { i: cur + 1, n }), onKeyDown: guideKeys,
+  } : null;
 
   return (
     <I18n.Provider value={L}>
-      <div className="ge min-h-screen bg-[color:var(--ge-soft)]" lang={L.info.html}>
+      <div className="ge ge-flow-shell bg-[color:var(--ge-soft)]" lang={L.info.html}>
         <style>{DEVICE_CSS + PAGE_CSS}</style>
-        <a href="#guia" className="sr-only z-[60] rounded-full bg-white px-4 py-2 font-bold text-[color:var(--ge-blue)] focus:not-sr-only focus:fixed focus:left-3 focus:top-3">{L.t("a11y.skip")}</a>
+        <a href="#active-title" onClick={e => { e.preventDefault(); titleRef.current?.focus(); }} className="sr-only z-[60] rounded-full bg-white px-4 py-2 font-bold text-[color:var(--ge-blue)] focus:not-sr-only focus:fixed focus:left-3 focus:top-3">{L.t("a11y.skip")}</a>
 
-        {/* Cabeçalho fixo e minimalista */}
-        <header className={cx("sticky top-0 z-40 border-b border-[color:var(--ge-line-soft)] bg-white/95 backdrop-blur print:static motion-safe:transition-transform motion-safe:duration-300", hdrHidden && "-translate-y-full")}>
-          <div className="mx-auto flex h-[var(--hdr)] max-w-[1240px] items-center gap-3 px-4 sm:px-8 lg:px-10">
+        <header className="ge-flow-header sticky top-0 z-40 border-b border-[color:var(--ge-line-soft)] bg-white print:static">
+          <div className="ge-flow-width flex min-h-[var(--hdr)] items-center gap-2 sm:gap-4">
             <a href="https://goldenergy.pt/" className="ge-focus flex-none rounded-md" onClick={() => track("logo")}>
-              <img src={LOGO} alt={L.t("a11y.logo")} width="120" height="73" className="h-[73px] w-[120px]" />
+              <img src={LOGO} alt={L.t("a11y.logo")} width="120" height="73" className="h-auto w-[120px]" />
             </a>
-            {ready && (
-              <button type="button" onClick={changeCar} className="ge-focus ge-in ml-1 hidden min-h-[44px] min-w-0 items-center gap-2 rounded-full border border-[color:var(--ge-line)] bg-white py-1 pl-1.5 pr-3.5 text-sm hover:border-[color:var(--ge-ink)] sm:flex">
-                <BrandLogo b={b} size="xs" /><span className="max-w-[16rem] truncate font-bold">{carTitle}</span><span className="ge-link flex-none">{L.t("hdr.change")}</span>
-              </button>
-            )}
-            <div className="ml-auto flex items-center gap-2 sm:gap-3">
-              {ready && <button type="button" onClick={changeCar} aria-label={L.t("hdr.changeCar") + ": " + carTitle} className="ge-focus flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--ge-line)] bg-white sm:hidden"><BrandLogo b={b} size="xs" /></button>}
-              <LangMenu lang={lang} onChange={changeLang} />
-              <a href={utm(OFFER.adesao, "header")} target="_blank" rel="noopener noreferrer" onClick={() => track("header_aderir")} className="ge-btn ge-btn--blue min-h-[44px] px-4 sm:px-5">
+            <div className="ml-auto flex min-w-0 items-center gap-2 sm:gap-3">
+              <a href={utm(OFFER.adesao, "header")} target="_blank" rel="noopener noreferrer" onClick={() => track("header_aderir")} className="ge-btn ge-btn--blue ge-flow-join min-h-[44px]">
                 <span className="sm:hidden">{L.t("cta.joinShort")}</span><span className="hidden sm:inline">{L.t("cta.join")}</span><Ext />
               </a>
+              <LangMenu lang={lang} onChange={changeLang} />
             </div>
           </div>
         </header>
 
-        {/* Topo: proposta de valor + pesquisa acima da dobra */}
-        <section className="bg-[color:var(--ge-green)] print:hidden" aria-labelledby="th1">
-          <div className="mx-auto grid max-w-[1240px] gap-8 px-5 pb-12 pt-7 sm:px-8 md:grid-cols-[minmax(0,1.15fr)_minmax(0,.85fr)] md:items-center md:pb-16 md:pt-12 lg:gap-14 lg:px-10 lg:pb-20">
-            <div className="min-w-0">
-              <p className="text-sm font-bold uppercase tracking-[.12em] text-[color:var(--ge-blue)]">{L.t("hero.kicker", { n: BRANDS.length })}</p>
-              <h1 id="th1" className="mt-2 text-[length:var(--fs-display)] font-black leading-[1.04] text-[color:var(--ge-ink)]"><Tx k="hero.title" vars={{ vz: <span className="whitespace-nowrap text-[color:var(--ge-blue)]"><Moon className="mr-[0.12em] inline-block h-[0.82em] w-[0.82em] align-[-0.05em]" />{L.t("hero.titleVz")}</span> }} plain /></h1>
-              <p className="mt-3 max-w-xl text-[1.1rem] leading-relaxed text-[color:var(--ge-ink)]">{L.t("hero.sub")}</p>
-              <div ref={pickRef} className="mt-6 scroll-mt-[calc(var(--hdr)+12px)] rounded-[var(--r-l)] bg-white p-4 shadow-[var(--sh-3)] sm:p-6">
-                <CarSearch key={brandName + ":" + famIdx} inputRef={inputRef} onPick={(name, fi) => pickBrand(name, fi, true)} onOther={pickOther} say={say} />
-                <BrandPicker b={b} f={f} onBrand={n0 => pickBrand(n0, undefined, true)} onModel={pickModel} onOther={pickOther} />
-              </div>
-              <div className="mt-5"><Cost100 /></div>
-            </div>
-            <div className="mx-auto w-full max-w-[420px] md:max-w-none">
-              <img src={IMG.hero} alt={L.t("hero.imgAlt")} width="727" height="473" fetchPriority="high" decoding="async" className="mx-auto block aspect-[727/473] w-full object-contain" />
-              <div className="mt-4 hidden justify-center md:flex">
-                <a href={utm(OFFER.pagina, "hero")} target="_blank" rel="noopener noreferrer" onClick={() => track("hero_tarifario")} className="ge-btn ge-btn--outline-ink">{L.t("cta.seeTariff")}<Icon n="arrow" /><Ext /></a>
-              </div>
-            </div>
-          </div>
-        </section>
+        <FlowProgress view={view} />
 
-        <main id="guia" tabIndex={-1} className={cx("focus:outline-none", (showBar || showReturn) && "pb-24")}>
-          <section ref={guideRef} aria-label={L.t("guide.region")} className="mx-auto max-w-[1240px] scroll-mt-[var(--hdr)] px-4 py-10 sm:px-8 md:py-16 lg:px-10">
-            {G ? (
-              <Guide key={(b.other ? "o" : b.name) + famIdx} {...{ G, b, f, p, cyc, setCyc, cur, n, screen, photo, finished, go, finish, desk }}
-                share={{ linkUrl, carTitle, copyLink, copied }} />
-            ) : (
-              <div className="ge-card flex flex-col items-center gap-3 p-8 text-center sm:p-12">
-                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[color:var(--ge-mint)] text-[color:var(--ge-success)]"><Icon n="car" className="h-7 w-7" /></span>
-                <h2 className="text-[length:var(--fs-h3)] font-black">{L.t("empty.title")}</h2>
-                <p className="max-w-md text-[color:var(--ge-muted)]">{L.t("empty.text")}</p>
-                <button type="button" onClick={changeCar} className="ge-btn ge-btn--green mt-2"><Icon n="search" />{L.t("empty.cta")}</button>
+        <main id="guia" className={cx("ge-flow-main", selecting && "ge-flow-main--vehicle")} onKeyDown={guideKeys}>
+          {selecting ? (
+            <section className="ge-flow-width ge-vehicle-layout" aria-labelledby="active-title">
+              <div className="ge-vehicle-intro min-w-0">
+                <p className="text-xs font-bold uppercase tracking-[.11em] text-[color:var(--ge-blue)] sm:text-sm">{L.t("hero.kicker", { n: BRANDS.length })}</p>
+                <h1 ref={titleRef} id="active-title" tabIndex={-1} className="ge-screen-heading mt-1.5">{view === "models" ? L.t("flow.modelTitle") : <Tx k="hero.title" vars={{ vz: <span className="text-[color:var(--ge-blue)]"><Moon />{L.t("hero.titleVz")}</span> }} plain />}</h1>
+                <p className="mt-2 max-w-[40ch] text-base leading-snug sm:text-lg">{L.t(view === "models" ? "flow.modelSub" : "hero.sub")}</p>
+                {view !== "models" && <img src={IMG.hero} alt={L.t("hero.imgAlt")} width="727" height="473" fetchPriority="high" decoding="async" className="mt-4 hidden h-auto w-full max-w-[390px] object-contain lg:block" />}
               </div>
-            )}
-          </section>
-          <div className="mx-auto flex max-w-[1240px] flex-col gap-6 px-4 pb-14 sm:px-8 lg:px-10">
-            <Promo />
-          </div>
+              <div className="min-w-0">
+                <div className="ge-card min-w-0 p-3.5 sm:p-5">
+                  <CarSearch key={view + ":" + brandName + ":" + famIdx} inputRef={inputRef} onPick={pickBrand} onOther={pickOther} say={say} />
+                  <BrandPicker b={b && !b.other ? b : null} f={f} onBrand={pickBrand} onModel={family => move({ type: "model", family })} onOther={pickOther} />
+                  {view === "models" && f && <button type="button" className="ge-btn ge-btn--green mt-4 w-full" onClick={() => move({ type: "schedule" })}>{L.t("flow.withModel")}<Icon n="chevR" /></button>}
+                </div>
+                {view !== "models" && <div className="mt-4"><Cost100 /></div>}
+              </div>
+            </section>
+          ) : view === "schedule" ? (
+            <section className="ge-flow-width ge-flow-content" aria-labelledby="active-title">
+              <VehicleTag {...{ b, f, photo }} />
+              <h1 ref={titleRef} id="active-title" tabIndex={-1} className="ge-screen-heading mt-1">{L.t("flow.scheduleTitle")}</h1>
+              <p className="mt-2 max-w-[60ch] leading-snug text-[color:var(--ge-muted)]">{L.t("flow.scheduleSub")}</p>
+              <div className="mt-4 sm:mt-5"><VazioPanel cyc={cyc} setCyc={cycle => move({ type: "cycle", cycle })} p={p} /></div>
+              {cyc === "semanal" && <p className="mt-3 max-w-[65ch] text-sm leading-relaxed text-[color:var(--ge-muted)]"><Tx k="flow.weeklyExample" vars={{ t: <Time>{p.s} → {p.e}</Time> }} /></p>}
+            </section>
+          ) : view === "guide" ? (
+            <div className="ge-flow-width ge-flow-content">
+              <Guide key={brandName + ":" + famIdx} {...{ G, b, f, p, cyc, cur, n, screen, photo, go, titleRef }} editSchedule={() => move({ type: "schedule" })} />
+            </div>
+          ) : (
+            <section className="ge-flow-width ge-flow-content" aria-labelledby="active-title">
+              <VehicleTag {...{ b, f, photo }} />
+              <Done {...{ p, titleRef }} share={{ linkUrl, carTitle, copyLink, copied }} restart={() => move({ type: "guide", restart: true })} />
+              <Feedback key={brandName + ":" + famIdx} gk={G.gk} b={b} f={f} />
+              <button type="button" className="ge-btn ge-btn--ghost mt-3" onClick={changeCar}><Icon n="car" />{L.t("hdr.changeCar")}</button>
+              <div className="mt-7 flex flex-col gap-4"><Promo /></div>
+            </section>
+          )}
         </main>
-
-
-
-        {G && <StepBar show={showBar} cur={cur} n={n} go={go} finish={finish} />}
-        {G && <GuideReturn show={showReturn} car={carTitle} cur={cur} n={n} onClick={returnToGuide} />}
+        {!selecting && actions && <FlowActions {...actions} />}
         <div role="status" aria-live="polite" className="sr-only">{msg}</div>
       </div>
     </I18n.Provider>

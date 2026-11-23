@@ -1,12 +1,7 @@
-# Guia de carregamento programado (Goldenergy)
+# Guia de carregamento programado · Goldenergy
 
-## Correr localmente
+Percurso responsivo em React, Vite e Tailwind: veículo, horário, passos na app e conclusão. Suporta português, espanhol, inglês, francês e alemão.
 
-    npm install
-    npm run dev
+Com Node.js 22 e as dependências do projeto instaladas, execute `npm run dev`. `npm test` verifica o percurso, as seleções e as ligações partilháveis; `npm run build` produz a pasta `dist`.
 
-## Publicar no Vercel
-
-1. Enviar esta pasta para um repositório GitHub (o package.json tem de ficar na raiz do repositório).
-2. Vercel > Add New > Project > importar o repositório.
-3. O vercel.json já define Vite, o comando de build e a pasta dist. Basta carregar em Deploy.
+Para publicação e testes em desktop e telemóvel, consulte `INSTRUCOES.md`.
