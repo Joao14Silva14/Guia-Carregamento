@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo, useLayoutEffect } from "react";
 import { BRANDS, GUIDES, ALIAS, TOP, norm, initials, logoUrl, photoFor, STORE, deviceHTML, DEVICE_CSS, themeFor, appLabel, SKIN, shotFor, CAR_SVG, LOGO, setMS, setDays, storeLinks } from "./engine.js";
-import { LANGS, langInfo, persistLang, fill, trHTML } from "./i18n/index.js";
+import { LANGS, langInfo, langPath, localizeURL, preferredLanguage, persistLang, fill, trHTML } from "./i18n/index.js";
 import { INITIAL, SECTIONS, fromHash, toHash, transition } from "./navigation.js";
+import { ERSE_URL, TARIFF_URL, FAQ_IDS, syncPageMetadata } from "./seo.js";
 /*
  * Goldenergy · Guia para programar o carregamento do carro elétrico nas horas de vazio — INTERFACE
  * React 18 + Tailwind CSS. Textos em src/i18n/*.json (PT é a fonte). Dados e maquetas em src/engine.js.
@@ -18,13 +19,14 @@ const OFFER = {
   descontoClientes: "+35%",
   telefone: "800 501 070",
   telefoneHref: "tel:+351800501070",
-  adesao: "https://goldenergy.pt/mobilidade-eletrica/carregar-em-casa/",
-  pagina: "https://goldenergy.pt/mobilidade-eletrica/carregar-em-casa/",
+  adesao: TARIFF_URL,
+  pagina: TARIFF_URL,
   precosPdf: "https://goldenergy.pt/resources/data/website/documentos/precos_lp_carregar_em_casa.pdf",
   solar: "https://goldenergy.pt/paineis-solares/",
 };
 const IMG = { hero: "/img/electric-love-casa.webp" };
-const ERSE_2027 = "https://www.erse.pt/media/uhpieyio/comunicado_novos-per%C3%ADodos-hor%C3%A1rios-_vfinal31julho2026.pdf";
+const PIXEL = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+const ERSE_2027 = "https://www.erse.pt/media/3eec14ln/cp137_fecho_ersexplica_pr_horarios.pdf";
 const CYC = { diario: ["22:00", "08:00"], semanal: ["00:00", "07:00"] };
 const USE_UTM = false;
 const utm = (url, content) => !USE_UTM ? url : url + (url.includes("?") ? "&" : "?") + "utm_source=guia-carregamento&utm_medium=referral&utm_campaign=carregar-em-casa&utm_content=" + content;
@@ -287,7 +289,7 @@ function LangMenu({ lang, onChange }) {
     if (e.key === "Tab") setOpen(false);
   };
   return (
-    <div ref={wrap} className="relative">
+    <div ref={wrap} role="search" aria-label={L.t("search.label")} className="relative">
       <button ref={btn} type="button" aria-haspopup="listbox" aria-expanded={open} aria-label={L.t("lang.label") + ": " + cur.name}
         onClick={() => setOpen(o => !o)} onKeyDown={e => { if (e.key === "ArrowDown") { e.preventDefault(); setOpen(true); } }}
         className="ge-focus flex h-11 min-w-[44px] items-center gap-1.5 rounded-full border border-[color:var(--ge-line)] bg-white px-3 text-sm font-bold text-[color:var(--ge-ink)] hover:border-[color:var(--ge-ink)] motion-safe:transition-colors">
@@ -659,6 +661,33 @@ function AppDetails({ label, icon, children, defaultOpen = false, className }) {
   );
 }
 
+function ChargingAnswers({ lang, onChange }) {
+  const L = useL();
+  return (
+    <AppDetails label={L.t("seo.heading")} icon="info" className="mt-4">
+      <div className="space-y-3">
+        {FAQ_IDS.map(i => (
+          <div key={i}>
+            <h2 className="font-bold">{L.t(`seo.q${i}`)}</h2>
+            <p className="text-base leading-relaxed text-[color:var(--ge-muted)]">{L.t(`seo.a${i}`)}</p>
+          </div>
+        ))}
+      </div>
+      <div className="mt-3 flex flex-col items-start gap-1 text-sm">
+        <A href={ERSE_URL}>{L.t("seo.erse")}</A>
+        <A href={TARIFF_URL}>{L.t("seo.tariff")}</A>
+      </div>
+      <nav aria-label={L.t("seo.languages")} className="mt-3 flex flex-wrap gap-x-3 gap-y-1 border-t border-[color:var(--ge-line-soft)] pt-2 text-sm">
+        {LANGS.map(l => <a key={l.code} href={langPath(l.code)} hrefLang={l.code === "pt" ? "pt-PT" : l.code} lang={l.html} aria-current={l.code === lang ? "page" : undefined}
+          className="ge-link ge-focus inline-flex min-h-[44px] items-center" onClick={e => {
+            if (e.button || e.metaKey || e.altKey || e.shiftKey || e.ctrlKey) return;
+            e.preventDefault(); if (l.code !== lang) onChange(l.code);
+          }}>{l.name}</a>)}
+      </nav>
+    </AppDetails>
+  );
+}
+
 function Guide({ G, b, f, p, cyc, cur, n, screen, photo, go, editSchedule, titleRef }) {
   const L = useL();
   const { gk, g } = G;
@@ -986,18 +1015,13 @@ export default function GuiaCarregamento({ initialLang = "pt", initialDict = nul
     if (code === "pt" && ptDict) return apply(ptDict);
     if (loadDict) Promise.resolve(loadDict(code)).then(apply).catch(() => { });
   };
-  useEffect(() => { persistLang(initialLang, { url: initialLang !== "pt" || /[?&]lang=/.test(window.location.search), store: false }); }, [initialLang]);
-  useEffect(() => {
-    document.title = L.t("meta.title");
-    const desc = document.querySelector('meta[name="description"]');
-    if (desc) desc.content = L.t("meta.desc");
-  }, [L]);
+  const [suggestedLanguage, setSuggestedLanguage] = useState(null);
+  useEffect(() => { setSuggestedLanguage(preferredLanguage()); }, [lang]);
+  useEffect(() => { persistLang(lang, { store: false }); syncPageMetadata(lang, L.t); }, [lang, L]);
 
-  const [nav, setNav] = useState(() => {
-    if (typeof window === "undefined") return INITIAL;
-    const saved = window.history.state?.geChargingNav;
-    return saved && toHash(saved) === window.location.hash ? saved : fromHash(window.location.hash);
-  });
+  // The server and first browser render match; restore shareable vehicle/cycle links after hydration.
+  const [nav, setNav] = useState(INITIAL);
+  const [navHydrated, setNavHydrated] = useState(false);
   const { view, brand: brandName, family: famIdx, cycle: cyc, step: cur } = nav;
   const [copied, setCopied] = useState(false);
   const [msg, setMsg] = useState("");
@@ -1017,13 +1041,15 @@ export default function GuiaCarregamento({ initialLang = "pt", initialDict = nul
   }
   function writeNav(next, method, locale = lang) {
     try {
-      const u = new URL(window.location.href);
-      if (locale !== "pt" || u.searchParams.has("lang")) u.searchParams.set("lang", locale);
+      const u = localizeURL(new URL(window.location.href), locale);
       u.hash = toHash(next);
       history[method]({ ...history.state, geChargingNav: next }, "", u.pathname + u.search + u.hash);
     } catch (e) { /* A navegação interna funciona mesmo sem acesso ao URL. */ }
   }
   useEffect(() => {
+    const saved = window.history.state?.geChargingNav;
+    const initial = saved && toHash(saved) === window.location.hash ? saved : fromHash(window.location.hash);
+    setNav(initial); setNavHydrated(true);
     const prevRestoration = history.scrollRestoration;
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     const onPop = e => {
@@ -1039,8 +1065,8 @@ export default function GuiaCarregamento({ initialLang = "pt", initialDict = nul
   }, []);
   // A língua escolhida aplica-se mesmo quando se usa Anterior do navegador.
   useEffect(() => {
-    writeNav(nav, "replaceState");
-  }, [nav, lang]);
+    if (navHydrated) writeNav(nav, "replaceState");
+  }, [nav, lang, navHydrated]);
   useLayoutEffect(() => {
     if (!focusPending.current) return;
     focusPending.current = false;
@@ -1073,8 +1099,8 @@ export default function GuiaCarregamento({ initialLang = "pt", initialDict = nul
     if (e.key === "ArrowRight" && cur < n - 1) { e.preventDefault(); go(cur + 1); }
   }
   const linkUrl = () => {
-    const u = new URL(window.location.href);
-    u.searchParams.set("lang", lang); u.hash = toHash(nav);
+    const u = localizeURL(new URL(window.location.href), lang);
+    u.hash = toHash(nav);
     return u.href;
   };
   function copyLink() {
@@ -1130,7 +1156,14 @@ export default function GuiaCarregamento({ initialLang = "pt", initialDict = nul
                 <p className="text-xs font-bold uppercase tracking-[.11em] text-[color:var(--ge-blue)] sm:text-sm">{L.t("hero.kicker", { n: BRANDS.length })}</p>
                 <h1 ref={titleRef} id="active-title" tabIndex={-1} className="ge-screen-heading mt-1.5">{view === "models" ? L.t("flow.modelTitle") : <Tx k="hero.title" vars={{ vz: <span className="text-[color:var(--ge-blue)]"><Moon />{L.t("hero.titleVz")}</span> }} plain />}</h1>
                 <p className="mt-2 max-w-[40ch] text-base leading-snug sm:text-lg">{L.t(view === "models" ? "flow.modelSub" : "hero.sub")}</p>
-                {view !== "models" && <img src={IMG.hero} alt={L.t("hero.imgAlt")} width="727" height="473" fetchPriority="high" decoding="async" className="mt-4 hidden h-auto w-full max-w-[390px] object-contain lg:block" />}
+                {view !== "models" && <>
+                  <p className="mt-2 text-sm font-semibold text-[color:var(--ge-ink)]">{L.t("seo.scope")}</p>
+                  {lang === "pt" && suggestedLanguage && suggestedLanguage !== lang && <a href={langPath(suggestedLanguage)} lang={langInfo(suggestedLanguage).html} className="ge-link ge-on-green ge-focus inline-flex min-h-[44px] items-center text-sm">{langInfo(suggestedLanguage).name} <span aria-hidden="true" className="ml-1">→</span></a>}
+                  <picture className="mt-4 hidden max-w-[390px] lg:block">
+                    <source media="(min-width: 1024px)" srcSet={IMG.hero} type="image/webp" />
+                    <img src={PIXEL} alt={L.t("hero.imgAlt")} width="727" height="473" fetchPriority="high" decoding="async" className="h-auto w-full object-contain" />
+                  </picture>
+                </>}
               </div>
               <div className="min-w-0">
                 <div className="ge-card min-w-0 p-3.5 sm:p-5">
@@ -1138,14 +1171,14 @@ export default function GuiaCarregamento({ initialLang = "pt", initialDict = nul
                   <BrandPicker b={b && !b.other ? b : null} f={f} onBrand={pickBrand} onModel={family => move({ type: "model", family })} onOther={pickOther} />
                   {view === "models" && f && <button type="button" className="ge-btn ge-btn--green mt-4 w-full" onClick={() => move({ type: "schedule" })}>{L.t("flow.withModel")}<Icon n="chevR" /></button>}
                 </div>
-                {view !== "models" && <div className="mt-4"><Cost100 /></div>}
+                {view !== "models" && <><div className="mt-4"><Cost100 /></div><ChargingAnswers lang={lang} onChange={changeLang} /></>}
               </div>
             </section>
           ) : view === "schedule" ? (
             <section className="ge-flow-width ge-flow-content" aria-labelledby="active-title">
               <VehicleTag {...{ b, f, photo }} />
               <h1 ref={titleRef} id="active-title" tabIndex={-1} className="ge-screen-heading mt-1">{L.t("flow.scheduleTitle")}</h1>
-              <p className="mt-2 max-w-[60ch] leading-snug text-[color:var(--ge-muted)]">{L.t("flow.scheduleSub")}</p>
+              <p className="mt-2 max-w-[60ch] leading-snug text-[color:var(--ge-muted)]">{L.t("flow.scheduleSub")} {L.t("seo.scope")}</p>
               <div className="mt-4 sm:mt-5"><VazioPanel cyc={cyc} setCyc={cycle => move({ type: "cycle", cycle })} p={p} /></div>
               {cyc === "semanal" && <p className="mt-3 max-w-[65ch] text-sm leading-relaxed text-[color:var(--ge-muted)]"><Tx k="flow.weeklyExample" vars={{ t: <Time>{p.s} → {p.e}</Time> }} /></p>}
             </section>

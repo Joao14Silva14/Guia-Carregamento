@@ -1,5 +1,5 @@
 /* ===================== i18n: idiomas, deteção e persistência =====================
-   Ordem de escolha: ?lang= no URL → preferência guardada → idioma do navegador → inglês.
+   Caminhos estáveis por idioma. Ligações antigas ?lang= continuam a abrir o guia.
    Os textos estão em src/i18n/{pt,es,en,fr,de}.json:
      "ui" → textos da página (chaves)
      "g"  → textos dos guias (chave = texto original em PT, com {app}, {inicio}, {fim} e <b>…</b>)
@@ -15,33 +15,32 @@ const LANG_CODES = LANGS.map(l => l.code);
 const LANG_KEY = "ge-guia-lang";
 const langInfo = c => LANGS.find(l => l.code === c) || LANGS[0];
 
-function detectLang() {
-  try {
-    const q = new URLSearchParams(window.location.search).get("lang");
-    if (q && LANG_CODES.includes(q.toLowerCase())) return q.toLowerCase();
-  } catch (e) { }
-  try {
-    const s = window.localStorage.getItem(LANG_KEY);
-    if (s && LANG_CODES.includes(s)) return s;
-  } catch (e) { }
-  try {
-    const list = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ""]);
-    for (const l of list) { const c = String(l).slice(0, 2).toLowerCase(); if (LANG_CODES.includes(c)) return c; }
-  } catch (e) { }
-  return "en";
+/* O caminho explícito é estável para utilizadores e motores de pesquisa. */
+function localeFromURL(pathname, search = "") {
+  const path = /^\/(es|en|fr|de)\/?$/.exec(pathname);
+  if (path) return path[1];
+  const legacy = new URLSearchParams(search).get("lang")?.toLowerCase();
+  return LANG_CODES.includes(legacy) ? legacy : "pt";
 }
-/* Guarda a escolha, atualiza <html lang> e o URL (?lang=xx), mantendo o #hash partilhável */
-function persistLang(code, { url = true, store = true } = {}) {
-  const info = langInfo(code);
-  try { document.documentElement.lang = info.html; } catch (e) { }
-  if (store) { try { window.localStorage.setItem(LANG_KEY, code); } catch (e) { } }
-  if (url) {
-    try {
-      const u = new URL(window.location.href);
-      u.searchParams.set("lang", code);
-      window.history.replaceState(window.history.state, "", u.pathname + u.search + u.hash);
-    } catch (e) { }
-  }
+const langPath = code => code !== "pt" && LANG_CODES.includes(code) ? `/${code}/` : "/";
+function localizeURL(u, code) { u.pathname = langPath(code); u.searchParams.delete("lang"); return u; }
+function detectLang() {
+  try { return localeFromURL(window.location.pathname, window.location.search); } catch { return "pt"; }
+}
+function preferredLanguage() {
+  try {
+    const saved = window.localStorage.getItem(LANG_KEY);
+    if (LANG_CODES.includes(saved)) return saved;
+    for (const l of navigator.languages?.length ? navigator.languages : [navigator.language || ""]) {
+      const c = String(l).slice(0, 2).toLowerCase();
+      if (LANG_CODES.includes(c)) return c;
+    }
+    return "en";
+  } catch { return null; }
+}
+function persistLang(code, { store = true } = {}) {
+  try { document.documentElement.lang = langInfo(code).html; } catch { }
+  if (store) { try { window.localStorage.setItem(LANG_KEY, code); } catch { } }
 }
 /* Interpolação simples: «Olá {nome}» + { nome: "Ana" } */
 const fill = (s, vars) => !vars ? s : String(s).replace(/\{(\w+)\}/g, (m, k) => (vars[k] != null ? vars[k] : m));
@@ -70,4 +69,4 @@ function trHTML(html, m) {
     return ">" + encodeEnt(lead + r + trail) + "<";
   });
 }
-export { LANGS, LANG_CODES, langInfo, detectLang, persistLang, fill, trText, trHTML };
+export { LANGS, LANG_CODES, langInfo, detectLang, localeFromURL, langPath, localizeURL, preferredLanguage, persistLang, fill, trText, trHTML };
